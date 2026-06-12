@@ -20,6 +20,10 @@
   --cinza-fundo:    #F5F7FA;
   --cinza-borda:    #D9D9D9;
   --texto:          #1A1A2E;
+  /* Header brand palette */
+  --navy:           #0D2B5E;
+  --azul-opr:       #00A3E0;
+  --verde-opr:      #78BE20;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Inter', sans-serif; background: var(--cinza-fundo); color: var(--texto); min-width: 1280px; }
@@ -28,18 +32,79 @@ body { font-family: 'Inter', sans-serif; background: var(--cinza-fundo); color: 
    HEADER
    ===================================================== */
 .header {
-  background: var(--azul-escuro); color: #fff;
-  padding: 14px 32px; position: sticky; top: 0; z-index: 200;
+  background: #fff;
+  color: var(--texto);
+  padding: 0 32px 0 24px;
+  position: sticky; top: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
-  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+  height: 110px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.10);
 }
-.header h1 { font-size: 19px; font-weight: 700; }
-.header p  { font-size: 12px; opacity: .75; margin-top: 3px; }
+/* Linha de gradiente na borda inferior */
+.header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--azul-opr) 0%, var(--verde-opr) 100%);
+}
+/* Arco decorativo SVG no canto direito */
+.header-deco {
+  position: absolute; right: 0; top: 0;
+  width: 300px; height: 110px;
+  pointer-events: none; overflow: visible;
+}
+/* Lado esquerdo */
+.header-left {
+  display: flex; align-items: center; gap: 20px;
+  flex: 1; min-width: 0;
+}
+.header-logo-opr {
+  height: 82px; width: auto; flex-shrink: 0;
+  object-fit: contain;
+}
+.header-vsep {
+  width: 1px; height: 60px; flex-shrink: 0;
+  background: rgba(0,0,0,.15);
+}
+.header-title-block {
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 0;
+}
+.header-supra {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.4px; color: var(--verde-opr);
+  text-transform: uppercase;
+}
+.header-title {
+  font-size: 21px; font-weight: 700; color: var(--navy);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.header-subtitle {
+  font-size: 12px; font-weight: 400;
+  color: #5a7a9a;
+  margin-top: 1px;
+}
+/* Lado direito */
+.header-right {
+  display: flex; align-items: center; gap: 16px;
+  flex-shrink: 0; position: relative; z-index: 1;
+}
+.header-logo-gov {
+  height: 48px; width: auto;
+  object-fit: contain;
+}
+.header-logo-der {
+  height: 54px; width: auto;
+  object-fit: contain;
+}
 .status-chip {
-  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+  background: rgba(0,0,0,.05); border: 1px solid rgba(0,0,0,.15);
   padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; white-space: nowrap;
+  color: var(--texto);
 }
-.status-chip.ok   { border-color: var(--verde); background: rgba(112,173,71,.15); }
+.status-chip.ok   { border-color: var(--verde-opr); background: rgba(120,190,32,.15); }
 .status-chip.erro { border-color: var(--vermelho); background: rgba(192,0,0,.15); }
 
 /* =====================================================
@@ -210,12 +275,36 @@ tr:hover td { background:#F8FAFF; }
      HEADER
      ===================================================== -->
 <header class="header">
-  <div>
-    <h1>Painel DER-PR — Eficiência Orçamentária 8398</h1>
-    <p>Orçamento para Resultados · Piloto 2025/2026</p>
+
+  <!-- Arcos decorativos no canto direito -->
+  <svg class="header-deco" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M300,-25 A220,220,0,0,0,5,110"   fill="none" stroke="#00A3E0" stroke-width="1.5" opacity="0.32"/>
+    <path d="M300, 18 A175,175,0,0,0,65,110"  fill="none" stroke="#78BE20" stroke-width="1.5" opacity="0.28"/>
+    <path d="M300, 55 A135,135,0,0,0,148,110" fill="none" stroke="#00A3E0" stroke-width="1"   opacity="0.20"/>
+  </svg>
+
+  <!-- Lado esquerdo: logo OPR + separador + bloco de títulos -->
+  <div class="header-left">
+    <img src="assets/logo OpR.jpeg" alt="Orçamento para Resultados" class="header-logo-opr">
+    <div class="header-vsep"></div>
+    <div class="header-title-block">
+      <span class="header-supra">DER PARANÁ&nbsp;&nbsp;|&nbsp;&nbsp;ORÇAMENTO PARA RESULTADOS</span>
+      <h1 class="header-title">Painel de Desempenho da Gestão de Rodovias</h1>
+      <p class="header-subtitle">Monitoramento executivo das rodovias estaduais do Paraná</p>
+    </div>
   </div>
-  <div class="status-chip" id="chipStatus">⏳ Carregando dados…</div>
+
+  <!-- Lado direito: status + logos governo + DER -->
+  <div class="header-right">
+    <img src="assets/logo governo do paraná.png" alt="Governo do Estado do Paraná" class="header-logo-gov">
+    <div class="header-vsep"></div>
+    <img src="assets/logo der.png" alt="DER Paraná" class="header-logo-der">
+  </div>
+
 </header>
+
+<!-- Elemento oculto mantido para compatibilidade com o JS de status -->
+<div id="chipStatus" style="display:none"></div>
 
 <!-- =====================================================
      NAVEGAÇÃO DE ABAS
