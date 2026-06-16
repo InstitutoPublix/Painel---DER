@@ -4,370 +4,325 @@
 <meta charset="UTF-8">
 <title>Painel DER-PR — Eficiência Orçamentária 8398</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
 <style>
-/* =====================================================
-   VARIÁVEIS E RESET
-   ===================================================== */
-:root {
-  --azul-escuro:    #1F4E79;
-  --azul-medio:     #2E75B6;
-  --azul-claro:     #BDD7EE;
-  --verde:          #70AD47;
-  --amarelo:        #FFC000;
-  --vermelho:       #C00000;
-  --vermelho-claro: #FFF0F0;
-  --cinza-fundo:    #F5F7FA;
-  --cinza-borda:    #D9D9D9;
-  --texto:          #1A1A2E;
-  /* Header brand palette */
-  --navy:           #0D2B5E;
-  --azul-opr:       #00A3E0;
-  --verde-opr:      #78BE20;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', sans-serif; background: var(--cinza-fundo); color: var(--texto); min-width: 1280px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F5F7FA;color:#1A1A2E;min-width:1280px}
 
-/* =====================================================
-   HEADER
-   ===================================================== */
-.header {
-  background: #fff;
-  color: var(--texto);
-  padding: 0 32px 0 24px;
-  position: sticky; top: 0; z-index: 200;
-  display: flex; align-items: center; justify-content: space-between;
-  height: 110px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,.10);
+/* ── HEADER GOVERNAMENTAL ── */
+.header-gov{
+  background:#fff;
+  color:#0D2B5E;
+  position:sticky;
+  top:0;
+  z-index:200;
+  height:108px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,.12);
+  border-bottom:1px solid #E8ECF1;
 }
-/* Linha de gradiente na borda inferior */
-.header::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--azul-opr) 0%, var(--verde-opr) 100%);
+.header-gov::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,#00A3E0 0%,#78BE20 55%,#4CAF50 100%);
+  z-index:2;
 }
-/* Arco decorativo SVG no canto direito */
-.header-deco {
-  position: absolute; right: 0; top: 0;
-  width: 300px; height: 110px;
-  pointer-events: none; overflow: visible;
+.hdr-left{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  position:relative;
+  z-index:1;
+  min-width:0;
 }
-/* Lado esquerdo */
-.header-left {
-  display: flex; align-items: center; gap: 20px;
-  flex: 1; min-width: 0;
+.hdr-sep{
+  width:1px;
+  height:60px;
+  background:rgba(13,43,94,.15);
+  flex-shrink:0;
 }
-.header-logo-opr {
-  height: 82px; width: auto; flex-shrink: 0;
-  object-fit: contain;
+.hdr-title-block{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
 }
-.header-vsep {
-  width: 1px; height: 60px; flex-shrink: 0;
-  background: rgba(0,0,0,.15);
+.hdr-eyebrow{
+  font-size:9.5px;
+  font-weight:700;
+  color:#78BE20;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
 }
-.header-title-block {
-  display: flex; flex-direction: column; gap: 3px;
-  min-width: 0;
+.hdr-title{
+  font-size:21px;
+  font-weight:700;
+  color:#0D2B5E;
+  line-height:1.15;
+  letter-spacing:-.2px;
+  white-space:nowrap;
 }
-.header-supra {
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 1.4px; color: var(--verde-opr);
-  text-transform: uppercase;
+.hdr-subtitle{
+  font-size:11.5px;
+  color:#5a6e8a;
+  font-weight:400;
+  margin-top:2px;
+  white-space:nowrap;
 }
-.header-title {
-  font-size: 21px; font-weight: 700; color: var(--navy);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  line-height: 1.2;
+.hdr-right{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  position:relative;
+  z-index:1;
+  flex-shrink:0;
 }
-.header-subtitle {
-  font-size: 12px; font-weight: 400;
-  color: #5a7a9a;
-  margin-top: 1px;
+.hdr-logo-img{
+  height:68px;
+  width:auto;
+  object-fit:contain;
+  display:block;
+  flex-shrink:0;
 }
-/* Lado direito */
-.header-right {
-  display: flex; align-items: center; gap: 16px;
-  flex-shrink: 0; position: relative; z-index: 1;
-}
-.header-logo-gov {
-  height: 48px; width: auto;
-  object-fit: contain;
-}
-.header-logo-der {
-  height: 54px; width: auto;
-  object-fit: contain;
-}
-.status-chip {
-  background: rgba(0,0,0,.05); border: 1px solid rgba(0,0,0,.15);
-  padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; white-space: nowrap;
-  color: var(--texto);
-}
-.status-chip.ok   { border-color: var(--verde-opr); background: rgba(120,190,32,.15); }
-.status-chip.erro { border-color: var(--vermelho); background: rgba(192,0,0,.15); }
-
-/* =====================================================
-   ABAS
-   ===================================================== */
-.tab-nav { background: #fff; border-bottom: 2px solid var(--cinza-borda); padding: 0 32px; display: flex; }
-.tab-btn {
-  padding: 13px 22px; border: none; background: none;
-  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: #666;
-  cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
-  transition: color .2s, border-color .2s;
-}
-.tab-btn:hover { color: var(--azul-medio); }
-.tab-btn.active { color: var(--azul-escuro); border-bottom-color: var(--azul-escuro); font-weight: 600; }
-
-/* =====================================================
-   CONTEÚDO
-   ===================================================== */
-.tab-content { padding: 28px 32px; max-width: 1440px; margin: 0 auto; }
-.tab-pane { display: none; animation: fadeIn .28s ease; }
-.tab-pane.active { display: block; }
-@keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
-
-/* Loading / erro */
-#loading { text-align:center; padding:80px; color:#666; font-size:16px; }
-#erro { display:none; background:#FFF0F0; border:1px solid var(--vermelho); border-radius:8px;
-  padding:16px 20px; margin:24px; color:var(--vermelho); font-weight:500; }
-
-/* =====================================================
-   KPI CARDS
-   ===================================================== */
-.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-.kpi-card {
-  background:#fff; border-radius:8px; padding:20px 22px;
-  border:1px solid var(--cinza-borda); box-shadow:0 1px 4px rgba(0,0,0,.05);
-}
-.kpi-card.alert { background:var(--vermelho-claro); border-color:var(--vermelho); }
-.kpi-card.warn  { background:#FFFBEC; border-color:var(--amarelo); }
-.kpi-label { font-size:11px; font-weight:600; color:#666; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
-.kpi-value { font-size:30px; font-weight:700; color:var(--azul-escuro); line-height:1; }
-.kpi-card.alert .kpi-value { color:var(--vermelho); }
-.kpi-card.warn  .kpi-value { color:#C57800; }
-.kpi-sub { font-size:12px; color:#888; margin-top:5px; }
-
-/* =====================================================
-   CHART CONTAINERS
-   ===================================================== */
-.chart-box {
-  background:#fff; border-radius:8px; padding:22px 24px;
-  border:1px solid var(--cinza-borda); box-shadow:0 1px 4px rgba(0,0,0,.05); margin-bottom:24px;
-}
-.chart-title { font-size:14px; font-weight:600; color:var(--azul-escuro); margin-bottom:16px; }
-
-/* =====================================================
-   TABELAS
-   ===================================================== */
-.table-wrap {
-  background:#fff; border-radius:8px; border:1px solid var(--cinza-borda);
-  box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden; margin-bottom:24px;
-}
-table { width:100%; border-collapse:collapse; font-size:13px; }
-th {
-  background:var(--azul-escuro); color:#fff; padding:11px 14px;
-  text-align:left; font-weight:600; font-size:12px; white-space:nowrap;
-  cursor:pointer; user-select:none;
-}
-th:hover { background:var(--azul-medio); }
-td { padding:10px 14px; border-bottom:1px solid #F0F0F0; vertical-align:middle; }
-tr:last-child td { border-bottom:none; }
-tr:hover td { background:#F8FAFF; }
-
-/* Destaque de linha */
-.tr-norte td:first-child { border-left:4px solid var(--vermelho); }
-.tr-paradoxo td { background:#FFF8F8; }
-
-/* =====================================================
-   BADGES
-   ===================================================== */
-.badge { display:inline-block; padding:2px 9px; border-radius:11px; font-size:11px; font-weight:600; }
-.b-red    { background:#FFEBEE; color:var(--vermelho); }
-.b-yellow { background:#FFF8E1; color:#C57800; }
-.b-green  { background:#E8F5E9; color:#2E7D32; }
-.b-gray   { background:#F0F0F0; color:#666; }
-.b-blue   { background:#E3F2FD; color:#1565C0; }
-.b-orange { background:#FFF3E0; color:#E65100; }
-
-/* IDH colorido */
-.idh-red    { color:var(--vermelho); font-weight:600; }
-.idh-yellow { color:#C57800; font-weight:600; }
-.idh-green  { color:#2E7D32; font-weight:600; }
-
-/* =====================================================
-   PROGRESS BAR
-   ===================================================== */
-.pb-wrap { display:flex; align-items:center; gap:8px; }
-.pb { height:8px; background:#F0F0F0; border-radius:4px; overflow:hidden; width:90px; display:inline-block; }
-.pb-fill { height:100%; border-radius:4px; }
-
-/* =====================================================
-   CAIXAS DE NOTAS / ALERTAS
-   ===================================================== */
-.note {
-  background:#F0F4FA; border-left:4px solid var(--azul-medio);
-  padding:13px 18px; border-radius:0 6px 6px 0; font-size:13px;
-  color:#444; margin-bottom:24px; line-height:1.6;
-}
-.note.gray { background:#F5F7FA; border-left-color:#999; }
-.note strong { color:var(--texto); }
-
-.alert-card {
-  background:#FFFBEC; border:1px solid var(--amarelo); border-radius:8px;
-  padding:14px 18px; margin-bottom:24px;
-  display:flex; gap:12px; align-items:flex-start; font-size:13px; line-height:1.6;
-}
-.alert-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
-
-/* =====================================================
-   HIGHLIGHT CARDS (3-colunas)
-   ===================================================== */
-.hl-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
-.hl-card { background:#fff; border-radius:8px; padding:16px 18px; border:1px solid var(--cinza-borda); border-top:4px solid var(--azul-medio); }
-.hl-card.danger { border-top-color:var(--vermelho); }
-.hl-card.warn   { border-top-color:var(--amarelo); }
-.hl-card h4 { font-size:13px; font-weight:600; color:var(--azul-escuro); margin-bottom:7px; }
-.hl-card p  { font-size:12px; color:#555; line-height:1.55; }
-
-/* =====================================================
-   MAPA SVG
-   ===================================================== */
-.map-box {
-  background:#fff; border-radius:8px; padding:22px 24px;
-  border:1px solid var(--cinza-borda); box-shadow:0 1px 4px rgba(0,0,0,.05); margin-bottom:24px;
-}
-.map-legend { display:flex; flex-wrap:wrap; gap:18px; margin-top:14px; }
-.leg-item { display:flex; align-items:center; gap:6px; font-size:12px; color:#444; }
-.leg-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
-
-/* Tooltip customizado */
-.tooltip {
-  position:fixed; background:rgba(20,20,40,.88); color:#fff;
-  padding:8px 12px; border-radius:6px; font-size:12px; pointer-events:none;
-  z-index:999; display:none; max-width:240px; line-height:1.6;
+.hdr-logo-opr{
+  height:90px;
 }
 
-/* =====================================================
-   GRID 2 COLUNAS
-   ===================================================== */
-.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px; }
+/* Tab nav */
+.tab-nav{background:#fff;border-bottom:2px solid #D9D9D9;padding:0 32px;display:flex}
+.tab-btn{padding:13px 22px;border:none;background:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#666;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s}
+.tab-btn:hover{color:#0D2B5E}
+.tab-btn.active{color:#0D2B5E;border-bottom-color:#0D2B5E;font-weight:600}
 
-/* =====================================================
-   BLOCO DE ARGUMENTAÇÃO
-   ===================================================== */
-.arg-block { background:#F5F7FA; border-radius:8px; padding:24px; margin-bottom:24px; }
-.arg-block h3 { font-size:15px; font-weight:600; color:var(--azul-escuro); margin-bottom:16px; }
-.arg-block p  { font-size:13px; color:#444; line-height:1.7; margin-bottom:12px; }
-.arg-block p:last-child { margin-bottom:0; }
+/* Tab panes */
+.tab-content{padding:28px 32px;max-width:1440px;margin:0 auto}
+.tab-pane{display:none}
+.tab-pane.active{display:block;animation:fadeIn .28s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* Nota de rodapé */
-.fn { font-size:11px; color:#888; font-style:italic; display:block; margin-top:4px; }
+/* KPI cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.kpi-card{background:#fff;border-radius:8px;padding:20px 22px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.kpi-card.alert{background:#FFF5F5;border-color:#C00000}
+.kpi-label{font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.kpi-value{font-size:30px;font-weight:700;color:#1F4E79;line-height:1}
+.kpi-card.alert .kpi-value{color:#C00000}
+.kpi-sub{font-size:12px;color:#888;margin-top:5px}
+
+/* Chart containers */
+.chart-container{background:#fff;border-radius:8px;padding:22px 24px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:24px}
+.chart-title{font-size:14px;font-weight:600;color:#1F4E79;margin-bottom:16px}
+
+/* Tables */
+.table-wrap{background:#fff;border-radius:8px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#1F4E79;color:#fff;padding:11px 14px;text-align:left;font-weight:600;font-size:12px;white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{background:#2E75B6}
+td{padding:10px 14px;border-bottom:1px solid #F0F0F0;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#F8FAFF}
+.tr-norte td:first-child{border-left:4px solid #C00000}
+.tr-paradoxo td{background:#FFF8F8}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11px;font-weight:600}
+.b-green{background:#E8F5E9;color:#2E7D32}
+.b-yellow{background:#FFF8E1;color:#C57800}
+.b-red{background:#FFEBEE;color:#C00000}
+.b-gray{background:#F0F0F0;color:#666}
+.b-blue{background:#E3F2FD;color:#1565C0}
+.b-orange{background:#FFF3E0;color:#E65100}
+
+/* Progress bar */
+.pb-wrap{display:flex;align-items:center;gap:8px}
+.pb{height:8px;background:#F0F0F0;border-radius:4px;overflow:hidden;width:90px;display:inline-block}
+.pb-fill{height:100%;border-radius:4px}
+
+/* Note boxes */
+.note{background:#F0F4FA;border-left:4px solid #2E75B6;padding:13px 18px;border-radius:0 6px 6px 0;font-size:13px;color:#444;margin-bottom:24px;line-height:1.6}
+.note.gray{background:#F5F7FA;border-left-color:#999}
+.note.warn{background:#FFFBF0;border-left-color:#FFC000}
+.note strong{color:#1A1A2E}
+
+/* Alert card */
+.alert-card{background:#FFFBEC;border:1px solid #FFC000;border-radius:8px;padding:14px 18px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.6}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+
+/* Highlight cards */
+.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.hl-card{background:#fff;border-radius:8px;padding:16px 18px;border:1px solid #D9D9D9;border-top:4px solid #2E75B6}
+.hl-card.danger{border-top-color:#C00000}
+.hl-card.warn{border-top-color:#FFC000}
+.hl-card h4{font-size:13px;font-weight:600;color:#1F4E79;margin-bottom:7px}
+.hl-card p{font-size:12px;color:#555;line-height:1.55}
+
+/* Scatter / Map */
+.svg-container{background:#fff;border-radius:8px;padding:22px 24px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:24px}
+svg.responsive{display:block;width:100%}
+
+/* Map legend */
+.map-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#444}
+.leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+/* Grid layouts */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
+
+/* Donut chart wrapper */
+.donut-wrap{display:flex;align-items:center;justify-content:center;height:100%}
+
+/* Arg block */
+.arg-block{background:#F5F7FA;border-radius:8px;padding:24px;margin-bottom:24px}
+.arg-block h3{font-size:15px;font-weight:600;color:#1F4E79;margin-bottom:16px}
+.arg-block p{font-size:13px;color:#444;line-height:1.7;margin-bottom:12px}
+.arg-block p:last-child{margin-bottom:0}
+
+/* Tooltip */
+.tt{position:fixed;background:rgba(20,20,40,.88);color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;pointer-events:none;z-index:999;display:none;max-width:230px;line-height:1.6}
+
+/* Footnote */
+.fn{font-size:11px;color:#888;font-style:italic}
+
+/* Filter controls */
+.filter-bar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.filter-bar label{font-size:13px;font-weight:500;color:#555;white-space:nowrap}
+.filter-select{font-family:'Inter',sans-serif;font-size:13px;padding:7px 12px;border:1px solid #D9D9D9;border-radius:6px;background:#fff;color:#1A1A2E;cursor:pointer}
+.filter-select:hover,.filter-select:focus{border-color:#2E75B6;outline:none}
 </style>
 </head>
 <body>
 
-<!-- Tooltip global -->
-<div class="tooltip" id="tooltip"></div>
+<div class="tt" id="tt"></div>
 
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
-<header class="header">
+<header class="header-gov">
 
-  <!-- Arcos decorativos no canto direito -->
-  <svg class="header-deco" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M300,-25 A220,220,0,0,0,5,110"   fill="none" stroke="#00A3E0" stroke-width="1.5" opacity="0.32"/>
-    <path d="M300, 18 A175,175,0,0,0,65,110"  fill="none" stroke="#78BE20" stroke-width="1.5" opacity="0.28"/>
-    <path d="M300, 55 A135,135,0,0,0,148,110" fill="none" stroke="#00A3E0" stroke-width="1"   opacity="0.20"/>
-  </svg>
+  <!-- Esquerda: logo OPR + separador + título -->
+  <div class="hdr-left">
 
-  <!-- Lado esquerdo: logo OPR + separador + bloco de títulos -->
-  <div class="header-left">
-    <img src="assets/logo OpR.jpeg" alt="Orçamento para Resultados" class="header-logo-opr">
-    <div class="header-vsep"></div>
-    <div class="header-title-block">
-      <span class="header-supra">DER PARANÁ&nbsp;&nbsp;|&nbsp;&nbsp;ORÇAMENTO PARA RESULTADOS</span>
-      <h1 class="header-title">Painel de Desempenho da Gestão de Rodovias</h1>
-      <p class="header-subtitle">Monitoramento executivo das rodovias estaduais do Paraná</p>
+    <img src="assets/logo OpR.jpeg"
+         alt="Orçamento para Resultados — Estado do Paraná"
+         class="hdr-logo-img hdr-logo-opr">
+
+    <div class="hdr-sep" aria-hidden="true"></div>
+
+    <div class="hdr-title-block">
+      <div class="hdr-eyebrow">DER PARANÁ &nbsp;·&nbsp; ORÇAMENTO PARA RESULTADOS</div>
+      <h1 class="hdr-title">Painel de Desempenho da Gestão de Rodovias</h1>
+      <p class="hdr-subtitle">
+        Monitoramento executivo das rodovias estaduais do Paraná &nbsp;·&nbsp; Ação 8398
+        &nbsp;·&nbsp; <span id="hdr-data-ref"></span>
+      </p>
     </div>
   </div>
 
-  <!-- Lado direito: status + logos governo + DER -->
-  <div class="header-right">
-    <img src="assets/logo governo do paraná.png" alt="Governo do Estado do Paraná" class="header-logo-gov">
-    <div class="header-vsep"></div>
-    <img src="assets/logo der.png" alt="DER Paraná" class="header-logo-der">
-  </div>
+  <!-- Direita: logos institucionais -->
+  <div class="hdr-right">
 
+    <img src="assets/logo governo do paraná.png"
+         alt="Governo do Estado do Paraná"
+         class="hdr-logo-img">
+
+    <div class="hdr-sep" aria-hidden="true"></div>
+
+    <img src="assets/logo der.png"
+         alt="DER-PR — Departamento de Estradas de Rodagem do Paraná"
+         class="hdr-logo-img">
+
+  </div>
 </header>
 
-<!-- Elemento oculto mantido para compatibilidade com o JS de status -->
-<div id="chipStatus" style="display:none"></div>
-
-<!-- =====================================================
-     NAVEGAÇÃO DE ABAS
-     ===================================================== -->
-<nav class="tab-nav" id="tabNav" style="display:none">
-  <button class="tab-btn active" data-tab="execucao">Execução Financeira</button>
-  <button class="tab-btn" data-tab="eficiencia">Eficiência por Regional</button>
-  <button class="tab-btn" data-tab="malha">Condição da Malha</button>
-  <button class="tab-btn" data-tab="paradoxo">Paradoxo Territorial</button>
+<nav class="tab-nav" role="tablist">
+  <button class="tab-btn active" data-tab="execucao" role="tab" aria-selected="true">Execução Financeira</button>
+  <button class="tab-btn" data-tab="eficiencia" role="tab" aria-selected="false">Eficiência por Regional</button>
+  <button class="tab-btn" data-tab="malha" role="tab" aria-selected="false">Condição da Malha</button>
+  <button class="tab-btn" data-tab="paradoxo" role="tab" aria-selected="false">Paradoxo Territorial</button>
+  <button class="tab-btn" data-tab="contratos" role="tab" aria-selected="false">Contratos</button>
 </nav>
 
-<!-- Mensagem de erro de carregamento -->
-<div id="erro">⚠️ Não foi possível carregar <code>../data/der_precomputed.json</code>. Verifique se o servidor está rodando com <code>python serve.py</code>.</div>
-
-<!-- Indicador de carregamento -->
-<div id="loading">⏳ Carregando dados do JSON…</div>
-
-<!-- =====================================================
-     CONTEÚDO DAS ABAS
-     ===================================================== -->
-<div class="tab-content" id="tabContent" style="display:none">
+<div class="tab-content">
 
   <!-- ABA 1: EXECUÇÃO FINANCEIRA -->
-  <div id="tab-execucao" class="tab-pane active">
-    <!-- KPI cards renderizados via JS -->
-    <div class="kpi-grid" id="kpiGrid"></div>
-
-    <!-- Gráfico: barras horizontais por subprograma -->
-    <div class="chart-box">
-      <div class="chart-title">Liquidado por Subprograma (R$) — cor indica classificação</div>
-      <div style="height:340px"><canvas id="chartSub"></canvas></div>
+  <div id="tab-execucao" class="tab-pane active" role="tabpanel">
+    <div class="arg-block" id="argblock1">
+      <h3>Resposta à Pergunta Central do Piloto</h3>
     </div>
 
-    <!-- Tabela de subprogramas -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Liquidado — Ação 8398</div>
+        <div class="kpi-value" id="kpi-total">—</div>
+        <div class="kpi-sub">Exercício de referência do piloto</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Taxa de Execução Geral</div>
+        <div class="kpi-value" id="kpi-taxa">—</div>
+        <div class="kpi-sub">Liquidado / dotação autorizada</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Classificado por Subprograma</div>
+        <div class="kpi-value" id="kpi-class">—</div>
+        <div class="kpi-sub">Com meta física vinculada no PPA</div>
+      </div>
+      <div class="kpi-card alert">
+        <div class="kpi-label">⚠ Sem Rastreabilidade</div>
+        <div class="kpi-value" id="kpi-semrastr">—</div>
+        <div class="kpi-sub" id="kpi-semrastr-sub">—</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">Liquidado por Subprograma (R$) — cor indica taxa de execução</div>
+      <div style="height:360px"><canvas id="chartSub"></canvas></div>
+    </div>
+
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
             <th>Subprograma</th>
             <th>Liquidado (R$)</th>
-            <th>% do Classificado</th>
-            <th>Observação</th>
+            <th>Taxa de Execução</th>
+            <th>Custo/km</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody id="tbodySub"></tbody>
       </table>
     </div>
 
-    <div class="note gray" id="notaSub"></div>
+    <div class="note gray" id="nota-metodologica"></div>
   </div>
 
   <!-- ABA 2: EFICIÊNCIA POR REGIONAL -->
-  <div id="tab-eficiencia" class="tab-pane">
+  <div id="tab-eficiencia" class="tab-pane" role="tabpanel">
+    <div class="filter-bar">
+      <label for="filtroSR">Filtrar por SR:</label>
+      <select id="filtroSR" class="filter-select">
+        <option value="">Todas as SRs</option>
+        <option value="SR Leste">SR Leste</option>
+        <option value="SR Campos Gerais">SR Campos Gerais</option>
+        <option value="SR Norte">SR Norte</option>
+        <option value="SR Noroeste">SR Noroeste</option>
+        <option value="SR Oeste">SR Oeste</option>
+      </select>
+    </div>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
             <th>SR</th>
             <th>Liquidado (R$)</th>
-            <th>R$/km</th>
+            <th>Liquidado/km (R$)</th>
             <th>% Malha Crítica (IRI)</th>
             <th>% Estrutura Crítica (FWD)</th>
-            <th>Contratos</th>
+            <th>Nº Contratos</th>
             <th>Emergenciais</th>
           </tr>
         </thead>
@@ -377,608 +332,1141 @@ tr:hover td { background:#F8FAFF; }
 
     <div class="alert-card">
       <div class="alert-icon">⚠️</div>
-      <div>
-        <strong>SR Noroeste — Contratos Emergenciais 2025:</strong>
-        2 contratos emergenciais identificados (CO137 e CO152) — sinal de pressão corretiva não planejada.
-        A SR Noroeste possui a maior extensão de malha do estado.
-      </div>
+      <div id="alert-noroeste"></div>
     </div>
 
-    <div class="chart-box">
-      <div class="chart-title">Criticidade da malha × Intensidade do gasto (IRI crítico vs. R$/km)</div>
-      <div style="height:340px"><canvas id="chartScatter"></canvas></div>
+    <div class="svg-container">
+      <div class="chart-title">Criticidade da malha × Intensidade do gasto</div>
+      <svg id="scatter" class="responsive" viewBox="0 0 720 400"></svg>
+      <p class="fn" style="margin-top:8px">Linha de tendência ilustrativa, baseada em 5 observações (uma por SR) — não deve ser interpretada como correlação estatisticamente validada.</p>
     </div>
   </div>
 
   <!-- ABA 3: CONDIÇÃO DA MALHA -->
-  <div id="tab-malha" class="tab-pane">
+  <div id="tab-malha" class="tab-pane" role="tabpanel">
     <div class="grid-2">
-      <div class="chart-box" style="margin-bottom:0">
-        <div class="chart-title">Condição da Malha — IRI (% inspecionado, pior → melhor)</div>
+      <div class="chart-container" style="margin-bottom:0">
+        <div class="chart-title">Condição da Malha — IRI (% inspecionado)</div>
         <div style="height:260px"><canvas id="chartIRI"></canvas></div>
       </div>
-      <div class="chart-box" style="margin-bottom:0">
-        <div class="chart-title">Condição Estrutural — FWD (% inspecionado, pior → melhor)</div>
+      <div class="chart-container" style="margin-bottom:0">
+        <div class="chart-title">Condição Estrutural — FWD (% inspecionado)</div>
         <div style="height:260px"><canvas id="chartFWD"></canvas></div>
       </div>
     </div>
 
-    <div class="hl-grid" id="hlCards"></div>
+    <div class="hl-grid" id="hl-grid"></div>
+
+    <div class="chart-container">
+      <div class="chart-title">Extensão da Malha por Condição e Regional (km absoluto)</div>
+      <div style="height:260px"><canvas id="chartMalhaKm"></canvas></div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">Gasto por km Inspecionado vs. % Malha Crítica (IRI) por Regional</div>
+      <div style="height:220px"><canvas id="chartLiqKmSR"></canvas></div>
+    </div>
 
     <div class="note">
-      <strong>Nota técnica — Indicadores de Condição:</strong><br>
-      <strong>IRI (Índice de Irregularidade Internacional):</strong> Mede a irregularidade da superfície (solavancos). Quanto maior o IRI, pior o pavimento — o usuário sente o desconforto e os veículos sofrem desgaste acelerado.<br>
-      <strong>FWD (Falling Weight Deflectometer):</strong> Mede a resistência estrutural do pavimento sob carga. Quanto maior a deflexão, mais frágil a base — indica risco de colapso estrutural, exigindo intervenções profundas e mais custosas.
+      <strong>Nota técnica — Indicadores de condição:</strong><br>
+      <strong>IRI (Índice de Irregularidade Internacional):</strong> mede o conforto de rolamento. Valores altos indicam superfície irregular (ondulações, afundamentos), causando desgaste veicular e desconforto ao usuário.<br>
+      <strong>FWD (Falling Weight Deflectometer):</strong> mede a capacidade estrutural do pavimento sob carga. Valores críticos indicam risco de colapso estrutural, exigindo intervenções mais profundas e custosas que a simples recomposição superficial.
     </div>
   </div>
 
   <!-- ABA 4: PARADOXO TERRITORIAL -->
-  <div id="tab-paradoxo" class="tab-pane">
-    <div class="map-box">
+  <div id="tab-paradoxo" class="tab-pane" role="tabpanel">
+    <div class="filter-bar">
+      <label for="filtroCategoria">Filtrar por categoria:</label>
+      <select id="filtroCategoria" class="filter-select">
+        <option value="">Todas as categorias</option>
+        <option value="Paradoxo territorial">Paradoxo Territorial</option>
+        <option value="Só logístico">Só Logístico</option>
+        <option value="Só vulnerável">Só Vulnerável</option>
+        <option value="Neutro">Neutro</option>
+      </select>
+    </div>
+    <div class="svg-container">
       <div class="chart-title">Municípios do Piloto — Mapa do Paraná</div>
-      <svg id="mapSVG" style="display:block;width:100%" viewBox="0 0 800 520"></svg>
-      <div class="map-legend" id="mapLegend">
-        <div class="leg-item"><div class="leg-dot" style="background:#C00000"></div>Paradoxo Territorial</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#2E75B6"></div>Só Logístico</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#FFC000"></div>Só Vulnerável</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#AAAAAA"></div>Neutro</div>
-        <div class="leg-item" style="font-style:italic;color:#888;margin-left:10px">Tamanho proporcional à população</div>
+      <svg id="mapa" class="responsive" viewBox="0 0 720 400"></svg>
+      <div class="map-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#8B0000"></div>Paradoxo Territorial (<span id="cnt-paradoxo">—</span>)</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#2E75B6"></div>Só Logístico (<span id="cnt-logistico">—</span>)</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#E07B00"></div>Só Vulnerável (<span id="cnt-vulneravel">—</span>)</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#888"></div>Neutro (<span id="cnt-neutro">—</span>)</div>
+        <div class="leg-item" style="font-style:italic;color:#888;margin-left:8px">Tamanho proporcional à população</div>
+        <div class="leg-item" style="margin-left:8px;color:#C00000;font-weight:600">⚠ <span id="cnt-nonnull">—</span>/<span id="cnt-total-mun">—</span> municípios com liquidado não-nulo identificado</div>
       </div>
+      <div class="note gray" id="nota-cobertura" style="margin-top:14px;margin-bottom:0"></div>
     </div>
 
     <div class="table-wrap">
       <table id="tblMun">
         <thead>
           <tr>
-            <th onclick="sortMun(0)">Município ↕</th>
-            <th onclick="sortMun(1)">SR ↕</th>
-            <th onclick="sortMun(2)">IDH ↕</th>
-            <th onclick="sortMun(3)">Rel. Logística ↕</th>
-            <th onclick="sortMun(4)">Categoria ↕</th>
-            <th onclick="sortMun(5)">População ↕</th>
-            <th onclick="sortMun(6)">Liq./hab ↕</th>
+            <th data-col="0">Município ↕</th>
+            <th data-col="1">SR ↕</th>
+            <th data-col="2">IDH ↕</th>
+            <th data-col="3">Relevância Logística ↕</th>
+            <th data-col="4">Categoria ↕</th>
+            <th data-col="5">População ↕</th>
+            <th data-col="6">Liquidado/hab ↕</th>
           </tr>
         </thead>
         <tbody id="tbodyMun"></tbody>
       </table>
     </div>
 
-    <div class="arg-block">
-      <h3>Por que o Paradoxo Territorial importa para o gestor público?</h3>
-      <p>Municípios como Agudos do Sul e Reserva concentram dois fatores críticos simultaneamente: IDH baixo e alta relevância logística. Nesses territórios, a rodovia estadual não é apenas infraestrutura de escoamento — é o caminho para o hospital, para a escola, para o mercado.</p>
-      <p>A análise mostra que não há liquidado identificado da Ação 8398 nesses municípios na base disponível. Isso não significa necessariamente ausência de investimento — pode refletir trechos concessionados, obras de outras ações ou ausência de vinculação territorial na base do DER. Mas sinaliza uma lacuna de rastreabilidade que precisa ser investigada.</p>
-      <p>Um DER que consegue demonstrar que seus critérios de priorização consideram tanto a condição técnica da malha quanto o perfil do território atendido está mais protegido diante de auditorias e mais capacitado para defender suas escolhas alocativas com evidência.</p>
+    <div class="arg-block" id="argblock-paradoxo">
+      <h3>O Paradoxo Territorial no Contexto do Orçamento para Resultados</h3>
+    </div>
+  </div>
+
+  <!-- ABA 5: CONTRATOS -->
+  <div id="tab-contratos" class="tab-pane" role="tabpanel">
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total de Contratos DOPSR1</div>
+        <div class="kpi-value" id="kpi-cont-total">—</div>
+        <div class="kpi-sub">Contratos ativos no período</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Empenhado</div>
+        <div class="kpi-value" id="kpi-cont-emp">—</div>
+        <div class="kpi-sub">Dotação comprometida</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Liquidado</div>
+        <div class="kpi-value" id="kpi-cont-liq">—</div>
+        <div class="kpi-sub">Serviço confirmado/atestado</div>
+      </div>
+      <div class="kpi-card" id="kpi-cont-exec-card">
+        <div class="kpi-label">Taxa de Execução</div>
+        <div class="kpi-value" id="kpi-cont-exec">—</div>
+        <div class="kpi-sub">Liquidado / Empenhado</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="chart-container" style="margin-bottom:0">
+        <div class="chart-title">Empenhado vs. Liquidado por SR (R$)</div>
+        <div style="height:280px"><canvas id="chartContSR"></canvas></div>
+      </div>
+      <div class="chart-container" style="margin-bottom:0">
+        <div class="chart-title">Distribuição de Contratos por Tipo</div>
+        <div style="height:280px"><canvas id="chartContTipo"></canvas></div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px" class="chart-container">
+      <div class="chart-title">Liquidado por Tipo de Contrato (R$)</div>
+      <div style="height:200px"><canvas id="chartContLiqTipo"></canvas></div>
+    </div>
+
+    <div class="filter-bar">
+      <label for="filtroContSR">Filtrar por SR:</label>
+      <select id="filtroContSR" class="filter-select">
+        <option value="">Todas as SRs</option>
+        <option value="SR LESTE">SR Leste</option>
+        <option value="SR CAMPOS GERAIS">SR Campos Gerais</option>
+        <option value="SR NORTE">SR Norte</option>
+        <option value="SR NOROESTE">SR Noroeste</option>
+        <option value="SR OESTE">SR Oeste</option>
+      </select>
+      <label for="filtroContTipo">Tipo:</label>
+      <select id="filtroContTipo" class="filter-select">
+        <option value="">Todos os tipos</option>
+        <option value="PROCONSERVA">PROCONSERVA</option>
+        <option value="COP">COP</option>
+        <option value="INTEGRA">INTEGRA</option>
+        <option value="CREMEP">CREMEP</option>
+        <option value="EMERGENCIAL">EMERGENCIAL</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table id="tblContratos">
+        <thead>
+          <tr>
+            <th>Contrato</th>
+            <th>SR</th>
+            <th>Tipo</th>
+            <th>Empenhado (R$)</th>
+            <th>Liquidado (R$)</th>
+            <th>Pago (R$)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyContratos"></tbody>
+      </table>
     </div>
   </div>
 
 </div><!-- /tab-content -->
 
 <script>
-/* =====================================================
-   UTILITÁRIOS DE FORMATAÇÃO
-   ===================================================== */
-const tt = document.getElementById('tooltip');
+// =======================================================
+// DADOS — AÇÃO 8398 DER-PR
+// =======================================================
 
-function showTT(e, html) {
-  tt.innerHTML = html;
-  tt.style.display = 'block';
-  moveTT(e);
-}
-function moveTT(e) {
-  tt.style.left = (e.clientX + 14) + 'px';
-  tt.style.top  = (e.clientY - 8)  + 'px';
-}
-function hideTT() { tt.style.display = 'none'; }
+// Dados carregados dinamicamente de ../data/der_precomputed.json via initDashboard()
+let subprogramas = [];
+let regionais    = [];
+let iri          = [];
+let fwd          = [];
+let municipios   = [];
 
-function fmtBRL(v) {
-  if (v == null) return '—';
-  if (v >= 1e9) return 'R$ ' + (v / 1e9).toFixed(2).replace('.', ',') + ' bi';
-  if (v >= 1e6) return 'R$ ' + (v / 1e6).toFixed(1).replace('.', ',') + ' mi';
-  if (v > 0)    return 'R$ ' + Math.round(v).toLocaleString('pt-BR');
-  return 'R$ 0';
-}
+// Dados de ../data/dados_extras.json
+let contratos  = [];
+let malhaKm    = [];
+let malhaLiqKm = [];
 
-function fmtBRLFull(v) {
-  return v == null ? '—' : 'R$ ' + Math.round(v).toLocaleString('pt-BR');
-}
+// =======================================================
+// UTILITÁRIOS
+// =======================================================
 
-function fmtPct(v, dec = 1) {
-  return v == null ? '—' : v.toFixed(dec).replace('.', ',') + '%';
-}
+const tt = document.getElementById('tt');
 
-function fmtNum(v) {
-  return v == null ? '—' : Math.round(v).toLocaleString('pt-BR');
-}
+function showTT(e, html){ tt.innerHTML=html; tt.style.display='block'; moveTT(e); }
+function moveTT(e){ tt.style.left=(e.clientX+14)+'px'; tt.style.top=(e.clientY-8)+'px'; }
+function hideTT(){ tt.style.display='none'; }
 
-/* Barra de progresso colorida */
-function progressBar(pct, maxPct = 45) {
-  const cor = pct >= 25 ? '#C00000' : pct >= 15 ? '#FFC000' : '#70AD47';
-  const w = Math.min(pct / maxPct * 100, 100).toFixed(1);
-  return `<div class="pb-wrap">
-    <div class="pb"><div class="pb-fill" style="width:${w}%;background:${cor}"></div></div>
-    <span>${fmtPct(pct)}</span>
-  </div>`;
+function fmtNum(v, decimais=0){
+  if(v==null) return '—';
+  return v.toLocaleString('pt-BR', {minimumFractionDigits:decimais, maximumFractionDigits:decimais});
 }
+function fmtR(v){
+  if(v==null) return '—';
+  if(v>=1e9) return 'R$&nbsp;'+fmtNum(v/1e9,2)+'&nbsp;bi';
+  if(v>=1e6) return 'R$&nbsp;'+fmtNum(v/1e6,1)+'&nbsp;mi';
+  return 'R$&nbsp;'+fmtNum(v);
+}
+function fmtRF(v){ return v==null?'—':'R$&nbsp;'+fmtNum(Math.round(v)); }
+function fmtP(v){ return v==null?'—':fmtNum(v,1)+' %'; }
 
-/* Cor do IDH */
-function idhClass(idh) {
-  if (idh < 0.65) return 'idh-red';
-  if (idh < 0.70) return 'idh-yellow';
-  return 'idh-green';
+function execBadge(t){
+  if(t==null) return '<span class="badge b-gray">—</span>';
+  if(t>=90) return '<span class="badge b-green">Alta execução</span>';
+  if(t>=70) return '<span class="badge b-yellow">Execução moderada</span>';
+  return '<span class="badge b-red">Baixa execução</span>';
 }
 
-/* Badge de categoria */
-const catBadgeMap = {
-  'Paradoxo territorial': 'b-red',
-  'Só logístico':         'b-blue',
-  'Só vulnerável':        'b-orange',
-  'Neutro':               'b-gray',
-};
-function catBadge(cat) {
-  const cls = catBadgeMap[cat] || 'b-gray';
-  return `<span class="badge ${cls}">${cat}</span>`;
+function pb(pct, maxPct=45){
+  const c = pct>=25?'#C00000':pct>=15?'#FFC000':'#70AD47';
+  const w = fmtNum(Math.min(pct/maxPct*100,100),1);
+  return `<div class="pb-wrap"><div class="pb"><div class="pb-fill" style="width:${w}%;background:${c}"></div></div><span>${fmtP(pct)}</span></div>`;
 }
 
-/* Cor do círculo no mapa por categoria */
-const catColorMap = {
-  'Paradoxo territorial': '#C00000',
-  'Só logístico':         '#2E75B6',
-  'Só vulnerável':        '#FFC000',
-  'Neutro':               '#AAAAAA',
-};
+// =======================================================
+// ESTADO DOS FILTROS
+// =======================================================
 
-/* Cores por SR */
-const srColors = {
-  'SR Leste':         '#2E75B6',
-  'SR Campos Gerais': '#70AD47',
-  'SR Norte':         '#C00000',
-  'SR Noroeste':      '#E07B00',
-  'SR Oeste':         '#1F4E79',
-};
+let srFiltro = '';
+let catFiltro = '';
+let munDisplayData = [];
 
-/* =====================================================
-   CONTROLE DE ABAS
-   ===================================================== */
-const rendered = {};
+// =======================================================
+// ABA 1 — EXECUÇÃO FINANCEIRA
+// =======================================================
 
-function activateTab(id) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
+function renderExecucao(){
+  // Ordena decrescente por liquidado
+  const sorted = [...subprogramas].sort((a,b)=>b.liquidado-a.liquidado);
+  const totalLiqSub = subprogramas.reduce((a, s) => a + s.liquidado, 0);
 
-  if (!rendered[id]) {
-    rendered[id] = true;
-    // Renderiza conteúdo da aba na primeira ativação
-    setTimeout(() => renderTab(id), 30);
-  }
-}
-
-document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => activateTab(b.dataset.tab)));
-
-/* =====================================================
-   CARREGAMENTO DO JSON
-   ===================================================== */
-let D = null; // dados globais
-
-async function loadData() {
-  try {
-    const resp = await fetch('../data/der_precomputed.json');
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    D = await resp.json();
-    onDataLoaded();
-  } catch (err) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('erro').style.display = 'block';
-    document.getElementById('chipStatus').textContent = '⚠️ Erro ao carregar JSON';
-    document.getElementById('chipStatus').className = 'status-chip erro';
-    console.error('Erro ao carregar JSON:', err);
-  }
-}
-
-function onDataLoaded() {
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('tabNav').style.display = 'flex';
-  document.getElementById('tabContent').style.display = 'block';
-
-  const gen = D.generated ? D.generated.replace('T', ' ') : '?';
-  document.getElementById('chipStatus').textContent = '✅ JSON · Gerado ' + gen;
-  document.getElementById('chipStatus').className = 'status-chip ok';
-
-  // Renderiza a aba inicial
-  rendered['execucao'] = true;
-  renderTab('execucao');
-}
-
-/* =====================================================
-   DISPATCH DE RENDERIZAÇÃO POR ABA
-   ===================================================== */
-function renderTab(id) {
-  if (id === 'execucao') renderExecucao();
-  else if (id === 'eficiencia') renderEficiencia();
-  else if (id === 'malha') renderMalha();
-  else if (id === 'paradoxo') renderParadoxo();
-}
-
-/* =====================================================
-   ABA 1 — EXECUÇÃO FINANCEIRA
-   ===================================================== */
-function renderExecucao() {
-  const k = D.kpis;
-
-  /* KPI Cards */
-  const taxa = k.taxa_execucao_pct;
-  const taxaClass = taxa < 50 ? 'alert' : taxa < 80 ? 'warn' : '';
-
-  document.getElementById('kpiGrid').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-label">Total Liquidado — Ação 8398+8399</div>
-      <div class="kpi-value">${fmtBRL(k.liquidado_total)}</div>
-      <div class="kpi-sub">Exercício de referência do piloto</div>
-    </div>
-    <div class="kpi-card ${taxaClass}">
-      <div class="kpi-label">Taxa de Execução</div>
-      <div class="kpi-value">${fmtPct(k.taxa_execucao_pct)}</div>
-      <div class="kpi-sub">Liquidado / Orçamento Atualizado</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Classificado por Subprograma</div>
-      <div class="kpi-value">${fmtPct(k.classificado_subprograma_pct)}</div>
-      <div class="kpi-sub">Com meta física vinculada no PPA</div>
-    </div>
-    <div class="kpi-card alert">
-      <div class="kpi-label">⚠ Sem Rastreabilidade</div>
-      <div class="kpi-value">${fmtPct(k.sem_rastreabilidade_pct)}</div>
-      <div class="kpi-sub">${fmtBRL(k.liquidado_total * k.sem_rastreabilidade_pct / 100)} sem meta física</div>
-    </div>`;
-
-  /* Subprogramas — excluir "NÃO CLASSIFICADO" do gráfico de barras */
-  const subs = Object.entries(D.subprogramas)
-    .filter(([k]) => k !== 'NÃO CLASSIFICADO')
-    .sort((a, b) => b[1].liquidado - a[1].liquidado);
-
-  const totalClassif = subs.reduce((acc, [, v]) => acc + v.liquidado, 0);
-
-  /* Gráfico de barras horizontais */
-  new Chart(document.getElementById('chartSub'), {
-    type: 'bar',
-    data: {
-      labels: subs.map(([k]) => k),
-      datasets: [{
-        data: subs.map(([, v]) => v.liquidado),
-        backgroundColor: '#2E75B6',
-        borderRadius: 3,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const liq = ctx.parsed.x;
-              const pct = totalClassif > 0 ? (liq / totalClassif * 100).toFixed(1) : 0;
-              return [`Liquidado: ${fmtBRL(liq)}`, `% do classificado: ${pct}%`];
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { color: '#F0F0F0' },
-          ticks: { callback: v => v >= 1e9 ? (v/1e9).toFixed(1)+' bi' : v >= 1e6 ? (v/1e6).toFixed(0)+' M' : v }
-        },
-        y: { grid: { display: false } }
-      }
-    }
-  });
-
-  /* Tabela de subprogramas */
-  const obsMap = {
-    'PROMAC':       'Contratos com OS pendente — baixa execução esperada',
-    'PRORESTAURA':  'Licitações travadas no TCE — dos 12 lotes previstos, apenas 2 licitados',
-    'NÃO CLASSIFICADO': 'Sem meta física vinculada no PPA',
-  };
-
-  const allSubs = Object.entries(D.subprogramas).sort((a, b) => b[1].liquidado - a[1].liquidado);
-
-  document.getElementById('tbodySub').innerHTML = allSubs.map(([sub, v]) => {
-    const isNaoDef = sub === 'NÃO CLASSIFICADO';
-    const pct = totalClassif > 0 && !isNaoDef ? (v.liquidado / totalClassif * 100).toFixed(1) + '%' : '—';
-    const obs = obsMap[sub] || '';
+  // Tabela
+  const tbody = document.getElementById('tbodySub');
+  tbody.innerHTML = sorted.map(s=>{
+    const ncPct = totalLiqSub > 0 ? Math.round(s.liquidado / totalLiqSub * 1000) / 10 : 0;
+    const nota = s.nome==='NÃO CLASSIFICADO'
+      ? `<br><span class="fn">Gasto sem classificação por subprograma no PPA — ${fmtNum(ncPct,1)}% do total liquidado</span>`
+      : '';
     return `<tr>
-      <td><strong>${sub}</strong>${obs ? `<span class="fn">${obs}</span>` : ''}</td>
-      <td>${fmtBRLFull(v.liquidado)}</td>
-      <td>${pct}</td>
-      <td>${isNaoDef ? '<span class="badge b-gray">Sem rastreabilidade</span>' : ''}</td>
+      <td>${s.nome}${nota}</td>
+      <td>${fmtR(s.liquidado)}</td>
+      <td>${fmtP(s.taxa)}</td>
+      <td>${s.custo_km?'R$&nbsp;'+s.custo_km.toLocaleString('pt-BR'):'—'}</td>
+      <td>${execBadge(s.taxa)}</td>
     </tr>`;
   }).join('');
 
-  /* Nota metodológica */
-  document.getElementById('notaSub').innerHTML =
-    `<strong>Nota metodológica:</strong> ${fmtPct(k.classificado_subprograma_pct)} do liquidado
-    está classificado por subprograma. Os ${fmtPct(k.sem_rastreabilidade_pct)} restantes
-    (${fmtBRL(k.liquidado_total * k.sem_rastreabilidade_pct / 100)}) não possuem meta física
-    vinculada no PPA e foram mantidos no agregado da ação como "NÃO CLASSIFICADO".`;
-}
+  // Cores das barras conforme taxa de execução
+  const cores = sorted.map(s=>{
+    if(s.taxa==null) return '#BDD7EE';
+    if(s.taxa>=90) return '#70AD47';
+    if(s.taxa>=70) return '#FFC000';
+    return '#C00000';
+  });
 
-/* =====================================================
-   ABA 2 — EFICIÊNCIA POR REGIONAL
-   ===================================================== */
-function renderEficiencia() {
-  const regs = D.regionais;
-
-  /* Tabela */
-  document.getElementById('tbodyReg').innerHTML = Object.entries(regs)
-    .sort((a, b) => a[0].localeCompare(b[0], 'pt'))
-    .map(([sr, v]) => {
-      const isNorte    = sr === 'SR Norte';
-      const isNoroeste = sr === 'SR Noroeste';
-      const iriCrit = (v.iri.ruim || 0) + (v.iri.pessimo || 0);
-      const fwdCrit = (v.fwd.ruim || 0) + (v.fwd.pessimo || 0);
-      const emgHtml = isNoroeste && v.emergencial > 0
-        ? `<strong style="color:#C00000">${v.emergencial}</strong> 🔶`
-        : v.emergencial;
-      return `<tr class="${isNorte ? 'tr-norte' : ''}">
-        <td><strong>${sr}</strong></td>
-        <td>${fmtBRLFull(v.liquidado)}</td>
-        <td>R$ ${Math.round(v.liquidado_por_km).toLocaleString('pt-BR')}</td>
-        <td>${progressBar(iriCrit)}</td>
-        <td>${progressBar(fwdCrit)}</td>
-        <td>${v.n_contratos}</td>
-        <td>${emgHtml}</td>
-      </tr>`;
-    }).join('');
-
-  /* Gráfico de dispersão (scatter) */
-  const datasets = Object.entries(regs).map(([sr, v]) => ({
-    label: sr,
-    data: [{ x: (v.iri.ruim || 0) + (v.iri.pessimo || 0), y: v.liquidado_por_km }],
-    backgroundColor: srColors[sr] || '#888',
-    pointRadius: 12,
-    pointHoverRadius: 15,
-    pointStyle: 'circle',
-  }));
-
-  new Chart(document.getElementById('chartScatter'), {
-    type: 'scatter',
-    data: { datasets },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'right', labels: { font: { size: 12 }, padding: 12 } },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const sr = ctx.dataset.label;
-              const v  = D.regionais[sr];
-              return [
-                `IRI crítico: ${fmtPct((v.iri.ruim||0)+(v.iri.pessimo||0))}`,
-                `Liquidado/km: ${fmtBRLFull(v.liquidado_por_km)}`,
-                `Contratos: ${v.n_contratos} (${v.emergencial} emergencial)`,
-              ];
+  new Chart(document.getElementById('chartSub'),{
+    type:'bar',
+    data:{
+      labels: sorted.map(s=>s.nome),
+      datasets:[{
+        data: sorted.map(s=>s.liquidado),
+        backgroundColor: cores,
+        borderRadius:3,
+        borderSkipped:false
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            title: ctx=>sorted[ctx[0].dataIndex].nome,
+            label: ctx=>{
+              const s=sorted[ctx.dataIndex];
+              const lines=['Liquidado: '+fmtR(s.liquidado).replace(/&nbsp;/g,' ')];
+              if(s.taxa!=null) lines.push('Taxa de execução: '+fmtP(s.taxa).replace(/&nbsp;/g,' '));
+              if(s.custo_km) lines.push('Custo/km: R$ '+s.custo_km.toLocaleString('pt-BR'));
+              return lines;
             }
           }
         }
       },
-      scales: {
-        x: {
-          title: { display: true, text: '% Malha Crítica (IRI: Ruim + Péssimo)', font: { size: 12 } },
-          min: 0, max: 45,
-          grid: { color: '#F0F0F0' },
+      scales:{
+        x:{
+          grid:{color:'#F0F0F0'},
+          ticks:{callback:v=>v>=1e9?fmtNum(v/1e9,1)+' bi':v>=1e6?fmtNum(v/1e6,0)+' M':v}
         },
-        y: {
-          title: { display: true, text: 'Liquidado / km (R$)', font: { size: 12 } },
-          min: 0,
-          grid: { color: '#F0F0F0' },
-          ticks: { callback: v => 'R$ ' + (v/1000).toFixed(0) + 'k' }
-        }
+        y:{grid:{display:false}}
       }
     }
   });
 }
 
-/* =====================================================
-   ABA 3 — CONDIÇÃO DA MALHA
-   ===================================================== */
-function renderMalha() {
-  const regs = D.regionais;
+// =======================================================
+// ABA 2 — EFICIÊNCIA POR REGIONAL
+// =======================================================
 
-  /* Ordena SRs do pior IRI (maior crítico) para o melhor */
-  const srsSorted = Object.keys(regs).sort((a, b) => {
-    const ca = (regs[a].iri.ruim || 0) + (regs[a].iri.pessimo || 0);
-    const cb = (regs[b].iri.ruim || 0) + (regs[b].iri.pessimo || 0);
-    return cb - ca; // pior no topo
+function renderEficiencia(sr=''){
+  srFiltro = sr;
+  const tbody = document.getElementById('tbodyReg');
+  tbody.innerHTML = regionais.map(r=>{
+    const isNorte = r.sr==='SR Norte';
+    const isSelected = !sr || r.sr===sr;
+    const rowCls = isNorte ? 'tr-norte' : '';
+    const rowStyle = sr && !isSelected ? 'opacity:.4' : '';
+    const emgHtml = r.emg>0
+      ? `<span style="color:#C00000;font-weight:600">${r.emg} ⚠️</span>`
+      : r.emg;
+    return `<tr class="${rowCls}" style="${rowStyle}">
+      <td><strong>${r.sr}</strong></td>
+      <td>${fmtRF(r.liquidado)}</td>
+      <td>R$&nbsp;${r.lkm.toLocaleString('pt-BR')}</td>
+      <td>${pb(r.iri)}</td>
+      <td>${pb(r.fwd,45)}</td>
+      <td>${r.nc}</td>
+      <td>${emgHtml}</td>
+    </tr>`;
+  }).join('');
+
+  renderScatter(sr);
+}
+
+function renderScatter(sr=''){
+  const svg = document.getElementById('scatter');
+  const W=720, H=400;
+  const pad={l:80,r:30,t:30,b:60};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+
+  const xMin=0, xMax=45, yMin=0, yMax=100000;
+  const sx = v => pad.l + (v-xMin)/(xMax-xMin)*pw;
+  const sy = v => pad.t + ph - (v-yMin)/(yMax-yMin)*ph;
+
+  // Regressão linear para linha de tendência
+  const n=regionais.length;
+  const mx=regionais.reduce((a,r)=>a+r.iri,0)/n;
+  const my=regionais.reduce((a,r)=>a+r.lkm,0)/n;
+  const slope=regionais.reduce((a,r)=>a+(r.iri-mx)*(r.lkm-my),0)/
+               regionais.reduce((a,r)=>a+(r.iri-mx)**2,0);
+  const intercept=my-slope*mx;
+
+  const x1t=xMin, y1t=slope*x1t+intercept;
+  const x2t=xMax, y2t=slope*x2t+intercept;
+
+  const srCores={'SR Leste':'#2E75B6','SR Campos Gerais':'#70AD47','SR Norte':'#C00000','SR Noroeste':'#E07B00','SR Oeste':'#1F4E79'};
+
+  // Grade e eixos
+  let g = '';
+
+  // Grade X
+  for(let v=0;v<=45;v+=10){
+    const x=sx(v);
+    g+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+ph}" stroke="#EBEBEB" stroke-width="1"/>`;
+    g+=`<text x="${x}" y="${pad.t+ph+18}" text-anchor="middle" font-size="11" fill="#888">${v}%</text>`;
+  }
+  // Grade Y
+  for(let v=0;v<=100000;v+=20000){
+    const y=sy(v);
+    g+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+pw}" y2="${y}" stroke="#EBEBEB" stroke-width="1"/>`;
+    g+=`<text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="11" fill="#888">${v>=1000?(v/1000)+'k':v}</text>`;
+  }
+
+  // Área do plot
+  g=`<rect x="${pad.l}" y="${pad.t}" width="${pw}" height="${ph}" fill="#FAFBFC" stroke="#E0E0E0" rx="3"/>`+g;
+
+  // Linha de tendência
+  g+=`<line x1="${sx(x1t).toFixed(1)}" y1="${sy(Math.max(0,y1t)).toFixed(1)}" x2="${sx(x2t).toFixed(1)}" y2="${sy(Math.max(0,y2t)).toFixed(1)}" stroke="#BDD7EE" stroke-width="2" stroke-dasharray="6,4"/>`;
+
+  // Labels eixos
+  g+=`<text x="${pad.l+pw/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="#555" font-weight="500">% Malha Crítica (IRI)</text>`;
+  g+=`<text transform="rotate(-90,18,${pad.t+ph/2})" x="18" y="${pad.t+ph/2+4}" text-anchor="middle" font-size="12" fill="#555" font-weight="500">Liquidado/km (R$)</text>`;
+
+  // Pontos
+  const offsets={
+    'SR Leste':[10,-12],
+    'SR Campos Gerais':[-10,-14],
+    'SR Norte':[0,-16],
+    'SR Noroeste':[12,4],
+    'SR Oeste':[10,-12]
+  };
+  regionais.forEach(r=>{
+    const cx=sx(r.iri), cy=sy(r.lkm);
+    const cor=srCores[r.sr]||'#888';
+    const [ox,oy]=offsets[r.sr]||[10,-12];
+    const lbl=r.sr.replace('SR ','');
+    const isNoroeste=r.sr==='SR Noroeste';
+    const isSelected = !sr || r.sr===sr;
+    const fillOp = isSelected ? '.82' : '.20';
+    const lblOp  = isSelected ? '1'   : '.25';
+    const radius  = sr && r.sr===sr ? 18 : 13;
+    if(r.emg > 0){
+      const haloOp = isSelected ? '1' : '.25';
+      g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="22" fill="none" stroke="#C00000" stroke-width="1.8" stroke-dasharray="5,4" opacity="${haloOp}"/>`;
+    }
+    g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${radius}" fill="${cor}" fill-opacity="${fillOp}" stroke="white" stroke-width="2"
+        class="sdot" data-sr="${r.sr}" data-iri="${r.iri}" data-lkm="${r.lkm.toLocaleString('pt-BR')}" data-emg="${r.emg}"/>`;
+    g+=`<text x="${(cx+ox).toFixed(1)}" y="${(cy+oy).toFixed(1)}" font-size="11" fill="${cor}" font-weight="600" opacity="${lblOp}">${lbl}</text>`;
   });
 
-  const catKeys   = ['ruim', 'pessimo', 'regular', 'bom', 'muito_bom'];
-  const catLabels = ['Ruim', 'Péssimo', 'Regular', 'Bom', 'Muito Bom'];
-  const catColors = ['#C00000', '#E07B00', '#FFC000', '#70AD47', '#1F4E79'];
+  svg.innerHTML=g;
 
-  function makeStackedChart(canvasId, dataField) {
-    return new Chart(document.getElementById(canvasId), {
-      type: 'bar',
-      data: {
-        labels: srsSorted.map(sr => sr.replace('SR ', '')),
-        datasets: catKeys.map((k, i) => ({
-          label: catLabels[i],
-          data: srsSorted.map(sr => regs[sr][dataField][k] || 0),
-          backgroundColor: catColors[i],
-        }))
+  svg.querySelectorAll('.sdot').forEach(el=>{
+    el.style.cursor='pointer';
+    el.addEventListener('mousemove',e=>{
+      const emgN=+el.dataset.emg;
+      const extra=emgN>0?`<br>⚠️ ${emgN} contratos emergenciais em 2025 — abaixo da linha de tendência`:'';
+      showTT(e,`<strong>${el.dataset.sr}</strong><br>IRI crítico: ${el.dataset.iri}%<br>Liquidado/km: R$ ${el.dataset.lkm}${extra}`);
+    });
+    el.addEventListener('mouseleave',hideTT);
+  });
+}
+
+// =======================================================
+// ABA 3 — CONDIÇÃO DA MALHA
+// =======================================================
+
+function renderMalha(){
+  // Ordena SRs por criticidade (ruim+pessimo) crescente (melhor no topo)
+  const iriSorted = [...iri].sort((a,b)=>(a.ruim+a.pessimo)-(b.ruim+b.pessimo));
+  const fwdSorted = [...fwd].sort((a,b)=>(a.ruim+a.pessimo)-(b.ruim+b.pessimo));
+
+  const stackDatasets = (arr) => [
+    { label:'Ruim',     data:arr.map(r=>r.ruim),     backgroundColor:'#C00000' },
+    { label:'Péssimo',  data:arr.map(r=>r.pessimo),  backgroundColor:'#E07B00' },
+    { label:'Regular',  data:arr.map(r=>r.regular),  backgroundColor:'#FFC000' },
+    { label:'Bom',      data:arr.map(r=>r.bom),      backgroundColor:'#70AD47' },
+    { label:'Muito Bom',data:arr.map(r=>r.muito_bom),backgroundColor:'#1F4E79' }
+  ];
+
+  const stackOpts = {
+    indexAxis:'y',
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11},padding:12}},
+      tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)}%`}}
+    },
+    scales:{
+      x:{stacked:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:'#F0F0F0'}},
+      y:{stacked:true,grid:{display:false}}
+    }
+  };
+
+  new Chart(document.getElementById('chartIRI'),{
+    type:'bar',
+    data:{ labels:iriSorted.map(r=>r.sr.replace('SR ','')), datasets:stackDatasets(iriSorted) },
+    options:stackOpts
+  });
+  new Chart(document.getElementById('chartFWD'),{
+    type:'bar',
+    data:{ labels:fwdSorted.map(r=>r.sr.replace('SR ','')), datasets:stackDatasets(fwdSorted) },
+    options:stackOpts
+  });
+
+  // Gráfico de extensão absoluta em km
+  if(malhaKm.length > 0){
+    const kmSorted = [...malhaKm].sort((a,b)=>(a.ruim_km+a.pessimo_km)-(b.ruim_km+b.pessimo_km));
+    new Chart(document.getElementById('chartMalhaKm'),{
+      type:'bar',
+      data:{
+        labels: kmSorted.map(r=>r.sr.replace('SR ','')),
+        datasets:[
+          { label:'Ruim',      data:kmSorted.map(r=>r.ruim_km),     backgroundColor:'#C00000' },
+          { label:'Péssimo',   data:kmSorted.map(r=>r.pessimo_km),  backgroundColor:'#E07B00' },
+          { label:'Regular',   data:kmSorted.map(r=>r.regular_km),  backgroundColor:'#FFC000' },
+          { label:'Boa',       data:kmSorted.map(r=>r.boa_km),      backgroundColor:'#70AD47' },
+          { label:'Muito Boa', data:kmSorted.map(r=>r.muito_boa_km),backgroundColor:'#1F4E79' }
+        ]
       },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } },
-          tooltip: {
-            callbacks: {
-              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.x.toFixed(1)}%`
-            }
-          }
+      options:{
+        indexAxis:'y',
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'bottom',labels:{font:{size:11},padding:12}},
+          tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)} km`}}
         },
-        scales: {
-          x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#F0F0F0' } },
-          y: { stacked: true, grid: { display: false } }
+        scales:{
+          x:{stacked:true,ticks:{callback:v=>fmtNum(v)+' km'},grid:{color:'#F0F0F0'}},
+          y:{stacked:true,grid:{display:false}}
         }
       }
     });
   }
 
-  makeStackedChart('chartIRI', 'iri');
-  makeStackedChart('chartFWD', 'fwd');
-
-  /* Cards de destaque — SR Norte, Noroeste, Oeste */
-  const norte = regs['SR Norte']    || {};
-  const nor   = regs['SR Noroeste'] || {};
-  const oeste = regs['SR Oeste']    || {};
-
-  const iriCritNorte = ((norte.iri?.ruim || 0) + (norte.iri?.pessimo || 0)).toFixed(1);
-  const fwdCritOeste = ((oeste.fwd?.ruim || 0) + (oeste.fwd?.pessimo || 0)).toFixed(1);
-  const fwdCritNor   = ((nor.fwd?.ruim   || 0) + (nor.fwd?.pessimo   || 0)).toFixed(1);
-
-  document.getElementById('hlCards').innerHTML = `
-    <div class="hl-card danger">
-      <h4>⚠ SR Norte — Pior IRI do Estado</h4>
-      <p>${iriCritNorte}% da malha em situação crítica (Ruim+Péssimo). Serviços mais profundos justificam o maior custo/km
-      (${fmtBRLFull(norte.liquidado_por_km)}).</p>
-    </div>
-    <div class="hl-card warn">
-      <h4>SR Noroeste — Maior Extensão de Malha</h4>
-      <p>Maior extensão do estado (${fmtNum(nor.km_total)} km). Pressão estrutural moderada (FWD crítico ${fwdCritNor}%)
-      com ${nor.emergencial || 0} contrato(s) emergencial(is) em 2025.</p>
-    </div>
-    <div class="hl-card">
-      <h4>SR Oeste — Maior Liquidado Absoluto</h4>
-      <p>Maior liquidado absoluto (${fmtBRL(oeste.liquidado)}). FWD crítico de ${fwdCritOeste}% —
-      capacidade estrutural requer atenção continuada.</p>
-    </div>`;
+  // Gráfico: liquidado/km por SR vs % crítico IRI
+  if(malhaKm.length > 0){
+    const SR_ORDER=['SR Leste','SR Campos Gerais','SR Norte','SR Noroeste','SR Oeste'];
+    const srLabels = SR_ORDER.map(s=>s.replace('SR ',''));
+    const liqKmData = SR_ORDER.map(sr=>{
+      const r = regionais.find(x=>x.sr===sr);
+      return r ? r.lkm : 0;
+    });
+    const pctCriticoData = SR_ORDER.map(sr=>{
+      const r = regionais.find(x=>x.sr===sr);
+      return r ? r.iri : 0;
+    });
+    new Chart(document.getElementById('chartLiqKmSR'),{
+      type:'bar',
+      data:{
+        labels: srLabels,
+        datasets:[
+          {
+            label:'Liquidado/km (R$)',
+            data: liqKmData,
+            backgroundColor:'#2E75B6',
+            yAxisID:'y',
+            borderRadius:3
+          },
+          {
+            label:'% Malha Crítica IRI',
+            data: pctCriticoData,
+            type:'line',
+            borderColor:'#C00000',
+            backgroundColor:'rgba(192,0,0,.15)',
+            fill:true,
+            tension:.3,
+            yAxisID:'y2',
+            pointRadius:5,
+            pointBackgroundColor:'#C00000'
+          }
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'bottom',labels:{font:{size:11},padding:12}},
+          tooltip:{callbacks:{label:ctx=>{
+            if(ctx.dataset.yAxisID==='y2') return ` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.y,1)}%`;
+            return ` ${ctx.dataset.label}: R$ ${fmtNum(ctx.parsed.y)}`;
+          }}}
+        },
+        scales:{
+          x:{grid:{display:false}},
+          y:{
+            position:'left',
+            grid:{color:'#F0F0F0'},
+            ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v}
+          },
+          y2:{
+            position:'right',
+            grid:{display:false},
+            ticks:{callback:v=>v+'%'},
+            max:50
+          }
+        }
+      }
+    });
+  }
 }
 
-/* =====================================================
-   ABA 4 — PARADOXO TERRITORIAL
-   ===================================================== */
-let munData = [];
+// =======================================================
+// ABA 4 — PARADOXO TERRITORIAL
+// =======================================================
 
-function renderParadoxo() {
-  munData = D.municipios || [];
-  renderMapa();
-  renderTblMun(munData);
+const catCores = {
+  'Paradoxo territorial':'#8B0000',
+  'Só logístico':'#2E75B6',
+  'Só vulnerável':'#E07B00',
+  'Neutro':'#888'
+};
+
+function renderParadoxo(){
+  catFiltro = '';
+  munDisplayData = [...municipios];
+  renderMapa('');
+  renderTblMun(munDisplayData, '');
 }
 
-function renderMapa() {
-  /* Converte lat/lng para coordenadas SVG
-     viewBox: 0 0 800 520
-     Paraná: lat [-22.5, -26.5], lng [-48.5, -54.5]          */
-  const LNG_MIN = -54.5, LNG_MAX = -48.5;
-  const LAT_MIN = -26.5, LAT_MAX = -22.5;
-  const SVG_W = 700, SVG_H = 460, PAD_X = 50, PAD_Y = 30;
+function renderMapa(cat=''){
+  // Bounding box do Paraná
+  const latMin=-26.75, latMax=-22.40;
+  const lngMin=-54.65, lngMax=-47.95;
+  const W=720, H=400;
+  const pad={l:18,r:18,t:18,b:18};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
 
-  function toX(lng) { return PAD_X + (lng - LNG_MIN) / (LNG_MAX - LNG_MIN) * SVG_W; }
-  function toY(lat) { return PAD_Y + (lat - LAT_MAX) / (LAT_MIN - LAT_MAX) * SVG_H; }
+  const tx = lng => pad.l+(lng-lngMin)/(lngMax-lngMin)*pw;
+  const ty = lat => pad.t+(lat-latMax)/(latMin-latMax)*ph;
 
-  /* Outline simplificado do Paraná */
+  // Outline simplificado do Paraná (lat,lng)
   const border = [
-    [-22.5,-53.2],[-22.5,-52.0],[-22.5,-50.7],[-22.9,-49.3],
-    [-23.4,-48.1],[-24.6,-48.0],[-25.7,-48.2],[-26.1,-48.6],
-    [-26.7,-49.2],[-26.7,-51.3],[-26.5,-53.4],[-25.6,-54.5],
-    [-24.1,-54.6],[-22.9,-54.5],[-22.5,-53.8],[-22.5,-53.2]
-  ].map(([lat, lng]) => `${toX(lng).toFixed(1)},${toY(lat).toFixed(1)}`).join(' ');
+    [-22.50,-53.20],[-22.50,-52.00],[-22.50,-50.70],[-22.90,-49.30],
+    [-23.40,-48.05],[-24.60,-48.00],[-25.70,-48.20],[-26.10,-48.55],
+    [-26.70,-49.20],[-26.70,-51.30],[-26.45,-53.40],[-25.60,-54.55],
+    [-24.10,-54.65],[-22.85,-54.55],[-22.50,-53.80],[-22.50,-53.20]
+  ].map(([lat,lng])=>`${tx(lng).toFixed(1)},${ty(lat).toFixed(1)}`).join(' ');
 
-  const maxPop = Math.max(...munData.map(m => m.populacao || 1));
-  const MIN_R = 6, MAX_R = 20;
+  const maxPop = Math.max(...municipios.map(m=>m.pop));
 
-  let svgHtml = `<polygon points="${border}" fill="#E8F2FA" stroke="#2E75B6" stroke-width="1.5" stroke-linejoin="round"/>`;
-  svgHtml += `<text x="${PAD_X + SVG_W/2}" y="22" text-anchor="middle" font-size="13" fill="#1F4E79" font-weight="600" font-family="Inter,sans-serif">Paraná</text>`;
+  let g = `<polygon points="${border}" fill="#E8F2FA" stroke="#2E75B6" stroke-width="1.5" stroke-linejoin="round"/>`;
+  g += `<text x="${W/2}" y="34" text-anchor="middle" font-size="13" fill="#1F4E79" font-weight="600">Paraná</text>`;
 
-  munData.forEach(m => {
-    if (!m.lat || !m.lng) return;
-    const cx = toX(m.lng).toFixed(1);
-    const cy = toY(m.lat).toFixed(1);
-    const r  = (MIN_R + Math.sqrt((m.populacao || 0) / maxPop) * (MAX_R - MIN_R)).toFixed(1);
-    const cor = catColorMap[m.categoria] || '#888';
-    const liqTxt = m.liquidado_8398 === 0
-      ? 'Liquidado identificado: R$ 0'
-      : m.liquidado_8398 > 0
-        ? 'Liq. 8398: ' + fmtBRLFull(m.liquidado_8398)
-        : 'Sem dados';
-    const tipTitle = `${m.nome} | IDH ${m.idh} | ${m.categoria} | Pop. ${(m.populacao||0).toLocaleString('pt-BR')} | ${liqTxt}`;
-
-    svgHtml += `<circle cx="${cx}" cy="${cy}" r="${r}"
-      fill="${cor}" fill-opacity=".75" stroke="white" stroke-width="1.5"
-      class="mdot" title="${tipTitle}"
-      data-nome="${m.nome}" data-idh="${m.idh}"
-      data-cat="${m.categoria}" data-pop="${(m.populacao||0).toLocaleString('pt-BR')}"
-      data-liq="${liqTxt}"/>`;
+  // Círculos dos municípios
+  municipios.forEach(m=>{
+    const cx=tx(m.lng), cy=ty(m.lat);
+    const r=4+Math.sqrt(m.pop/maxPop)*20;
+    const cor=catCores[m.cat]||'#888';
+    const fillOp = !cat || m.cat===cat ? '.72' : '.15';
+    const liqHtml=m.lh==null?'Sem dados de liquidado':m.lh===0?'Liq. identificado: R$ 0':'Liq./hab: R$&nbsp;'+fmtNum(m.lh,2);
+    g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"
+        fill="${cor}" fill-opacity="${fillOp}" stroke="white" stroke-width="1.5"
+        class="mdot" data-nome="${m.nome}" data-idh="${m.idh}" data-cat="${m.cat}"
+        data-pop="${m.pop.toLocaleString('pt-BR')}" data-liq="${liqHtml}"/>`;
   });
 
-  /* Labels para Paradoxo Territorial */
-  munData.filter(m => m.categoria === 'Paradoxo territorial').forEach(m => {
-    if (!m.lat || !m.lng) return;
-    const cx = toX(m.lng).toFixed(1);
-    const cy = (toY(m.lat) - 12).toFixed(1);
-    svgHtml += `<text x="${cx}" y="${cy}" text-anchor="middle" font-size="10"
-      fill="#C00000" font-weight="700" font-family="Inter,sans-serif">${m.nome}</text>`;
+  // Labels para paradoxo
+  municipios.filter(m=>m.cat==='Paradoxo territorial').forEach(m=>{
+    const cx=tx(m.lng), cy=ty(m.lat);
+    const lblOp = !cat || m.cat===cat ? '1' : '.2';
+    g+=`<text x="${cx.toFixed(1)}" y="${(cy-10).toFixed(1)}" text-anchor="middle" font-size="10" fill="#8B0000" font-weight="700" opacity="${lblOp}">${m.nome}</text>`;
   });
 
-  document.getElementById('mapSVG').innerHTML = svgHtml;
+  const svg=document.getElementById('mapa');
+  svg.innerHTML=g;
 
-  /* Tooltips customizados nos círculos do mapa */
-  document.querySelectorAll('.mdot').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('mousemove', e => showTT(e,
+  svg.querySelectorAll('.mdot').forEach(el=>{
+    el.style.cursor='pointer';
+    el.addEventListener('mousemove',e=>showTT(e,
       `<strong>${el.dataset.nome}</strong><br>IDH: ${el.dataset.idh}<br>Categoria: ${el.dataset.cat}<br>Pop.: ${el.dataset.pop}<br>${el.dataset.liq}`));
-    el.addEventListener('mouseleave', hideTT);
+    el.addEventListener('mouseleave',hideTT);
   });
 }
 
-/* Tabela de municípios (ordenável) */
-let munSortDir = {};
-
-function sortMun(col) {
-  const dir = munSortDir[col] === 'asc' ? 'desc' : 'asc';
-  munSortDir = { [col]: dir };
-  const keys = ['nome', 'sr', 'idh', 'logistica', 'categoria', 'populacao', 'liquidado_por_hab'];
-  const k = keys[col];
-  const sorted = [...munData].sort((a, b) => {
-    let va = a[k], vb = b[k];
-    if (va == null) va = dir === 'asc' ? Infinity : -Infinity;
-    if (vb == null) vb = dir === 'asc' ? Infinity : -Infinity;
-    if (typeof va === 'string') return dir === 'asc' ? va.localeCompare(vb, 'pt') : vb.localeCompare(va, 'pt');
-    return dir === 'asc' ? va - vb : vb - va;
+let munSortDir={};
+function sortMun(col){
+  const dir=munSortDir[col]==='asc'?'desc':'asc';
+  munSortDir={[col]:dir};
+  const keys=['nome','sr','idh','log','cat','pop','lh'];
+  const k=keys[col];
+  const sorted=[...municipios].sort((a,b)=>{
+    let va=a[k], vb=b[k];
+    if(va==null) va=dir==='asc'?Infinity:-Infinity;
+    if(vb==null) vb=dir==='asc'?Infinity:-Infinity;
+    if(typeof va==='string') return dir==='asc'?va.localeCompare(vb,'pt'):vb.localeCompare(va,'pt');
+    return dir==='asc'?va-vb:vb-va;
   });
-  renderTblMun(sorted);
+  munDisplayData = sorted;
+  renderTblMun(munDisplayData, catFiltro);
 }
 
-function renderTblMun(data) {
-  document.getElementById('tbodyMun').innerHTML = data.map(m => {
-    const isP = m.categoria === 'Paradoxo territorial';
-    const liqHtml = m.liquidado_8398 === 0
-      ? '<span class="badge b-red">⚠️ R$ 0 identificado</span>'
-      : m.liquidado_8398 > 0
-        ? fmtBRLFull(m.liquidado_por_hab) + '/hab'
-        : '<span class="badge b-gray">Sem dados</span>';
-    return `<tr class="${isP ? 'tr-paradoxo' : ''}">
+function renderTblMun(data, cat=''){
+  const catBadge = c => {
+    if(c==='Paradoxo territorial') return `<span class="badge b-red">${c}</span>`;
+    if(c==='Só logístico')         return `<span class="badge b-blue">${c}</span>`;
+    if(c==='Só vulnerável')        return `<span class="badge b-orange">${c}</span>`;
+    return `<span class="badge b-gray">${c}</span>`;
+  };
+  const lhHtml = m => {
+    if(m.lh==null) return '<span class="badge b-gray">Sem dados</span>';
+    if(m.lh===0)   return '<span class="badge b-gray">R$ 0</span>';
+    return 'R$&nbsp;'+fmtNum(m.lh,2)+'/hab';
+  };
+  document.getElementById('tbodyMun').innerHTML = data.map(m=>{
+    const isP=m.cat==='Paradoxo territorial';
+    const rowStyle = cat && m.cat!==cat ? 'opacity:.35' : '';
+    return `<tr class="${isP?'tr-paradoxo':''}" style="${rowStyle}">
       <td><strong>${m.nome}</strong></td>
-      <td>${m.sr || '—'}</td>
-      <td class="${idhClass(m.idh)}">${m.idh ? m.idh.toFixed(3) : '—'}</td>
-      <td>${m.logistica || '—'}</td>
-      <td>${catBadge(m.categoria)}</td>
-      <td>${(m.populacao || 0).toLocaleString('pt-BR')}</td>
-      <td>${liqHtml}</td>
+      <td>${m.sr}</td>
+      <td>${fmtNum(m.idh,3)}</td>
+      <td>${m.log}</td>
+      <td>${catBadge(m.cat)}</td>
+      <td>${m.pop.toLocaleString('pt-BR')}</td>
+      <td>${lhHtml(m)}</td>
     </tr>`;
   }).join('');
 }
 
-/* =====================================================
-   INICIALIZAÇÃO
-   ===================================================== */
-loadData();
+// =======================================================
+// ABA 5 — CONTRATOS
+// =======================================================
+
+const SR_DISPLAY = {
+  'SR LESTE':'SR Leste','SR CAMPOS GERAIS':'SR Campos Gerais',
+  'SR NORTE':'SR Norte','SR NOROESTE':'SR Noroeste','SR OESTE':'SR Oeste'
+};
+
+const TIPO_COLORS = {
+  'PROCONSERVA':'#2E75B6','COP':'#70AD47','INTEGRA':'#1F4E79',
+  'CREMEP':'#FFC000','EMERGENCIAL':'#C00000'
+};
+
+let contSRFiltro   = '';
+let contTipoFiltro = '';
+
+function renderContratos(){
+  if(!contratos.length) return;
+
+  const totalEmp  = contratos.reduce((a,c)=>a+c.empenhado,0);
+  const totalLiq  = contratos.reduce((a,c)=>a+c.liquidado,0);
+  const pctExec   = totalEmp>0?(totalLiq/totalEmp*100):0;
+
+  // KPI cards
+  document.getElementById('kpi-cont-total').textContent = contratos.length;
+  document.getElementById('kpi-cont-emp').innerHTML     = fmtR(totalEmp);
+  document.getElementById('kpi-cont-liq').innerHTML     = fmtR(totalLiq);
+  document.getElementById('kpi-cont-exec').textContent  = fmtNum(pctExec,1)+'%';
+  const execCard = document.getElementById('kpi-cont-exec-card');
+  if(pctExec<70) execCard.classList.add('alert');
+
+  // Chart 1 — Empenhado vs Liquidado por SR
+  const SR_ORDER_UP=['SR LESTE','SR CAMPOS GERAIS','SR NORTE','SR NOROESTE','SR OESTE'];
+  const srLabels = SR_ORDER_UP.map(s=>SR_DISPLAY[s].replace('SR ',''));
+  const empBySR  = SR_ORDER_UP.map(sr=>contratos.filter(c=>c.sr===sr).reduce((a,c)=>a+c.empenhado,0));
+  const liqBySR  = SR_ORDER_UP.map(sr=>contratos.filter(c=>c.sr===sr).reduce((a,c)=>a+c.liquidado,0));
+
+  new Chart(document.getElementById('chartContSR'),{
+    type:'bar',
+    data:{
+      labels: srLabels,
+      datasets:[
+        { label:'Empenhado', data:empBySR, backgroundColor:'#BDD7EE', borderRadius:3 },
+        { label:'Liquidado', data:liqBySR, backgroundColor:'#2E75B6', borderRadius:3 }
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{font:{size:11},padding:12}},
+        tooltip:{callbacks:{label:ctx=>{
+          const v=ctx.raw;
+          const fmt=v>=1e9?'R$ '+fmtNum(v/1e9,2)+' bi':v>=1e6?'R$ '+fmtNum(v/1e6,1)+' mi':'R$ '+fmtNum(v);
+          return ` ${ctx.dataset.label}: ${fmt}`;
+        }}}
+      },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1e6?fmtNum(v/1e6,0)+' M':v}}
+      }
+    }
+  });
+
+  // Chart 2 — Donut por tipo
+  const tipos = Object.keys(TIPO_COLORS);
+  const tipoCounts = tipos.map(t=>contratos.filter(c=>c.tipo===t).length).filter((_,i)=>contratos.some(c=>c.tipo===tipos[i]));
+  const tiposAtivos = tipos.filter(t=>contratos.some(c=>c.tipo===t));
+
+  new Chart(document.getElementById('chartContTipo'),{
+    type:'doughnut',
+    data:{
+      labels: tiposAtivos,
+      datasets:[{
+        data: tiposAtivos.map(t=>contratos.filter(c=>c.tipo===t).length),
+        backgroundColor: tiposAtivos.map(t=>TIPO_COLORS[t]||'#888'),
+        borderWidth:2,
+        borderColor:'#fff'
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{font:{size:11},padding:10}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw} contrato${ctx.raw>1?'s':''}`}}
+      }
+    }
+  });
+
+  // Chart 3 — Liquidado por tipo (horizontal bar)
+  const tipoLiqMap = tiposAtivos.map(t=>({
+    tipo:t,
+    liq:contratos.filter(c=>c.tipo===t).reduce((a,c)=>a+c.liquidado,0)
+  })).sort((a,b)=>b.liq-a.liq);
+
+  new Chart(document.getElementById('chartContLiqTipo'),{
+    type:'bar',
+    data:{
+      labels: tipoLiqMap.map(t=>t.tipo),
+      datasets:[{
+        data: tipoLiqMap.map(t=>t.liq),
+        backgroundColor: tipoLiqMap.map(t=>TIPO_COLORS[t.tipo]||'#888'),
+        borderRadius:3
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>{
+          const v=ctx.raw;
+          const fmt=v>=1e9?'R$ '+fmtNum(v/1e9,2)+' bi':v>=1e6?'R$ '+fmtNum(v/1e6,1)+' mi':'R$ '+fmtNum(v);
+          return ` Liquidado: ${fmt}`;
+        }}}
+      },
+      scales:{
+        x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1e6?fmtNum(v/1e6,0)+' M':v}},
+        y:{grid:{display:false}}
+      }
+    }
+  });
+
+  renderTblContratos(contratos);
+}
+
+function renderTblContratos(data){
+  const tipoBadge = t=>{
+    const cls={'PROCONSERVA':'b-blue','COP':'b-green','INTEGRA':'b-blue','CREMEP':'b-yellow','EMERGENCIAL':'b-red'};
+    return `<span class="badge ${cls[t]||'b-gray'}">${t}</span>`;
+  };
+  const tblBody = document.getElementById('tbodyContratos');
+  if(!tblBody) return;
+  tblBody.innerHTML = data.map(c=>{
+    const pct = c.empenhado>0?c.liquidado/c.empenhado*100:0;
+    const emgRow = c.tipo==='EMERGENCIAL'?'background:#FFF5F5':'';
+    return `<tr style="${emgRow}">
+      <td><strong>${c.contrato}</strong></td>
+      <td>${SR_DISPLAY[c.sr]||c.sr}</td>
+      <td>${tipoBadge(c.tipo)}</td>
+      <td>${fmtRF(c.empenhado)}</td>
+      <td>${fmtRF(c.liquidado)}</td>
+      <td>${fmtRF(c.pago)}</td>
+      <td>${execBadge(pct)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// =======================================================
+// CONTROLE DE ABAS
+// =======================================================
+
+const rendered={};
+
+function activateTab(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    const active=b.dataset.tab===id;
+    b.classList.toggle('active',active);
+    b.setAttribute('aria-selected',active?'true':'false');
+  });
+  document.querySelectorAll('.tab-pane').forEach(p=>{
+    p.classList.remove('active');
+    p.style.display='none';
+  });
+  const pane=document.getElementById('tab-'+id);
+  pane.style.display='block';
+  // forçar reflow antes da animação
+  void pane.offsetHeight;
+  pane.classList.add('active');
+
+  if(!rendered[id]){
+    rendered[id]=true;
+    setTimeout(()=>{
+      if(id==='execucao') renderExecucao();
+      else if(id==='eficiencia') renderEficiencia();
+      else if(id==='malha') renderMalha();
+      else if(id==='paradoxo') renderParadoxo();
+      else if(id==='contratos') renderContratos();
+    }, 30);
+  }
+}
+
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
+document.querySelectorAll('#tblMun th[data-col]').forEach(th=>th.addEventListener('click',()=>sortMun(+th.dataset.col)));
+
+document.getElementById('filtroSR').addEventListener('change', e=>{
+  renderEficiencia(e.target.value);
+});
+
+document.getElementById('filtroCategoria').addEventListener('change', e=>{
+  catFiltro = e.target.value;
+  renderMapa(catFiltro);
+  renderTblMun(munDisplayData, catFiltro);
+});
+
+document.getElementById('filtroContSR').addEventListener('change', e=>{
+  contSRFiltro = e.target.value;
+  const filtered = contratos.filter(c=>
+    (!contSRFiltro || c.sr===contSRFiltro) &&
+    (!contTipoFiltro || c.tipo===contTipoFiltro)
+  );
+  renderTblContratos(filtered);
+});
+
+document.getElementById('filtroContTipo').addEventListener('change', e=>{
+  contTipoFiltro = e.target.value;
+  const filtered = contratos.filter(c=>
+    (!contSRFiltro || c.sr===contSRFiltro) &&
+    (!contTipoFiltro || c.tipo===contTipoFiltro)
+  );
+  renderTblContratos(filtered);
+});
+
+// Inicialização via fetch — ver initDashboard() abaixo
+
+// =======================================================
+// CARGA DE DADOS — ../data/der_precomputed.json
+// =======================================================
+
+function initDashboard(d) {
+  const SR_ORDER = ['SR Leste','SR Campos Gerais','SR Norte','SR Noroeste','SR Oeste'];
+
+  // Data de extração no cabeçalho
+  const hdrDataRef = document.getElementById('hdr-data-ref');
+  if(hdrDataRef && d.generated){
+    const gen = new Date(d.generated);
+    hdrDataRef.textContent = 'Dados: SAM/SGP ' + gen.toLocaleDateString('pt-BR');
+  }
+
+  // ── Subprogramas ────────────────────────────────────────
+  subprogramas = Object.entries(d.subprogramas).map(([nome, s]) => ({
+    nome,
+    liquidado: s.liquidado,
+    taxa: s.orcamento > 0 ? Math.round(s.liquidado / s.orcamento * 1000) / 10 : null,
+    custo_km: null
+  }));
+
+  // ── Regionais ───────────────────────────────────────────
+  regionais = SR_ORDER.map(sr => {
+    const r = d.regionais[sr];
+    return {
+      sr,
+      liquidado: r.liquidado,
+      lkm: Math.round(r.liquidado_por_km),
+      iri: Math.round((r.iri.ruim + r.iri.pessimo) * 100) / 100,
+      fwd: Math.round((r.fwd.ruim + r.fwd.pessimo) * 100) / 100,
+      nc:  r.n_contratos,
+      emg: r.emergencial
+    };
+  });
+
+  // ── IRI e FWD (detalhamento por faixa) ──────────────────
+  iri = SR_ORDER.map(sr => ({ sr, ...d.regionais[sr].iri }));
+  fwd = SR_ORDER.map(sr => ({ sr, ...d.regionais[sr].fwd }));
+
+  // ── Municípios ──────────────────────────────────────────
+  municipios = d.municipios.map(m => ({
+    nome: m.nome,
+    idh:  m.idh,
+    log:  m.logistica,
+    cat:  m.categoria,
+    lat:  m.lat,
+    lng:  m.lng,
+    sr:   m.sr,
+    lh:   m.liquidado_por_hab,
+    pop:  m.populacao
+  }));
+  munDisplayData = [...municipios];
+
+  // ── KPI cards ───────────────────────────────────────────
+  const k = d.kpis;
+  const semRastrAbs = k.liquidado_total * k.sem_rastreabilidade_pct / 100;
+  document.getElementById('kpi-total').innerHTML       = fmtR(k.liquidado_total);
+  document.getElementById('kpi-taxa').textContent      = fmtNum(k.taxa_execucao_pct, 1) + '%';
+  document.getElementById('kpi-class').textContent     = fmtNum(k.classificado_subprograma_pct, 1) + '%';
+  document.getElementById('kpi-semrastr').textContent  = fmtNum(k.sem_rastreabilidade_pct, 1) + '%';
+  document.getElementById('kpi-semrastr-sub').innerHTML = fmtR(semRastrAbs) + ' sem meta física vinculada';
+
+  // ── Nota metodológica (Aba 1) ───────────────────────────
+  document.getElementById('nota-metodologica').innerHTML =
+    `<strong>Nota metodológica:</strong> ${fmtNum(k.classificado_subprograma_pct,1)}% do liquidado está classificado por subprograma. ` +
+    `Os ${fmtNum(k.sem_rastreabilidade_pct,1)}% restantes (${fmtR(semRastrAbs)}) não possuem meta física vinculada no PPA e foram mantidos no agregado da ação. ` +
+    `Ver <em>"Resposta à Pergunta Central do Piloto"</em> acima para o impacto dessa lacuna na avaliação de eficiência alocativa.`;
+
+  // ── Valores derivados para narrativas ───────────────────
+  const rastreavel  = regionais.reduce((a, r) => a + r.liquidado, 0);
+  const rastrPct    = Math.round(rastreavel / k.liquidado_total * 100);
+  const avgLkm      = Math.round(regionais.reduce((a, r) => a + r.lkm, 0) / regionais.length);
+  const srPiorIRI   = regionais.reduce((a, b) => b.iri > a.iri ? b : a);
+  const srMenorLkm  = regionais.reduce((a, b) => b.lkm < a.lkm ? b : a);
+  const srsByLkm    = [...regionais].sort((a, b) => b.lkm - a.lkm);
+
+  const munNonNull  = municipios.filter(m => m.lh > 0);
+  const munNonNullRaw = d.municipios.filter(m => m.liquidado_8398 > 0);
+  const munTotal    = municipios.length;
+  const semMunId    = '9999999';
+  const semMunVal   = d.liquidado_por_municipio[semMunId] || 0;
+  const semMunPct   = Math.round(semMunVal / k.liquidado_total * 10000) / 100;
+
+  // ── Arg-block Aba 1 ─────────────────────────────────────
+  let munTerritorialTxt;
+  if (munNonNull.length === 1) {
+    const m0 = munNonNull[0];
+    const liq0 = munNonNullRaw.find(m => m.nome === m0.nome);
+    const liqFmt = liq0 ? fmtR(liq0.liquidado_8398) : '';
+    munTerritorialTxt =
+      `apenas 1 dos ${munTotal} municípios do piloto tem liquidado não-nulo identificado na base do DER ` +
+      `(${m0.nome} — ${liqFmt}, R$ ${fmtNum(m0.lh, 2)}/hab, subprograma PRORESTAURA). ` +
+      `Os demais ${munTotal - 1} apresentam R$ 0 registrado`;
+  } else if (munNonNull.length === 0) {
+    munTerritorialTxt = `nenhum dos ${munTotal} municípios do piloto tem liquidado não-nulo identificado`;
+  } else {
+    munTerritorialTxt = `${munNonNull.length} dos ${munTotal} municípios do piloto têm liquidado não-nulo identificado`;
+  }
+
+  document.getElementById('argblock1').innerHTML =
+    `<h3>Resposta à Pergunta Central do Piloto</h3>` +
+    `<p>Para os ~${fmtR(rastreavel)} rastreáveis por regional (~${rastrPct}% do liquidado da Ação 8398), ` +
+    `existe uma tendência positiva entre criticidade da malha e gasto por km: ` +
+    `a ${srPiorIRI.sr} (pior IRI do estado, ${fmtNum(srPiorIRI.iri, 1)}% crítico) recebe R$ ${fmtNum(srPiorIRI.lkm)}/km, ` +
+    `acima da média das cinco SRs (R$ ${fmtNum(avgLkm)}/km). ` +
+    `Contudo, SRs com malha em melhor condição também recebem valores altos — ` +
+    `${srsByLkm[0].sr} (IRI ${fmtNum(srsByLkm[0].iri, 1)}%) e ${srsByLkm[1].sr} (IRI ${fmtNum(srsByLkm[1].iri, 1)}%) ` +
+    `lideram com R$ ${fmtNum(srsByLkm[0].lkm)}/km e R$ ${fmtNum(srsByLkm[1].lkm)}/km respectivamente. ` +
+    `A relação entre necessidade e intensidade de gasto existe, mas não é linear nem exclusiva: ` +
+    `a ${srMenorLkm.sr} é o principal contraponto, recebendo o menor gasto/km (R$ ${fmtNum(srMenorLkm.lkm)}/km) ` +
+    `apesar de manter ${srMenorLkm.emg} contratos emergenciais em 2025.</p>` +
+    `<p>Essa análise cobre apenas ${rastrPct}% do orçamento da ação. ` +
+    `Os ${fmtNum(k.sem_rastreabilidade_pct, 1)}% do liquidado sem rastreabilidade regional (${fmtR(semRastrAbs)}) não passam pelo mesmo teste. ` +
+    `A ausência de rastreabilidade não é confirmação positiva nem negativa — ` +
+    `é uma lacuna de evidência que impede avaliar se o restante do gasto seguiu a mesma lógica ou não.</p>` +
+    `<p>Na dimensão territorial, a rastreabilidade é ainda mais limitada: ${munTerritorialTxt}, ` +
+    `e ${fmtR(semMunVal)} (${fmtNum(semMunPct, 2)}% do total) estão vinculados a um código genérico sem identificação municipal. ` +
+    `Essa dimensão é desenvolvida na aba <em>Paradoxo Territorial</em>.</p>`;
+
+  // ── Alert card Noroeste (Aba 2) ─────────────────────────
+  const noroeste = regionais.find(r => r.sr === 'SR Noroeste');
+  document.getElementById('alert-noroeste').innerHTML =
+    `<strong>${noroeste.sr} — Contratos Emergenciais 2025:</strong> ` +
+    `${noroeste.emg} contratos emergenciais identificados na base de contratos do DER — ` +
+    `sinal de pressão corretiva não planejada, indicativo de deterioração em trecho sem cobertura contratual regular. ` +
+    `No gráfico de dispersão abaixo, a ${noroeste.sr} aparece destacada por estar abaixo da linha de tendência — ` +
+    `recebendo menos por km do que regionais com malha em condição comparável ` +
+    `(R$ ${fmtNum(noroeste.lkm)}/km, o menor valor entre as ${regionais.length} SRs).`;
+
+  // ── HL cards Aba 3 ──────────────────────────────────────
+  const srNorte    = regionais.find(r => r.sr === 'SR Norte');
+  const srNoroeste = regionais.find(r => r.sr === 'SR Noroeste');
+  const srMaiorLkm = srsByLkm[0];
+  const noroesteKmTotal = Math.round(d.regionais['SR Noroeste'].km_total);
+  document.getElementById('hl-grid').innerHTML =
+    `<div class="hl-card danger">` +
+      `<h4>⚠ ${srNorte.sr} — Pior IRI e FWD do Estado</h4>` +
+      `<p>${fmtNum(srNorte.iri, 1)}% da malha em condição crítica (IRI) e ${fmtNum(srNorte.fwd, 1)}% com estrutura crítica (FWD) — ` +
+      `indicadores mais elevados entre as ${regionais.length} SRs. ` +
+      `Recebe R$ ${fmtNum(srNorte.lkm)}/km, acima da média estadual (R$ ${fmtNum(avgLkm)}/km).</p>` +
+    `</div>` +
+    `<div class="hl-card warn">` +
+      `<h4>${srNoroeste.sr} — Maior Extensão de Malha</h4>` +
+      `<p>Maior rede gerenciada do estado (${fmtNum(noroesteKmTotal)} km). ` +
+      `Pressão estrutural moderada (FWD ${fmtNum(srNoroeste.fwd, 1)}%) com ${srNoroeste.emg} contratos emergenciais em 2025 ` +
+      `— menor gasto/km (R$ ${fmtNum(srNoroeste.lkm)}/km).</p>` +
+    `</div>` +
+    `<div class="hl-card">` +
+      `<h4>${srMaiorLkm.sr} — Maior Liquidado por km</h4>` +
+      `<p>Maior liquidado absoluto (${fmtR(srMaiorLkm.liquidado)}) e maior gasto por km (R$ ${fmtNum(srMaiorLkm.lkm)}/km), ` +
+      `apesar de IRI (${fmtNum(srMaiorLkm.iri, 1)}%) e FWD (${fmtNum(srMaiorLkm.fwd, 1)}%) abaixo dos níveis críticos da ${srNorte.sr}.</p>` +
+    `</div>`;
+
+  // ── Legenda do mapa (Aba 4) ─────────────────────────────
+  const catCounts = municipios.reduce((acc, m) => {
+    acc[m.cat] = (acc[m.cat] || 0) + 1;
+    return acc;
+  }, {});
+  document.getElementById('cnt-paradoxo').textContent  = catCounts['Paradoxo territorial'] || 0;
+  document.getElementById('cnt-logistico').textContent = catCounts['Só logístico']          || 0;
+  document.getElementById('cnt-vulneravel').textContent= catCounts['Só vulnerável']         || 0;
+  document.getElementById('cnt-neutro').textContent    = catCounts['Neutro']                || 0;
+  document.getElementById('cnt-nonnull').textContent   = munNonNull.length;
+  document.getElementById('cnt-total-mun').textContent = munTotal;
+
+  // ── Nota cobertura (Aba 4) ──────────────────────────────
+  let coberturaBody;
+  if (munNonNull.length === 1) {
+    const m0 = munNonNull[0];
+    const liq0 = munNonNullRaw.find(m => m.nome === m0.nome);
+    const liqFmt = liq0 ? fmtR(liq0.liquidado_8398) : '';
+    coberturaBody =
+      `apenas 1 dos ${munTotal} municípios do piloto tem liquidado não-nulo identificado na base do DER — ` +
+      `${m0.nome} (${liqFmt} / R$ ${fmtNum(m0.lh, 2)}/hab, subprograma PRORESTAURA). ` +
+      `Os demais ${munTotal - 1} apresentam R$ 0 registrado`;
+  } else {
+    coberturaBody = `${munNonNull.length} dos ${munTotal} municípios têm liquidado não-nulo identificado`;
+  }
+  document.getElementById('nota-cobertura').innerHTML =
+    `<strong>Cobertura de dados:</strong> ${coberturaBody}. ` +
+    `Em paralelo, ${fmtR(semMunVal)} (${fmtNum(semMunPct, 2)}% do total liquidado) estão vinculados a um código genérico ` +
+    `sem identificação municipal — a categorização (Paradoxo Territorial, Só Logístico, Só Vulnerável, Neutro) ` +
+    `reflete o perfil socioeconômico e logístico do município, não o histórico de investimento recebido.`;
+
+  // ── Arg-block Paradoxo (Aba 4) ──────────────────────────
+  const paradoxoMuns = municipios.filter(m => m.cat === 'Paradoxo territorial');
+  const paradoxoNomes = paradoxoMuns.map(m => m.nome).join(' e ');
+  let munNaoRastr = munNonNull.length === 0
+    ? 'Nenhum município do piloto possui liquidado identificado e não-nulo'
+    : `O único município com liquidado identificado e não-nulo é ${munNonNull[0].nome} ` +
+      `(R$ ${fmtNum(munNonNull[0].lh, 2)}/hab — categoria ${munNonNull[0].cat}), ` +
+      `o que não corresponde à lógica de priorização por necessidade que o Orçamento para Resultados pressupõe`;
+
+  document.getElementById('argblock-paradoxo').innerHTML =
+    `<h3>O Paradoxo Territorial no Contexto do Orçamento para Resultados</h3>` +
+    `<p><strong>Para o gestor público:</strong> ${paradoxoNomes} combinam alta relevância logística com baixo IDH — ` +
+    `municípios onde a rodovia é o principal vetor de acesso a mercados e serviços públicos. ` +
+    `${paradoxoMuns.length > 0 ? 'Ambos constam com R$ 0 de liquidado identificado na base da Ação 8398.' : ''} ` +
+    `Isso não significa necessariamente que nenhuma obra foi realizada nesses territórios, ` +
+    `mas que o sistema orçamentário atual não permite rastrear o gasto até o município. ` +
+    `${munNaoRastr}.</p>` +
+    `<p><strong>Para o Tribunal de Contas (TCE-PR):</strong> A falta de rastreabilidade de ` +
+    `${fmtNum(k.sem_rastreabilidade_pct, 1)}% do liquidado da Ação 8398 por subprograma, ` +
+    `combinada com ${fmtNum(semMunPct, 2)}% do total sem identificação municipal, compromete o controle por resultados. ` +
+    `Quando não há vínculo entre o gasto e a meta física — e tampouco entre o gasto e o território atendido — ` +
+    `os instrumentos tradicionais de auditoria financeira tornam-se insuficientes para avaliar ` +
+    `se o recurso público cumpriu sua finalidade constitucional.</p>` +
+    `<p><strong>Para a política pública:</strong> O programa Orçamento para Resultados pressupõe que o gasto possa ser avaliado por seus efeitos. ` +
+    `A criação de indicadores territorializados — como liquidado/km por SR, custo/km por subprograma e condição da malha por área — ` +
+    `é o primeiro passo para transformar o orçamento de manutenção rodoviária em instrumento de desenvolvimento regional equitativo e auditável.</p>`;
+
+  // ── Inicializa painel ────────────────────────────────────
+  activateTab('execucao');
+}
+
+Promise.all([
+  fetch('../data/der_precomputed.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar der_precomputed.json'); return r.json(); }),
+  fetch('../data/dados_extras.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar dados_extras.json'); return r.json(); })
+]).then(([d, extras])=>{
+  contratos  = extras.contratos_dopsr1 || [];
+  malhaKm    = extras.malha_km        || [];
+  malhaLiqKm = extras.malha_pct       || [];
+  initDashboard(d);
+}).catch(err=>{
+  document.querySelector('.tab-content').innerHTML =
+    `<div style="padding:40px;color:#C00000">` +
+    `<h2 style="font-family:Inter,sans-serif;margin-bottom:12px">Erro ao carregar dados</h2>` +
+    `<p style="font-family:Inter,sans-serif;font-size:14px">Não foi possível carregar os arquivos de dados.</p>` +
+    `<p style="font-family:Inter,sans-serif;font-size:14px;margin-top:8px">Detalhe: ${err.message}</p>` +
+    `<p style="font-family:Inter,sans-serif;font-size:13px;color:#555;margin-top:8px">` +
+    `Abra o painel a partir de um servidor local (ex: <code>python -m http.server</code> na raiz do projeto).</p>` +
+    `</div>`;
+});
 </script>
 </body>
 </html>

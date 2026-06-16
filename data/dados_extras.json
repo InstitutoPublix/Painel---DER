@@ -1,0 +1,560 @@
+﻿{
+    "generated":  "2026-06-15T16:08:27.0095935-03:00",
+    "malha_km":  [
+                     {
+                         "sr":  "SR Leste",
+                         "ruim_km":  6,
+                         "pessimo_km":  24.36,
+                         "regular_km":  313.55,
+                         "boa_km":  442.59,
+                         "muito_boa_km":  0,
+                         "liquidado":  49640349.2
+                     },
+                     {
+                         "sr":  "SR Campos Gerais",
+                         "ruim_km":  2.3,
+                         "pessimo_km":  74.5,
+                         "regular_km":  424.42,
+                         "boa_km":  1154.85,
+                         "muito_boa_km":  1,
+                         "liquidado":  162041294.03
+                     },
+                     {
+                         "sr":  "SR Norte",
+                         "ruim_km":  3,
+                         "pessimo_km":  71.53,
+                         "regular_km":  707.54,
+                         "boa_km":  1580.6,
+                         "muito_boa_km":  13.17,
+                         "liquidado":  219184299.66
+                     },
+                     {
+                         "sr":  "SR Noroeste",
+                         "ruim_km":  15.14,
+                         "pessimo_km":  79.13,
+                         "regular_km":  823.68,
+                         "boa_km":  2616.76,
+                         "muito_boa_km":  12.27,
+                         "liquidado":  199321703.67
+                     },
+                     {
+                         "sr":  "SR Oeste",
+                         "ruim_km":  1,
+                         "pessimo_km":  80.26,
+                         "regular_km":  568.53,
+                         "boa_km":  1724.16,
+                         "muito_boa_km":  65.38,
+                         "liquidado":  239350030.41
+                     }
+                 ],
+    "malha_pct":  [
+                      {
+                          "sr":  "SR Leste",
+                          "pct_ruim_pessimo":  0.0386013986013986,
+                          "pct_regular":  0.398664971392244,
+                          "pct_bom":  0.562733630006357,
+                          "liq_por_km":  59210.5504729416
+                      },
+                      {
+                          "sr":  "SR Campos Gerais",
+                          "pct_ruim_pessimo":  0.0463468652501102,
+                          "pct_regular":  0.256126777987653,
+                          "pct_bom":  0.697526356762237,
+                          "liq_por_km":  66731.4431032921
+                      },
+                      {
+                          "sr":  "SR Norte",
+                          "pct_ruim_pessimo":  0.0313699575729005,
+                          "pct_regular":  0.297806249579096,
+                          "pct_bom":  0.670823792848003,
+                          "liq_por_km":  86930.6367807977
+                      },
+                      {
+                          "sr":  "SR Noroeste",
+                          "pct_ruim_pessimo":  0.0265775392023637,
+                          "pct_regular":  0.232220085819486,
+                          "pct_bom":  0.74120237497815,
+                          "liq_por_km":  47464.5551652863
+                      },
+                      {
+                          "sr":  "SR Oeste",
+                          "pct_ruim_pessimo":  0.0333124259530281,
+                          "pct_regular":  0.2330680965675,
+                          "pct_bom":  0.733619477479472,
+                          "liq_por_km":  66110.939973981
+                      }
+                  ],
+    "iri_por_condicao":  [
+                             {
+                                 "condicao":  "Ruim",
+                                 "SR Leste":  4.86,
+                                 "SR Campos Gerais":  3.88,
+                                 "SR Norte":  10.39,
+                                 "SR Noroeste":  4.58,
+                                 "SR Oeste":  5.28
+                             },
+                             {
+                                 "condicao":  "Péssimo",
+                                 "SR Leste":  9.61,
+                                 "SR Campos Gerais":  8.42,
+                                 "SR Norte":  27.05,
+                                 "SR Noroeste":  12.5,
+                                 "SR Oeste":  13.44
+                             },
+                             {
+                                 "condicao":  "Regular",
+                                 "SR Leste":  27.67,
+                                 "SR Campos Gerais":  29.84,
+                                 "SR Norte":  41.53,
+                                 "SR Noroeste":  37.08,
+                                 "SR Oeste":  35.36
+                             },
+                             {
+                                 "condicao":  "Bom",
+                                 "SR Leste":  40.76,
+                                 "SR Campos Gerais":  40.15,
+                                 "SR Norte":  17.37,
+                                 "SR Noroeste":  31.21,
+                                 "SR Oeste":  27.9
+                             },
+                             {
+                                 "condicao":  "Muito Bom",
+                                 "SR Leste":  17.1,
+                                 "SR Campos Gerais":  17.73,
+                                 "SR Norte":  3.66,
+                                 "SR Noroeste":  14.63,
+                                 "SR Oeste":  18.03
+                             },
+                             {
+                                 "condicao":  "Nota",
+                                 "SR Leste":  0,
+                                 "SR Campos Gerais":  0,
+                                 "SR Norte":  0,
+                                 "SR Noroeste":  0,
+                                 "SR Oeste":  0
+                             }
+                         ],
+    "fwd_por_condicao":  [
+                             {
+                                 "condicao":  "Ruim",
+                                 "SR Leste":  13.26,
+                                 "SR Campos Gerais":  15.98,
+                                 "SR Norte":  14.19,
+                                 "SR Noroeste":  10.89,
+                                 "SR Oeste":  6.69
+                             },
+                             {
+                                 "condicao":  "Péssimo",
+                                 "SR Leste":  15.47,
+                                 "SR Campos Gerais":  13.88,
+                                 "SR Norte":  16.19,
+                                 "SR Noroeste":  13.12,
+                                 "SR Oeste":  16.21
+                             },
+                             {
+                                 "condicao":  "Regular",
+                                 "SR Leste":  24.31,
+                                 "SR Campos Gerais":  23.06,
+                                 "SR Norte":  25.39,
+                                 "SR Noroeste":  22.12,
+                                 "SR Oeste":  28.66
+                             },
+                             {
+                                 "condicao":  "Bom",
+                                 "SR Leste":  26.19,
+                                 "SR Campos Gerais":  28.32,
+                                 "SR Norte":  24.29,
+                                 "SR Noroeste":  27.62,
+                                 "SR Oeste":  30.32
+                             },
+                             {
+                                 "condicao":  "Muito Bom",
+                                 "SR Leste":  20.77,
+                                 "SR Campos Gerais":  18.76,
+                                 "SR Norte":  19.91,
+                                 "SR Noroeste":  26.24,
+                                 "SR Oeste":  18.11
+                             },
+                             {
+                                 "condicao":  "Muito Bom",
+                                 "SR Leste":  0,
+                                 "SR Campos Gerais":  0,
+                                 "SR Norte":  0,
+                                 "SR Noroeste":  0,
+                                 "SR Oeste":  0
+                             }
+                         ],
+    "contratos_dopsr1":  [
+                             {
+                                 "contrato":  "CO056/2022DOP",
+                                 "empenhado":  5387569.34,
+                                 "liquidado":  4773569.34,
+                                 "pago":  4773569.34,
+                                 "sr":  "SR LESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO057/2022DOP",
+                                 "empenhado":  16438416.030000001,
+                                 "liquidado":  16338416.030000001,
+                                 "pago":  16338416.030000001,
+                                 "sr":  "SR LESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO058/2022DOP",
+                                 "empenhado":  12794501.700000003,
+                                 "liquidado":  12494501.700000003,
+                                 "pago":  12494501.700000003,
+                                 "sr":  "SR LESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO059/2022DOP",
+                                 "empenhado":  16195739.6,
+                                 "liquidado":  16033862.129999999,
+                                 "pago":  16033862.129999999,
+                                 "sr":  "SR LESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO016/2022DOP",
+                                 "empenhado":  36814568.79,
+                                 "liquidado":  34514568.79,
+                                 "pago":  34514568.79,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO016/2023DOP",
+                                 "empenhado":  33100500.870000005,
+                                 "liquidado":  30464839.950000003,
+                                 "pago":  30464839.950000003,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO024/2023DOP",
+                                 "empenhado":  41356195.38,
+                                 "liquidado":  38934193.080000006,
+                                 "pago":  38934193.080000006,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO091/2024DOP",
+                                 "empenhado":  11123724.71,
+                                 "liquidado":  11123724.71,
+                                 "pago":  11123724.71,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO128/2021DOP",
+                                 "empenhado":  7835202.8800000008,
+                                 "liquidado":  7285203.1100000013,
+                                 "pago":  7285203.1100000013,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "INTEGRA"
+                             },
+                             {
+                                 "contrato":  "CO169/2022DOP",
+                                 "empenhado":  27448798.000000004,
+                                 "liquidado":  27448798.000000004,
+                                 "pago":  27448798.000000004,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO173/2025DOP",
+                                 "empenhado":  14088945.270000001,
+                                 "liquidado":  8088945.2700000014,
+                                 "pago":  8088945.2700000014,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO175/2025DOP",
+                                 "empenhado":  6875286.92,
+                                 "liquidado":  4181021.12,
+                                 "pago":  4181021.12,
+                                 "sr":  "SR CAMPOS GERAIS",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO006/2020DOP",
+                                 "empenhado":  32268826.77,
+                                 "liquidado":  32168826.77,
+                                 "pago":  32168826.77,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "COP"
+                             },
+                             {
+                                 "contrato":  "CO007/2020DOP",
+                                 "empenhado":  20400895.83,
+                                 "liquidado":  20300895.83,
+                                 "pago":  20300895.83,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "COP"
+                             },
+                             {
+                                 "contrato":  "CO023/2023DOP",
+                                 "empenhado":  44495386.00999999,
+                                 "liquidado":  44425386.00999999,
+                                 "pago":  44425386.00999999,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO035/2024DOP",
+                                 "empenhado":  9921695.86,
+                                 "liquidado":  9921695.86,
+                                 "pago":  9921695.86,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO036/2024DOP",
+                                 "empenhado":  60111673.339999996,
+                                 "liquidado":  56611673.339999996,
+                                 "pago":  56611673.339999996,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO045/2023DOP",
+                                 "empenhado":  23283734.32,
+                                 "liquidado":  23222734.32,
+                                 "pago":  23222734.32,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO089/2024DOP",
+                                 "empenhado":  23350268.37,
+                                 "liquidado":  23350268.37,
+                                 "pago":  23350268.37,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "INTEGRA"
+                             },
+                             {
+                                 "contrato":  "CO133/2021DOP",
+                                 "empenhado":  10539400.25,
+                                 "liquidado":  9182819.16,
+                                 "pago":  9182819.16,
+                                 "sr":  "SR NORTE",
+                                 "tipo":  "INTEGRA"
+                             },
+                             {
+                                 "contrato":  "CO004/2020DOP",
+                                 "empenhado":  39431335.78,
+                                 "liquidado":  39131335.78,
+                                 "pago":  39131335.78,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "COP"
+                             },
+                             {
+                                 "contrato":  "CO005/2020DOP",
+                                 "empenhado":  4267004.2299999995,
+                                 "liquidado":  4267004.2299999995,
+                                 "pago":  4267004.2299999995,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "COP"
+                             },
+                             {
+                                 "contrato":  "CO009/2020DOP",
+                                 "empenhado":  34928349.989999995,
+                                 "liquidado":  34404476.339999996,
+                                 "pago":  34404476.339999996,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "COP"
+                             },
+                             {
+                                 "contrato":  "CO015/2023DOP",
+                                 "empenhado":  79356510.750000015,
+                                 "liquidado":  70775630.750000015,
+                                 "pago":  70775630.750000015,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO025/2019DT-DOP",
+                                 "empenhado":  4567926.09,
+                                 "liquidado":  4567926.09,
+                                 "pago":  4567926.09,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "CREMEP"
+                             },
+                             {
+                                 "contrato":  "CO069/2022DOP",
+                                 "empenhado":  81522.77,
+                                 "liquidado":  81522.77,
+                                 "pago":  81522.77,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO072/2022DOP",
+                                 "empenhado":  172207.6,
+                                 "liquidado":  172207.6,
+                                 "pago":  172207.6,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO093/2018DT-DOP",
+                                 "empenhado":  153364.94,
+                                 "liquidado":  153364.94,
+                                 "pago":  153364.94,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "CREMEP"
+                             },
+                             {
+                                 "contrato":  "CO123/2021DOP",
+                                 "empenhado":  39758589.809999995,
+                                 "liquidado":  39138589.809999995,
+                                 "pago":  39138589.809999995,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO137/2025DOP",
+                                 "empenhado":  3500072.62,
+                                 "liquidado":  3173852.84,
+                                 "pago":  3173852.84,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "EMERGENCIAL"
+                             },
+                             {
+                                 "contrato":  "CO142/2018DT-DOP",
+                                 "empenhado":  2532160.16,
+                                 "liquidado":  2532160.16,
+                                 "pago":  2532160.16,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "CREMEP"
+                             },
+                             {
+                                 "contrato":  "CO152/2025DOP",
+                                 "empenhado":  1173632.3599999999,
+                                 "liquidado":  923632.36,
+                                 "pago":  923632.36,
+                                 "sr":  "SR NOROESTE",
+                                 "tipo":  "EMERGENCIAL"
+                             },
+                             {
+                                 "contrato":  "CO006/2023DOP",
+                                 "empenhado":  29366861.930000003,
+                                 "liquidado":  26866861.930000003,
+                                 "pago":  26866861.930000003,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO007/2023DOP",
+                                 "empenhado":  8410678.31,
+                                 "liquidado":  8410678.31,
+                                 "pago":  8410678.31,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO017/2023DOP",
+                                 "empenhado":  16932355.759999998,
+                                 "liquidado":  15748303.049999999,
+                                 "pago":  15748303.049999999,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO018/2023DOP",
+                                 "empenhado":  193539.39,
+                                 "liquidado":  193539.39,
+                                 "pago":  193539.39,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO019/2023DOP",
+                                 "empenhado":  37083406.320000008,
+                                 "liquidado":  35956475.230000004,
+                                 "pago":  35956475.230000004,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO026/2023DOP",
+                                 "empenhado":  38219756.39,
+                                 "liquidado":  34419756.39,
+                                 "pago":  34419756.39,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO028/2023DOP",
+                                 "empenhado":  447415.47000000003,
+                                 "liquidado":  447415.47000000003,
+                                 "pago":  447415.47000000003,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO071/2023DOP",
+                                 "empenhado":  34182626.370000005,
+                                 "liquidado":  32422626.37,
+                                 "pago":  32422626.37,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO072/2025DOP",
+                                 "empenhado":  9463922.370000001,
+                                 "liquidado":  8642922.370000001,
+                                 "pago":  8642922.370000001,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO092/2025DOP",
+                                 "empenhado":  23567371.47,
+                                 "liquidado":  21807371.47,
+                                 "pago":  21807371.47,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO121/2025DOP",
+                                 "empenhado":  18027376.41,
+                                 "liquidado":  13026376.41,
+                                 "pago":  13026376.41,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO124/2021DOP",
+                                 "empenhado":  9243976,
+                                 "liquidado":  9243976,
+                                 "pago":  9243976,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO124/2024DOP",
+                                 "empenhado":  31441685.17,
+                                 "liquidado":  31441685.150000002,
+                                 "pago":  31441685.150000002,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "PROCONSERVA"
+                             },
+                             {
+                                 "contrato":  "CO131/2021DOP",
+                                 "empenhado":  722042.87000000011,
+                                 "liquidado":  722042.87000000011,
+                                 "pago":  722042.87000000011,
+                                 "sr":  "SR OESTE",
+                                 "tipo":  "INTEGRA"
+                             }
+                         ],
+    "fisico_subprograma":  [
+
+                           ]
+}
