@@ -1,201 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <title>Painel DER-PR — Eficiência Orçamentária 8398</title>
+<!-- Dependências externas: manter CDNs até haver cópias locais em assets/vendor. -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#F5F7FA;color:#1A1A2E;min-width:1280px}
-
-/* ── HEADER GOVERNAMENTAL ── */
-.header-gov{
-  background:#fff;
-  color:#0D2B5E;
-  position:sticky;
-  top:0;
-  z-index:200;
-  height:108px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 40px;
-  overflow:hidden;
-  box-shadow:0 2px 10px rgba(0,0,0,.12);
-  border-bottom:1px solid #E8ECF1;
-}
-.header-gov::after{
-  content:'';
-  position:absolute;
-  bottom:0;left:0;right:0;
-  height:3px;
-  background:linear-gradient(90deg,#00A3E0 0%,#78BE20 55%,#4CAF50 100%);
-  z-index:2;
-}
-.hdr-left{
-  display:flex;
-  align-items:center;
-  gap:20px;
-  position:relative;
-  z-index:1;
-  min-width:0;
-}
-.hdr-sep{
-  width:1px;
-  height:60px;
-  background:rgba(13,43,94,.15);
-  flex-shrink:0;
-}
-.hdr-title-block{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  min-width:0;
-}
-.hdr-eyebrow{
-  font-size:9.5px;
-  font-weight:700;
-  color:#78BE20;
-  letter-spacing:1.2px;
-  text-transform:uppercase;
-}
-.hdr-title{
-  font-size:21px;
-  font-weight:700;
-  color:#0D2B5E;
-  line-height:1.15;
-  letter-spacing:-.2px;
-  white-space:nowrap;
-}
-.hdr-subtitle{
-  font-size:11.5px;
-  color:#5a6e8a;
-  font-weight:400;
-  margin-top:2px;
-  white-space:nowrap;
-}
-.hdr-right{
-  display:flex;
-  align-items:center;
-  gap:20px;
-  position:relative;
-  z-index:1;
-  flex-shrink:0;
-}
-.hdr-logo-img{
-  height:68px;
-  width:auto;
-  object-fit:contain;
-  display:block;
-  flex-shrink:0;
-}
-.hdr-logo-opr{
-  height:90px;
-}
-
-/* Tab nav */
-.tab-nav{background:#fff;border-bottom:2px solid #D9D9D9;padding:0 32px;display:flex}
-.tab-btn{padding:13px 22px;border:none;background:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#666;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s}
-.tab-btn:hover{color:#0D2B5E}
-.tab-btn.active{color:#0D2B5E;border-bottom-color:#0D2B5E;font-weight:600}
-
-/* Tab panes */
-.tab-content{padding:28px 32px;max-width:1440px;margin:0 auto}
-.tab-pane{display:none}
-.tab-pane.active{display:block;animation:fadeIn .28s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* KPI cards */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
-.kpi-card{background:#fff;border-radius:8px;padding:20px 22px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.kpi-card.alert{background:#FFF5F5;border-color:#C00000}
-.kpi-label{font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.kpi-value{font-size:30px;font-weight:700;color:#1F4E79;line-height:1}
-.kpi-card.alert .kpi-value{color:#C00000}
-.kpi-sub{font-size:12px;color:#888;margin-top:5px}
-
-/* Chart containers */
-.chart-container{background:#fff;border-radius:8px;padding:22px 24px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:24px}
-.chart-title{font-size:14px;font-weight:600;color:#1F4E79;margin-bottom:16px}
-
-/* Tables */
-.table-wrap{background:#fff;border-radius:8px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden;margin-bottom:24px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#1F4E79;color:#fff;padding:11px 14px;text-align:left;font-weight:600;font-size:12px;white-space:nowrap;cursor:pointer;user-select:none}
-th:hover{background:#2E75B6}
-td{padding:10px 14px;border-bottom:1px solid #F0F0F0;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#F8FAFF}
-.tr-norte td:first-child{border-left:4px solid #C00000}
-.tr-paradoxo td{background:#FFF8F8}
-
-/* Badges */
-.badge{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11px;font-weight:600}
-.b-green{background:#E8F5E9;color:#2E7D32}
-.b-yellow{background:#FFF8E1;color:#C57800}
-.b-red{background:#FFEBEE;color:#C00000}
-.b-gray{background:#F0F0F0;color:#666}
-.b-blue{background:#E3F2FD;color:#1565C0}
-.b-orange{background:#FFF3E0;color:#E65100}
-
-/* Progress bar */
-.pb-wrap{display:flex;align-items:center;gap:8px}
-.pb{height:8px;background:#F0F0F0;border-radius:4px;overflow:hidden;width:90px;display:inline-block}
-.pb-fill{height:100%;border-radius:4px}
-
-/* Note boxes */
-.note{background:#F0F4FA;border-left:4px solid #2E75B6;padding:13px 18px;border-radius:0 6px 6px 0;font-size:13px;color:#444;margin-bottom:24px;line-height:1.6}
-.note.gray{background:#F5F7FA;border-left-color:#999}
-.note.warn{background:#FFFBF0;border-left-color:#FFC000}
-.note strong{color:#1A1A2E}
-
-/* Alert card */
-.alert-card{background:#FFFBEC;border:1px solid #FFC000;border-radius:8px;padding:14px 18px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.6}
-.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
-
-/* Highlight cards */
-.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-.hl-card{background:#fff;border-radius:8px;padding:16px 18px;border:1px solid #D9D9D9;border-top:4px solid #2E75B6}
-.hl-card.danger{border-top-color:#C00000}
-.hl-card.warn{border-top-color:#FFC000}
-.hl-card h4{font-size:13px;font-weight:600;color:#1F4E79;margin-bottom:7px}
-.hl-card p{font-size:12px;color:#555;line-height:1.55}
-
-/* Scatter / Map */
-.svg-container{background:#fff;border-radius:8px;padding:22px 24px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:24px}
-svg.responsive{display:block;width:100%}
-
-/* Map legend */
-.map-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px}
-.leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#444}
-.leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-
-/* Grid layouts */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
-
-/* Donut chart wrapper */
-.donut-wrap{display:flex;align-items:center;justify-content:center;height:100%}
-
-/* Arg block */
-.arg-block{background:#F5F7FA;border-radius:8px;padding:24px;margin-bottom:24px}
-.arg-block h3{font-size:15px;font-weight:600;color:#1F4E79;margin-bottom:16px}
-.arg-block p{font-size:13px;color:#444;line-height:1.7;margin-bottom:12px}
-.arg-block p:last-child{margin-bottom:0}
-
-/* Tooltip */
-.tt{position:fixed;background:rgba(20,20,40,.88);color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;pointer-events:none;z-index:999;display:none;max-width:230px;line-height:1.6}
-
-/* Footnote */
-.fn{font-size:11px;color:#888;font-style:italic}
-
-/* Filter controls */
-.filter-bar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-.filter-bar label{font-size:13px;font-weight:500;color:#555;white-space:nowrap}
-.filter-select{font-family:'Inter',sans-serif;font-size:13px;padding:7px 12px;border:1px solid #D9D9D9;border-radius:6px;background:#fff;color:#1A1A2E;cursor:pointer}
-.filter-select:hover,.filter-select:focus{border-color:#2E75B6;outline:none}
-</style>
+<link rel="stylesheet" href="css/painel.css">
 </head>
 <body>
 
@@ -239,57 +50,56 @@ svg.responsive{display:block;width:100%}
 </header>
 
 <nav class="tab-nav" role="tablist">
-  <button class="tab-btn active" data-tab="execucao" role="tab" aria-selected="true">Execução Financeira</button>
-  <button class="tab-btn" data-tab="eficiencia" role="tab" aria-selected="false">Eficiência por Regional</button>
+  <button class="tab-btn active" data-tab="execucao" role="tab" aria-selected="true">Execução Orçamentária e Contratos</button>
   <button class="tab-btn" data-tab="malha" role="tab" aria-selected="false">Condição da Malha</button>
-  <button class="tab-btn" data-tab="paradoxo" role="tab" aria-selected="false">Paradoxo Territorial</button>
-  <button class="tab-btn" data-tab="contratos" role="tab" aria-selected="false">Contratos</button>
+  <button class="tab-btn" data-tab="analitica" role="tab" aria-selected="false">Análise de Retorno</button>
+  <button class="tab-btn" data-tab="benchmark" role="tab" aria-selected="false">Benchmark Nacional</button>
+  <button class="tab-btn" data-tab="maparodovias" role="tab" aria-selected="false">Mapa da Malha</button>
 </nav>
 
 <div class="tab-content">
 
-  <!-- ABA 1: EXECUÇÃO FINANCEIRA -->
+  <!-- ABA 1: EXECUÇÃO ORÇAMENTÁRIA + CONTRATOS -->
   <div id="tab-execucao" class="tab-pane active" role="tabpanel">
-    <div class="arg-block" id="argblock1">
-      <h3>Resposta à Pergunta Central do Piloto</h3>
-    </div>
+
+    <div class="section-header">Visão Orçamentária — Ação 8398 <span class="periodo-badge">Dados 2025</span></div>
 
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div class="kpi-label">Total Liquidado — Ação 8398</div>
+        <div class="kpi-label">Total Liquidado — Ação 8398 <span class="periodo-badge">2025</span></div>
         <div class="kpi-value" id="kpi-total">—</div>
         <div class="kpi-sub">Exercício de referência do piloto</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Taxa de Execução Geral</div>
+        <div class="kpi-label">Taxa de Execução Geral <span class="periodo-badge">2025</span></div>
         <div class="kpi-value" id="kpi-taxa">—</div>
         <div class="kpi-sub">Liquidado / dotação autorizada</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Classificado por Subprograma</div>
+        <div class="kpi-label">Classificado por Subprograma <span class="periodo-badge">2025</span></div>
         <div class="kpi-value" id="kpi-class">—</div>
         <div class="kpi-sub">Com meta física vinculada no PPA</div>
       </div>
       <div class="kpi-card alert">
-        <div class="kpi-label">⚠ Sem Rastreabilidade</div>
+        <div class="kpi-label">⚠ Sem Rastreabilidade <span class="periodo-badge">2025</span></div>
         <div class="kpi-value" id="kpi-semrastr">—</div>
         <div class="kpi-sub" id="kpi-semrastr-sub">—</div>
       </div>
     </div>
 
     <div class="chart-container">
-      <div class="chart-title">Liquidado por Subprograma (R$) — cor indica taxa de execução</div>
-      <div style="height:360px"><canvas id="chartSub"></canvas></div>
+      <div class="chart-title">Liquidado por Subprograma (R$) — cor indica taxa de execução <span class="periodo-badge">Dados 2025</span></div>
+      <div class="chart-h-320"><canvas id="chartSub"></canvas></div>
     </div>
 
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Subprograma</th>
+            <th>Subprograma <span class="periodo-badge on-dark">2025</span></th>
             <th>Liquidado (R$)</th>
+            <th>Empenhado (R$)</th>
             <th>Taxa de Execução</th>
-            <th>Custo/km</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -298,10 +108,191 @@ svg.responsive{display:block;width:100%}
     </div>
 
     <div class="note gray" id="nota-metodologica"></div>
+
+    <!-- SEÇÃO: CONTRATOS DOPSR1 -->
+    <div class="section-sep"><span>Contratos DOPSR1 <span class="periodo-badge">Dados 2025</span></span></div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total de Contratos <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-cont-total">—</div>
+        <div class="kpi-sub">Contratos DOPSR1 ativos</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Empenhado <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-cont-emp">—</div>
+        <div class="kpi-sub">Dotação comprometida</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Liquidado (Contratos) <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-cont-liq">—</div>
+        <div class="kpi-sub">Serviço confirmado/atestado</div>
+      </div>
+      <div class="kpi-card" id="kpi-cont-exec-card">
+        <div class="kpi-label">Taxa de Execução <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-cont-exec">—</div>
+        <div class="kpi-sub">Liquidado / Empenhado</div>
+      </div>
+    </div>
+
+    <div class="grid-2 mb-24">
+      <div class="chart-container mb-0">
+        <div class="chart-title">Empenhado / Liquidado / Pago por SR (R$) <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-h-260"><canvas id="chartContSR"></canvas></div>
+      </div>
+      <div class="chart-container mb-0">
+        <div class="chart-title">Liquidado por Tipo de Contrato (R$) <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-h-260"><canvas id="chartContTipo"></canvas></div>
+      </div>
+    </div>
+
+    <div class="contract-filter-panel" id="contratoFilterPanel" aria-label="Filtros da tabela de contratos">
+      <div class="contract-filter-field">
+        <label for="filtroContratoBusca">Contrato</label>
+        <input type="text" id="filtroContratoBusca" class="contract-filter-input" placeholder="Buscar contrato" autocomplete="off">
+      </div>
+      <div class="contract-filter-field">
+        <label for="filtroContratoRegiao">Região</label>
+        <select id="filtroContratoRegiao" class="contract-filter-select">
+          <option value="">Todas as regiões</option>
+        </select>
+      </div>
+      <div class="contract-filter-field">
+        <label for="filtroContratoTipo">Tipo de contrato</label>
+        <select id="filtroContratoTipo" class="contract-filter-select">
+          <option value="">Todos os tipos</option>
+        </select>
+      </div>
+      <div class="contract-filter-field">
+        <label for="filtroContratoStatus">Status</label>
+        <select id="filtroContratoStatus" class="contract-filter-select">
+          <option value="">Todos os status</option>
+        </select>
+      </div>
+      <button type="button" id="limparFiltrosContrato" class="contract-filter-clear">Limpar filtros</button>
+    </div>
+    <div id="contratoFilterCount" class="contract-filter-count">Exibindo 0 de 0 contratos</div>
+
+    <div class="table-wrap">
+      <table id="tblContratos">
+        <thead>
+          <tr>
+            <th>Contrato <span class="periodo-badge on-dark">2025</span></th>
+            <th>SR</th>
+            <th>Tipo</th>
+            <th>Empenhado (R$)</th>
+            <th>Liquidado (R$)</th>
+            <th>Pago (R$)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyContratos"></tbody>
+      </table>
+    </div>
+    <div id="contratoFilterEmpty" class="contract-filter-empty" hidden>Nenhum contrato encontrado com os filtros selecionados.</div>
   </div>
 
-  <!-- ABA 2: EFICIÊNCIA POR REGIONAL -->
-  <div id="tab-eficiencia" class="tab-pane" role="tabpanel">
+  <!-- ABA 2: CONDIÇÃO DA MALHA -->
+  <div id="tab-malha" class="tab-pane" role="tabpanel">
+    <div class="grid-2">
+      <div class="chart-container mb-0">
+        <div class="chart-title">Condição da Malha — IRI (% inspecionado) <span class="periodo-badge">Levantamento SGP 2021–2022</span></div>
+        <div class="chart-h-260"><canvas id="chartIRI"></canvas></div>
+      </div>
+      <div class="chart-container mb-0">
+        <div class="chart-title">Condição Estrutural — FWD (% inspecionado) <span class="periodo-badge">Levantamento SGP 2021–2022</span></div>
+        <div class="chart-h-260"><canvas id="chartFWD"></canvas></div>
+      </div>
+    </div>
+
+    <div class="hl-grid" id="hl-grid"></div>
+
+    <div class="chart-container">
+      <div class="chart-title">Extensão da Malha por Condição e Regional (km absoluto) <span class="periodo-badge">Dados 2025</span></div>
+      <div class="chart-h-260"><canvas id="chartMalhaKm"></canvas></div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">Gasto por km vs. % Malha Crítica (IRI) por Regional <span class="periodo-badge mix">Liquidado 2025 · IRI 2021–2022</span></div>
+      <div class="chart-h-220"><canvas id="chartLiqKmSR"></canvas></div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">Custo por km de Malha Estadual por Regional (R$/km) — ordenado decrescente <span class="periodo-badge">Dados 2025</span></div>
+      <div class="chart-h-200"><canvas id="chartCustoKm"></canvas></div>
+    </div>
+    <details class="method-details mt-neg-12">
+      <summary>Ver nota metodológica</summary>
+      <p>O valor representa o liquidado total da Ação 8398 dividido pelo total de km de malha gerenciada pela SR. Não é o custo do km efetivamente intervido, pois a base não separa o km com intervenção do total de rede sob responsabilidade da regional.</p>
+    </details>
+
+    <div class="section-sep"><span>Índice de Eficiência Transversal por Regional</span></div>
+
+    <div class="chart-container">
+      <div class="chart-title">% Malha em Boa Condição por R$ 1.000/km Gastos — Índice Transversal <span class="periodo-badge">Dados 2025</span></div>
+      <div class="chart-h-220"><canvas id="chartEficTransversal"></canvas></div>
+    </div>
+
+    <details class="method-details">
+      <summary>Ver interpretação do índice</summary>
+      <p>O índice compara, em 2025, quanta malha em boa condição (IRI Bom + Muito Bom) cada regional sustenta por real gasto por km. Não mede melhora ao longo do tempo nem estabelece causalidade, pois não há série histórica de condição da malha vinculada ao gasto acumulado por regional.</p>
+    </details>
+
+    <div class="note">
+      <strong>Nota técnica — Indicadores de condição:</strong><br>
+      <strong>IRI (Índice de Irregularidade Internacional):</strong> mede o conforto de rolamento. Valores altos indicam superfície irregular (ondulações, afundamentos), causando desgaste veicular e desconforto ao usuário.<br>
+      <strong>FWD (Falling Weight Deflectometer):</strong> mede a capacidade estrutural do pavimento sob carga. Valores críticos indicam risco de colapso estrutural, exigindo intervenções mais profundas e custosas que a simples recomposição superficial.
+    </div>
+  </div>
+
+  <!-- ABA 3: ANÁLISE DE RETORNO -->
+  <div id="tab-analitica" class="tab-pane" role="tabpanel">
+
+    <!-- SEÇÃO 1: Retorno sobre a Despesa -->
+    <div class="section-header">Retorno sobre a Despesa Pública <span class="periodo-badge">Dados 2025</span></div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Malha em Boa / Muito Boa Condição <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-roi-km-bom">—</div>
+        <div class="kpi-sub">km total — todas as SRs</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Retorno Médio <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-roi-km-por-mi">—</div>
+        <div class="kpi-sub">km em boa condição / R$ milhão</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">SR Mais Eficiente <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-roi-sr-eficiente">—</div>
+        <div class="kpi-sub" id="kpi-roi-sr-eficiente-sub">maior retorno por R$ investido</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Custo Médio por km em Boa Cond. <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-roi-custo-km">—</div>
+        <div class="kpi-sub">Liquidado / km em boa condição</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="chart-container mb-0">
+        <div class="chart-title">km em Boa/Muito Boa Condição por R$ Milhão Investido — por SR <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-h-240"><canvas id="chartROIKm"></canvas></div>
+      </div>
+      <div class="chart-container mb-0">
+        <div class="chart-title">Custo por km Mantido em Boa Condição (R$/km) — por SR <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-h-240"><canvas id="chartROICusto"></canvas></div>
+      </div>
+    </div>
+
+    <details class="method-details mt-24">
+      <summary>Ver metodologia do retorno sobre a despesa</summary>
+      <p>O indicador <em>km em boa condição por R$ milhão</em> mede quantos quilômetros de malha (IRI Bom + Muito Bom) são mantidos para cada R$ 1 milhão liquidado por SR. Não mensura novos quilômetros melhorados; avalia eficiência relativa na preservação do patrimônio existente e deve ser lido junto ao porte de cada regional.</p>
+    </details>
+
+    <!-- SEÇÃO 2: Eficiência por Regional -->
+    <div class="section-sep"><span>Eficiência por Regional</span></div>
+
     <div class="filter-bar">
       <label for="filtroSR">Filtrar por SR:</label>
       <select id="filtroSR" class="filter-select">
@@ -313,16 +304,17 @@ svg.responsive{display:block;width:100%}
         <option value="SR Oeste">SR Oeste</option>
       </select>
     </div>
+
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
             <th>SR</th>
-            <th>Liquidado (R$)</th>
-            <th>Liquidado/km (R$)</th>
-            <th>% Malha Crítica (IRI)</th>
-            <th>% Estrutura Crítica (FWD)</th>
-            <th>Nº Contratos</th>
+            <th>Liquidado (R$) <span class="periodo-badge on-dark">2025</span></th>
+            <th>Liquidado/km (R$) <span class="periodo-badge on-dark">2025</span></th>
+            <th>% Malha Crítica (IRI) <span class="periodo-badge mix on-dark">2021–2022</span></th>
+            <th>% Estrutura Crítica (FWD) <span class="periodo-badge mix on-dark">2021–2022</span></th>
+            <th>Nº Contratos <span class="periodo-badge on-dark">2025</span></th>
             <th>Emergenciais</th>
           </tr>
         </thead>
@@ -336,64 +328,24 @@ svg.responsive{display:block;width:100%}
     </div>
 
     <div class="svg-container">
-      <div class="chart-title">Criticidade da malha × Intensidade do gasto</div>
+      <div class="chart-title">Criticidade da Malha × Intensidade do Gasto por km <span class="periodo-badge mix">Liquidado 2025 × IRI 2021–2022 (períodos distintos)</span></div>
       <svg id="scatter" class="responsive" viewBox="0 0 720 400"></svg>
-      <p class="fn" style="margin-top:8px">Linha de tendência ilustrativa, baseada em 5 observações (uma por SR) — não deve ser interpretada como correlação estatisticamente validada.</p>
-    </div>
-  </div>
-
-  <!-- ABA 3: CONDIÇÃO DA MALHA -->
-  <div id="tab-malha" class="tab-pane" role="tabpanel">
-    <div class="grid-2">
-      <div class="chart-container" style="margin-bottom:0">
-        <div class="chart-title">Condição da Malha — IRI (% inspecionado)</div>
-        <div style="height:260px"><canvas id="chartIRI"></canvas></div>
-      </div>
-      <div class="chart-container" style="margin-bottom:0">
-        <div class="chart-title">Condição Estrutural — FWD (% inspecionado)</div>
-        <div style="height:260px"><canvas id="chartFWD"></canvas></div>
-      </div>
+      <p class="fn mt-8">Linha de tendência ilustrativa — 5 observações (uma por SR). Não representa correlação estatisticamente validada. <strong>Atenção:</strong> eixo X usa levantamento SGP 2021–2022; eixo Y usa liquidado 2025.</p>
     </div>
 
-    <div class="hl-grid" id="hl-grid"></div>
+    <!-- SEÇÃO 3: Pergunta Central do Piloto -->
+    <div class="section-sep"><span>Resposta à Pergunta Central do Piloto</span></div>
+    <div class="arg-block" id="argblock1"></div>
 
-    <div class="chart-container">
-      <div class="chart-title">Extensão da Malha por Condição e Regional (km absoluto)</div>
-      <div style="height:260px"><canvas id="chartMalhaKm"></canvas></div>
-    </div>
+    <!-- SEÇÃO 4: Liquidado por Município -->
+    <div class="section-sep"><span>Liquidado por Município <span class="periodo-badge">Dados 2025</span></span></div>
 
-    <div class="chart-container">
-      <div class="chart-title">Gasto por km Inspecionado vs. % Malha Crítica (IRI) por Regional</div>
-      <div style="height:220px"><canvas id="chartLiqKmSR"></canvas></div>
-    </div>
-
-    <div class="note">
-      <strong>Nota técnica — Indicadores de condição:</strong><br>
-      <strong>IRI (Índice de Irregularidade Internacional):</strong> mede o conforto de rolamento. Valores altos indicam superfície irregular (ondulações, afundamentos), causando desgaste veicular e desconforto ao usuário.<br>
-      <strong>FWD (Falling Weight Deflectometer):</strong> mede a capacidade estrutural do pavimento sob carga. Valores críticos indicam risco de colapso estrutural, exigindo intervenções mais profundas e custosas que a simples recomposição superficial.
-    </div>
-  </div>
-
-  <!-- ABA 4: PARADOXO TERRITORIAL -->
-  <div id="tab-paradoxo" class="tab-pane" role="tabpanel">
-    <div class="filter-bar">
-      <label for="filtroCategoria">Filtrar por categoria:</label>
-      <select id="filtroCategoria" class="filter-select">
-        <option value="">Todas as categorias</option>
-        <option value="Paradoxo territorial">Paradoxo Territorial</option>
-        <option value="Só logístico">Só Logístico</option>
-        <option value="Só vulnerável">Só Vulnerável</option>
-        <option value="Neutro">Neutro</option>
-      </select>
-    </div>
     <div class="svg-container">
-      <div class="chart-title">Municípios do Piloto — Mapa do Paraná</div>
+      <div class="chart-title">Municípios do Piloto — Distribuição no Paraná <span class="periodo-badge">Dados 2025</span></div>
       <svg id="mapa" class="responsive" viewBox="0 0 720 400"></svg>
       <div class="map-legend">
-        <div class="leg-item"><div class="leg-dot" style="background:#8B0000"></div>Paradoxo Territorial (<span id="cnt-paradoxo">—</span>)</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#2E75B6"></div>Só Logístico (<span id="cnt-logistico">—</span>)</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#E07B00"></div>Só Vulnerável (<span id="cnt-vulneravel">—</span>)</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#888"></div>Neutro (<span id="cnt-neutro">—</span>)</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#0D2B5E"></div>Com liquidado identificado na base do DER</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#BDD7EE"></div>Sem liquidado identificado (R$ 0 na base)</div>
         <div class="leg-item" style="font-style:italic;color:#888;margin-left:8px">Tamanho proporcional à população</div>
         <div class="leg-item" style="margin-left:8px;color:#C00000;font-weight:600">⚠ <span id="cnt-nonnull">—</span>/<span id="cnt-total-mun">—</span> municípios com liquidado não-nulo identificado</div>
       </div>
@@ -404,1069 +356,109 @@ svg.responsive{display:block;width:100%}
       <table id="tblMun">
         <thead>
           <tr>
-            <th data-col="0">Município ↕</th>
-            <th data-col="1">SR ↕</th>
-            <th data-col="2">IDH ↕</th>
-            <th data-col="3">Relevância Logística ↕</th>
-            <th data-col="4">Categoria ↕</th>
-            <th data-col="5">População ↕</th>
-            <th data-col="6">Liquidado/hab ↕</th>
+            <th data-col="0" class="sortable">Município ↕</th>
+            <th data-col="1" class="sortable">SR ↕</th>
+            <th data-col="2" class="sortable">População ↕</th>
+            <th data-col="3" class="sortable">Liquidado/hab ↕</th>
           </tr>
         </thead>
         <tbody id="tbodyMun"></tbody>
       </table>
     </div>
 
-    <div class="arg-block" id="argblock-paradoxo">
-      <h3>O Paradoxo Territorial no Contexto do Orçamento para Resultados</h3>
-    </div>
+    <div class="arg-block" id="argblock-paradoxo"></div>
+
   </div>
 
-  <!-- ABA 5: CONTRATOS -->
-  <div id="tab-contratos" class="tab-pane" role="tabpanel">
+  <!-- ABA 4: BENCHMARK NACIONAL -->
+  <div id="tab-benchmark" class="tab-pane" role="tabpanel">
 
-    <div class="kpi-grid">
+    <div class="section-header">Benchmark Nacional — Pesquisa CNT de Rodovias <span class="periodo-badge">Série 2015–2025</span></div>
+
+    <div id="bench-error"></div>
+
+    <div class="note gray mb-20">
+      <strong>Fonte:</strong> Pesquisa CNT de Rodovias, consolidada na planilha de indicadores SEFA &nbsp;·&nbsp; Série 2015–2025 &nbsp;·&nbsp; <strong>Sem levantamento em 2020 e 2023</strong> — esses anos não constam na série e não foram interpolados.
+    </div>
+
+    <!-- Controles de ano -->
+    <div class="bench-controls">
+      <button id="benchPlayBtn" class="bench-play">&#9654; Play</button>
+      <span class="bench-year-disp" id="benchYearLabel">2025</span>
+      <input type="range" id="benchSlider" class="bench-slider" min="0" max="8" value="8" step="1">
+      <span class="bench-hint">← Arraste para navegar pelos anos da série</span>
+    </div>
+
+    <!-- 3 cards de métrica -->
+    <div class="kpi-grid kpi-grid-3">
       <div class="kpi-card">
-        <div class="kpi-label">Total de Contratos DOPSR1</div>
-        <div class="kpi-value" id="kpi-cont-total">—</div>
-        <div class="kpi-sub">Contratos ativos no período</div>
+        <div class="kpi-label">Paraná &nbsp;·&nbsp; % Boa ou Ótima <span class="periodo-badge" id="benchBadgePR">2025</span></div>
+        <div class="kpi-value" id="benchKpiPR">—</div>
+        <div class="kpi-sub">Pesquisa CNT de Rodovias</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Total Empenhado</div>
-        <div class="kpi-value" id="kpi-cont-emp">—</div>
-        <div class="kpi-sub">Dotação comprometida</div>
+        <div class="kpi-label">Posição do Paraná <span class="periodo-badge" id="benchBadgePos">2025</span></div>
+        <div class="kpi-value" id="benchKpiPos">—</div>
+        <div class="kpi-sub">Ranking entre estados com dado naquele ano</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Total Liquidado</div>
-        <div class="kpi-value" id="kpi-cont-liq">—</div>
-        <div class="kpi-sub">Serviço confirmado/atestado</div>
-      </div>
-      <div class="kpi-card" id="kpi-cont-exec-card">
-        <div class="kpi-label">Taxa de Execução</div>
-        <div class="kpi-value" id="kpi-cont-exec">—</div>
-        <div class="kpi-sub">Liquidado / Empenhado</div>
+        <div class="kpi-label">Média Brasil <span class="periodo-badge" id="benchBadgeBR">2025</span></div>
+        <div class="kpi-value" id="benchKpiBR">—</div>
+        <div class="kpi-sub">Agregado nacional — Pesquisa CNT</div>
       </div>
     </div>
 
-    <div class="grid-2">
-      <div class="chart-container" style="margin-bottom:0">
-        <div class="chart-title">Empenhado vs. Liquidado por SR (R$)</div>
-        <div style="height:280px"><canvas id="chartContSR"></canvas></div>
-      </div>
-      <div class="chart-container" style="margin-bottom:0">
-        <div class="chart-title">Distribuição de Contratos por Tipo</div>
-        <div style="height:280px"><canvas id="chartContTipo"></canvas></div>
-      </div>
+    <!-- Gráfico de ranking -->
+    <div class="chart-container">
+      <div class="chart-title">Ranking Estadual — % Malha em Boa ou Ótima Condição <span class="periodo-badge" id="benchRankingBadge">2025</span></div>
+      <div class="chart-h-680"><canvas id="chartBenchRanking"></canvas></div>
     </div>
 
-    <div style="margin-top:24px" class="chart-container">
-      <div class="chart-title">Liquidado por Tipo de Contrato (R$)</div>
-      <div style="height:200px"><canvas id="chartContLiqTipo"></canvas></div>
+    <!-- Evolução Paraná × Brasil -->
+    <div class="chart-container">
+      <div class="chart-title">Evolução ao Longo do Tempo — Paraná × Brasil <span class="periodo-badge">Série 2015–2025</span></div>
+      <div class="chart-h-280"><canvas id="chartBenchLine"></canvas></div>
+      <p class="fn mt-8">Os anos 2020 e 2023 não foram cobertos pela Pesquisa CNT e não estão no eixo — os pontos são exibidos na sequência real da série, sem interpolação dos anos faltantes. O ponto destacado corresponde ao ano selecionado no slider.</p>
     </div>
 
-    <div class="filter-bar">
-      <label for="filtroContSR">Filtrar por SR:</label>
-      <select id="filtroContSR" class="filter-select">
-        <option value="">Todas as SRs</option>
-        <option value="SR LESTE">SR Leste</option>
-        <option value="SR CAMPOS GERAIS">SR Campos Gerais</option>
-        <option value="SR NORTE">SR Norte</option>
-        <option value="SR NOROESTE">SR Noroeste</option>
-        <option value="SR OESTE">SR Oeste</option>
-      </select>
-      <label for="filtroContTipo">Tipo:</label>
-      <select id="filtroContTipo" class="filter-select">
-        <option value="">Todos os tipos</option>
-        <option value="PROCONSERVA">PROCONSERVA</option>
-        <option value="COP">COP</option>
-        <option value="INTEGRA">INTEGRA</option>
-        <option value="CREMEP">CREMEP</option>
-        <option value="EMERGENCIAL">EMERGENCIAL</option>
-      </select>
+    <!-- Nota metodológica obrigatória -->
+    <details class="method-details">
+      <summary>Ver nota metodológica sobre benchmark e causalidade</summary>
+      <p>Este benchmark situa o Paraná no contexto nacional, mas não estabelece relação causal entre investimento da Ação 8398 e melhora da malha. A base de liquidado tratado tem apenas 2024 e 2025, e a malha DER-PR representa uma fração do universo CNT; por isso, não é possível isolar a contribuição específica do Paraná para a variação nacional.</p>
+    </details>
+
+  </div>
+
+  <!-- ABA 5: MAPA DA MALHA POR REGIONAL -->
+  <div id="tab-maparodovias" class="tab-pane" role="tabpanel">
+
+    <div class="section-header">Mapa da Malha por Superintendência Regional <span class="periodo-badge">Geometria: OpenStreetMap · Condição: IRI 2021–2022</span></div>
+
+    <div id="mapa-rod-error"></div>
+
+    <div class="note warn is-hidden" id="mapa-rod-alerta-aprox">
+      <strong>Aviso — atribuição de SR por aproximação:</strong> A atribuição de trechos à sua Superintendência Regional foi estimada por proximidade ao município-sede de cada SR (Voronoi simples), pois não foi encontrada uma lista completa de municípios por SR no projeto — a cobertura disponível é apenas dos 21 municípios do piloto. Confirme com a equipe de SIG do DER-PR antes de usar este mapa em material formal.
     </div>
 
-    <div class="table-wrap">
-      <table id="tblContratos">
-        <thead>
-          <tr>
-            <th>Contrato</th>
-            <th>SR</th>
-            <th>Tipo</th>
-            <th>Empenhado (R$)</th>
-            <th>Liquidado (R$)</th>
-            <th>Pago (R$)</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="tbodyContratos"></tbody>
-      </table>
+    <div class="leaflet-map-wrap">
+      <div id="map-rodovias" class="leaflet-map"></div>
     </div>
+
+    <div class="note">
+      <strong>Nota metodológica:</strong> As linhas mostram o traçado real das rodovias estaduais do Paraná (fonte: OpenStreetMap). A cor de cada trecho reflete a condição média da Superintendência Regional onde ele está localizado (dados de IRI/FWD agregados por SR, levantamento SGP 2021–2022) — não existe, na base disponível, uma nota de condição por trecho individual.
+    </div>
+
+    <div class="note gray">
+      <strong>Fonte geométrica:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="link-blue">OpenStreetMap contributors</a> — dados obtidos via Overpass API. Para regenerar o arquivo de geometria execute: <code>python scripts/fetch_rodovias_pr.py</code>
+    </div>
+
   </div>
 
 </div><!-- /tab-content -->
 
-<script>
-// =======================================================
-// DADOS — AÇÃO 8398 DER-PR
-// =======================================================
-
-// Dados carregados dinamicamente de ../data/der_precomputed.json via initDashboard()
-let subprogramas = [];
-let regionais    = [];
-let iri          = [];
-let fwd          = [];
-let municipios   = [];
-
-// Dados de ../data/dados_extras.json
-let contratos  = [];
-let malhaKm    = [];
-let malhaLiqKm = [];
-
-// =======================================================
-// UTILITÁRIOS
-// =======================================================
-
-const tt = document.getElementById('tt');
-
-function showTT(e, html){ tt.innerHTML=html; tt.style.display='block'; moveTT(e); }
-function moveTT(e){ tt.style.left=(e.clientX+14)+'px'; tt.style.top=(e.clientY-8)+'px'; }
-function hideTT(){ tt.style.display='none'; }
-
-function fmtNum(v, decimais=0){
-  if(v==null) return '—';
-  return v.toLocaleString('pt-BR', {minimumFractionDigits:decimais, maximumFractionDigits:decimais});
-}
-function fmtR(v){
-  if(v==null) return '—';
-  if(v>=1e9) return 'R$&nbsp;'+fmtNum(v/1e9,2)+'&nbsp;bi';
-  if(v>=1e6) return 'R$&nbsp;'+fmtNum(v/1e6,1)+'&nbsp;mi';
-  return 'R$&nbsp;'+fmtNum(v);
-}
-function fmtRF(v){ return v==null?'—':'R$&nbsp;'+fmtNum(Math.round(v)); }
-function fmtP(v){ return v==null?'—':fmtNum(v,1)+' %'; }
-
-function execBadge(t){
-  if(t==null) return '<span class="badge b-gray">—</span>';
-  if(t>=90) return '<span class="badge b-green">Alta execução</span>';
-  if(t>=70) return '<span class="badge b-yellow">Execução moderada</span>';
-  return '<span class="badge b-red">Baixa execução</span>';
-}
-
-function pb(pct, maxPct=45){
-  const c = pct>=25?'#C00000':pct>=15?'#FFC000':'#70AD47';
-  const w = fmtNum(Math.min(pct/maxPct*100,100),1);
-  return `<div class="pb-wrap"><div class="pb"><div class="pb-fill" style="width:${w}%;background:${c}"></div></div><span>${fmtP(pct)}</span></div>`;
-}
-
-// =======================================================
-// ESTADO DOS FILTROS
-// =======================================================
-
-let srFiltro = '';
-let catFiltro = '';
-let munDisplayData = [];
-
-// =======================================================
-// ABA 1 — EXECUÇÃO FINANCEIRA
-// =======================================================
-
-function renderExecucao(){
-  // Ordena decrescente por liquidado
-  const sorted = [...subprogramas].sort((a,b)=>b.liquidado-a.liquidado);
-  const totalLiqSub = subprogramas.reduce((a, s) => a + s.liquidado, 0);
-
-  // Tabela
-  const tbody = document.getElementById('tbodySub');
-  tbody.innerHTML = sorted.map(s=>{
-    const ncPct = totalLiqSub > 0 ? Math.round(s.liquidado / totalLiqSub * 1000) / 10 : 0;
-    const nota = s.nome==='NÃO CLASSIFICADO'
-      ? `<br><span class="fn">Gasto sem classificação por subprograma no PPA — ${fmtNum(ncPct,1)}% do total liquidado</span>`
-      : '';
-    return `<tr>
-      <td>${s.nome}${nota}</td>
-      <td>${fmtR(s.liquidado)}</td>
-      <td>${fmtP(s.taxa)}</td>
-      <td>${s.custo_km?'R$&nbsp;'+s.custo_km.toLocaleString('pt-BR'):'—'}</td>
-      <td>${execBadge(s.taxa)}</td>
-    </tr>`;
-  }).join('');
-
-  // Cores das barras conforme taxa de execução
-  const cores = sorted.map(s=>{
-    if(s.taxa==null) return '#BDD7EE';
-    if(s.taxa>=90) return '#70AD47';
-    if(s.taxa>=70) return '#FFC000';
-    return '#C00000';
-  });
-
-  new Chart(document.getElementById('chartSub'),{
-    type:'bar',
-    data:{
-      labels: sorted.map(s=>s.nome),
-      datasets:[{
-        data: sorted.map(s=>s.liquidado),
-        backgroundColor: cores,
-        borderRadius:3,
-        borderSkipped:false
-      }]
-    },
-    options:{
-      indexAxis:'y',
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{
-          callbacks:{
-            title: ctx=>sorted[ctx[0].dataIndex].nome,
-            label: ctx=>{
-              const s=sorted[ctx.dataIndex];
-              const lines=['Liquidado: '+fmtR(s.liquidado).replace(/&nbsp;/g,' ')];
-              if(s.taxa!=null) lines.push('Taxa de execução: '+fmtP(s.taxa).replace(/&nbsp;/g,' '));
-              if(s.custo_km) lines.push('Custo/km: R$ '+s.custo_km.toLocaleString('pt-BR'));
-              return lines;
-            }
-          }
-        }
-      },
-      scales:{
-        x:{
-          grid:{color:'#F0F0F0'},
-          ticks:{callback:v=>v>=1e9?fmtNum(v/1e9,1)+' bi':v>=1e6?fmtNum(v/1e6,0)+' M':v}
-        },
-        y:{grid:{display:false}}
-      }
-    }
-  });
-}
-
-// =======================================================
-// ABA 2 — EFICIÊNCIA POR REGIONAL
-// =======================================================
-
-function renderEficiencia(sr=''){
-  srFiltro = sr;
-  const tbody = document.getElementById('tbodyReg');
-  tbody.innerHTML = regionais.map(r=>{
-    const isNorte = r.sr==='SR Norte';
-    const isSelected = !sr || r.sr===sr;
-    const rowCls = isNorte ? 'tr-norte' : '';
-    const rowStyle = sr && !isSelected ? 'opacity:.4' : '';
-    const emgHtml = r.emg>0
-      ? `<span style="color:#C00000;font-weight:600">${r.emg} ⚠️</span>`
-      : r.emg;
-    return `<tr class="${rowCls}" style="${rowStyle}">
-      <td><strong>${r.sr}</strong></td>
-      <td>${fmtRF(r.liquidado)}</td>
-      <td>R$&nbsp;${r.lkm.toLocaleString('pt-BR')}</td>
-      <td>${pb(r.iri)}</td>
-      <td>${pb(r.fwd,45)}</td>
-      <td>${r.nc}</td>
-      <td>${emgHtml}</td>
-    </tr>`;
-  }).join('');
-
-  renderScatter(sr);
-}
-
-function renderScatter(sr=''){
-  const svg = document.getElementById('scatter');
-  const W=720, H=400;
-  const pad={l:80,r:30,t:30,b:60};
-  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
-
-  const xMin=0, xMax=45, yMin=0, yMax=100000;
-  const sx = v => pad.l + (v-xMin)/(xMax-xMin)*pw;
-  const sy = v => pad.t + ph - (v-yMin)/(yMax-yMin)*ph;
-
-  // Regressão linear para linha de tendência
-  const n=regionais.length;
-  const mx=regionais.reduce((a,r)=>a+r.iri,0)/n;
-  const my=regionais.reduce((a,r)=>a+r.lkm,0)/n;
-  const slope=regionais.reduce((a,r)=>a+(r.iri-mx)*(r.lkm-my),0)/
-               regionais.reduce((a,r)=>a+(r.iri-mx)**2,0);
-  const intercept=my-slope*mx;
-
-  const x1t=xMin, y1t=slope*x1t+intercept;
-  const x2t=xMax, y2t=slope*x2t+intercept;
-
-  const srCores={'SR Leste':'#2E75B6','SR Campos Gerais':'#70AD47','SR Norte':'#C00000','SR Noroeste':'#E07B00','SR Oeste':'#1F4E79'};
-
-  // Grade e eixos
-  let g = '';
-
-  // Grade X
-  for(let v=0;v<=45;v+=10){
-    const x=sx(v);
-    g+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+ph}" stroke="#EBEBEB" stroke-width="1"/>`;
-    g+=`<text x="${x}" y="${pad.t+ph+18}" text-anchor="middle" font-size="11" fill="#888">${v}%</text>`;
-  }
-  // Grade Y
-  for(let v=0;v<=100000;v+=20000){
-    const y=sy(v);
-    g+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+pw}" y2="${y}" stroke="#EBEBEB" stroke-width="1"/>`;
-    g+=`<text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="11" fill="#888">${v>=1000?(v/1000)+'k':v}</text>`;
-  }
-
-  // Área do plot
-  g=`<rect x="${pad.l}" y="${pad.t}" width="${pw}" height="${ph}" fill="#FAFBFC" stroke="#E0E0E0" rx="3"/>`+g;
-
-  // Linha de tendência
-  g+=`<line x1="${sx(x1t).toFixed(1)}" y1="${sy(Math.max(0,y1t)).toFixed(1)}" x2="${sx(x2t).toFixed(1)}" y2="${sy(Math.max(0,y2t)).toFixed(1)}" stroke="#BDD7EE" stroke-width="2" stroke-dasharray="6,4"/>`;
-
-  // Labels eixos
-  g+=`<text x="${pad.l+pw/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="#555" font-weight="500">% Malha Crítica (IRI)</text>`;
-  g+=`<text transform="rotate(-90,18,${pad.t+ph/2})" x="18" y="${pad.t+ph/2+4}" text-anchor="middle" font-size="12" fill="#555" font-weight="500">Liquidado/km (R$)</text>`;
-
-  // Pontos
-  const offsets={
-    'SR Leste':[10,-12],
-    'SR Campos Gerais':[-10,-14],
-    'SR Norte':[0,-16],
-    'SR Noroeste':[12,4],
-    'SR Oeste':[10,-12]
-  };
-  regionais.forEach(r=>{
-    const cx=sx(r.iri), cy=sy(r.lkm);
-    const cor=srCores[r.sr]||'#888';
-    const [ox,oy]=offsets[r.sr]||[10,-12];
-    const lbl=r.sr.replace('SR ','');
-    const isNoroeste=r.sr==='SR Noroeste';
-    const isSelected = !sr || r.sr===sr;
-    const fillOp = isSelected ? '.82' : '.20';
-    const lblOp  = isSelected ? '1'   : '.25';
-    const radius  = sr && r.sr===sr ? 18 : 13;
-    if(r.emg > 0){
-      const haloOp = isSelected ? '1' : '.25';
-      g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="22" fill="none" stroke="#C00000" stroke-width="1.8" stroke-dasharray="5,4" opacity="${haloOp}"/>`;
-    }
-    g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${radius}" fill="${cor}" fill-opacity="${fillOp}" stroke="white" stroke-width="2"
-        class="sdot" data-sr="${r.sr}" data-iri="${r.iri}" data-lkm="${r.lkm.toLocaleString('pt-BR')}" data-emg="${r.emg}"/>`;
-    g+=`<text x="${(cx+ox).toFixed(1)}" y="${(cy+oy).toFixed(1)}" font-size="11" fill="${cor}" font-weight="600" opacity="${lblOp}">${lbl}</text>`;
-  });
-
-  svg.innerHTML=g;
-
-  svg.querySelectorAll('.sdot').forEach(el=>{
-    el.style.cursor='pointer';
-    el.addEventListener('mousemove',e=>{
-      const emgN=+el.dataset.emg;
-      const extra=emgN>0?`<br>⚠️ ${emgN} contratos emergenciais em 2025 — abaixo da linha de tendência`:'';
-      showTT(e,`<strong>${el.dataset.sr}</strong><br>IRI crítico: ${el.dataset.iri}%<br>Liquidado/km: R$ ${el.dataset.lkm}${extra}`);
-    });
-    el.addEventListener('mouseleave',hideTT);
-  });
-}
-
-// =======================================================
-// ABA 3 — CONDIÇÃO DA MALHA
-// =======================================================
-
-function renderMalha(){
-  // Ordena SRs por criticidade (ruim+pessimo) crescente (melhor no topo)
-  const iriSorted = [...iri].sort((a,b)=>(a.ruim+a.pessimo)-(b.ruim+b.pessimo));
-  const fwdSorted = [...fwd].sort((a,b)=>(a.ruim+a.pessimo)-(b.ruim+b.pessimo));
-
-  const stackDatasets = (arr) => [
-    { label:'Ruim',     data:arr.map(r=>r.ruim),     backgroundColor:'#C00000' },
-    { label:'Péssimo',  data:arr.map(r=>r.pessimo),  backgroundColor:'#E07B00' },
-    { label:'Regular',  data:arr.map(r=>r.regular),  backgroundColor:'#FFC000' },
-    { label:'Bom',      data:arr.map(r=>r.bom),      backgroundColor:'#70AD47' },
-    { label:'Muito Bom',data:arr.map(r=>r.muito_bom),backgroundColor:'#1F4E79' }
-  ];
-
-  const stackOpts = {
-    indexAxis:'y',
-    responsive:true,
-    maintainAspectRatio:false,
-    plugins:{
-      legend:{position:'bottom',labels:{font:{size:11},padding:12}},
-      tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)}%`}}
-    },
-    scales:{
-      x:{stacked:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:'#F0F0F0'}},
-      y:{stacked:true,grid:{display:false}}
-    }
-  };
-
-  new Chart(document.getElementById('chartIRI'),{
-    type:'bar',
-    data:{ labels:iriSorted.map(r=>r.sr.replace('SR ','')), datasets:stackDatasets(iriSorted) },
-    options:stackOpts
-  });
-  new Chart(document.getElementById('chartFWD'),{
-    type:'bar',
-    data:{ labels:fwdSorted.map(r=>r.sr.replace('SR ','')), datasets:stackDatasets(fwdSorted) },
-    options:stackOpts
-  });
-
-  // Gráfico de extensão absoluta em km
-  if(malhaKm.length > 0){
-    const kmSorted = [...malhaKm].sort((a,b)=>(a.ruim_km+a.pessimo_km)-(b.ruim_km+b.pessimo_km));
-    new Chart(document.getElementById('chartMalhaKm'),{
-      type:'bar',
-      data:{
-        labels: kmSorted.map(r=>r.sr.replace('SR ','')),
-        datasets:[
-          { label:'Ruim',      data:kmSorted.map(r=>r.ruim_km),     backgroundColor:'#C00000' },
-          { label:'Péssimo',   data:kmSorted.map(r=>r.pessimo_km),  backgroundColor:'#E07B00' },
-          { label:'Regular',   data:kmSorted.map(r=>r.regular_km),  backgroundColor:'#FFC000' },
-          { label:'Boa',       data:kmSorted.map(r=>r.boa_km),      backgroundColor:'#70AD47' },
-          { label:'Muito Boa', data:kmSorted.map(r=>r.muito_boa_km),backgroundColor:'#1F4E79' }
-        ]
-      },
-      options:{
-        indexAxis:'y',
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{
-          legend:{position:'bottom',labels:{font:{size:11},padding:12}},
-          tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)} km`}}
-        },
-        scales:{
-          x:{stacked:true,ticks:{callback:v=>fmtNum(v)+' km'},grid:{color:'#F0F0F0'}},
-          y:{stacked:true,grid:{display:false}}
-        }
-      }
-    });
-  }
-
-  // Gráfico: liquidado/km por SR vs % crítico IRI
-  if(malhaKm.length > 0){
-    const SR_ORDER=['SR Leste','SR Campos Gerais','SR Norte','SR Noroeste','SR Oeste'];
-    const srLabels = SR_ORDER.map(s=>s.replace('SR ',''));
-    const liqKmData = SR_ORDER.map(sr=>{
-      const r = regionais.find(x=>x.sr===sr);
-      return r ? r.lkm : 0;
-    });
-    const pctCriticoData = SR_ORDER.map(sr=>{
-      const r = regionais.find(x=>x.sr===sr);
-      return r ? r.iri : 0;
-    });
-    new Chart(document.getElementById('chartLiqKmSR'),{
-      type:'bar',
-      data:{
-        labels: srLabels,
-        datasets:[
-          {
-            label:'Liquidado/km (R$)',
-            data: liqKmData,
-            backgroundColor:'#2E75B6',
-            yAxisID:'y',
-            borderRadius:3
-          },
-          {
-            label:'% Malha Crítica IRI',
-            data: pctCriticoData,
-            type:'line',
-            borderColor:'#C00000',
-            backgroundColor:'rgba(192,0,0,.15)',
-            fill:true,
-            tension:.3,
-            yAxisID:'y2',
-            pointRadius:5,
-            pointBackgroundColor:'#C00000'
-          }
-        ]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{
-          legend:{position:'bottom',labels:{font:{size:11},padding:12}},
-          tooltip:{callbacks:{label:ctx=>{
-            if(ctx.dataset.yAxisID==='y2') return ` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.y,1)}%`;
-            return ` ${ctx.dataset.label}: R$ ${fmtNum(ctx.parsed.y)}`;
-          }}}
-        },
-        scales:{
-          x:{grid:{display:false}},
-          y:{
-            position:'left',
-            grid:{color:'#F0F0F0'},
-            ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v}
-          },
-          y2:{
-            position:'right',
-            grid:{display:false},
-            ticks:{callback:v=>v+'%'},
-            max:50
-          }
-        }
-      }
-    });
-  }
-}
-
-// =======================================================
-// ABA 4 — PARADOXO TERRITORIAL
-// =======================================================
-
-const catCores = {
-  'Paradoxo territorial':'#8B0000',
-  'Só logístico':'#2E75B6',
-  'Só vulnerável':'#E07B00',
-  'Neutro':'#888'
-};
-
-function renderParadoxo(){
-  catFiltro = '';
-  munDisplayData = [...municipios];
-  renderMapa('');
-  renderTblMun(munDisplayData, '');
-}
-
-function renderMapa(cat=''){
-  // Bounding box do Paraná
-  const latMin=-26.75, latMax=-22.40;
-  const lngMin=-54.65, lngMax=-47.95;
-  const W=720, H=400;
-  const pad={l:18,r:18,t:18,b:18};
-  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
-
-  const tx = lng => pad.l+(lng-lngMin)/(lngMax-lngMin)*pw;
-  const ty = lat => pad.t+(lat-latMax)/(latMin-latMax)*ph;
-
-  // Outline simplificado do Paraná (lat,lng)
-  const border = [
-    [-22.50,-53.20],[-22.50,-52.00],[-22.50,-50.70],[-22.90,-49.30],
-    [-23.40,-48.05],[-24.60,-48.00],[-25.70,-48.20],[-26.10,-48.55],
-    [-26.70,-49.20],[-26.70,-51.30],[-26.45,-53.40],[-25.60,-54.55],
-    [-24.10,-54.65],[-22.85,-54.55],[-22.50,-53.80],[-22.50,-53.20]
-  ].map(([lat,lng])=>`${tx(lng).toFixed(1)},${ty(lat).toFixed(1)}`).join(' ');
-
-  const maxPop = Math.max(...municipios.map(m=>m.pop));
-
-  let g = `<polygon points="${border}" fill="#E8F2FA" stroke="#2E75B6" stroke-width="1.5" stroke-linejoin="round"/>`;
-  g += `<text x="${W/2}" y="34" text-anchor="middle" font-size="13" fill="#1F4E79" font-weight="600">Paraná</text>`;
-
-  // Círculos dos municípios
-  municipios.forEach(m=>{
-    const cx=tx(m.lng), cy=ty(m.lat);
-    const r=4+Math.sqrt(m.pop/maxPop)*20;
-    const cor=catCores[m.cat]||'#888';
-    const fillOp = !cat || m.cat===cat ? '.72' : '.15';
-    const liqHtml=m.lh==null?'Sem dados de liquidado':m.lh===0?'Liq. identificado: R$ 0':'Liq./hab: R$&nbsp;'+fmtNum(m.lh,2);
-    g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"
-        fill="${cor}" fill-opacity="${fillOp}" stroke="white" stroke-width="1.5"
-        class="mdot" data-nome="${m.nome}" data-idh="${m.idh}" data-cat="${m.cat}"
-        data-pop="${m.pop.toLocaleString('pt-BR')}" data-liq="${liqHtml}"/>`;
-  });
-
-  // Labels para paradoxo
-  municipios.filter(m=>m.cat==='Paradoxo territorial').forEach(m=>{
-    const cx=tx(m.lng), cy=ty(m.lat);
-    const lblOp = !cat || m.cat===cat ? '1' : '.2';
-    g+=`<text x="${cx.toFixed(1)}" y="${(cy-10).toFixed(1)}" text-anchor="middle" font-size="10" fill="#8B0000" font-weight="700" opacity="${lblOp}">${m.nome}</text>`;
-  });
-
-  const svg=document.getElementById('mapa');
-  svg.innerHTML=g;
-
-  svg.querySelectorAll('.mdot').forEach(el=>{
-    el.style.cursor='pointer';
-    el.addEventListener('mousemove',e=>showTT(e,
-      `<strong>${el.dataset.nome}</strong><br>IDH: ${el.dataset.idh}<br>Categoria: ${el.dataset.cat}<br>Pop.: ${el.dataset.pop}<br>${el.dataset.liq}`));
-    el.addEventListener('mouseleave',hideTT);
-  });
-}
-
-let munSortDir={};
-function sortMun(col){
-  const dir=munSortDir[col]==='asc'?'desc':'asc';
-  munSortDir={[col]:dir};
-  const keys=['nome','sr','idh','log','cat','pop','lh'];
-  const k=keys[col];
-  const sorted=[...municipios].sort((a,b)=>{
-    let va=a[k], vb=b[k];
-    if(va==null) va=dir==='asc'?Infinity:-Infinity;
-    if(vb==null) vb=dir==='asc'?Infinity:-Infinity;
-    if(typeof va==='string') return dir==='asc'?va.localeCompare(vb,'pt'):vb.localeCompare(va,'pt');
-    return dir==='asc'?va-vb:vb-va;
-  });
-  munDisplayData = sorted;
-  renderTblMun(munDisplayData, catFiltro);
-}
-
-function renderTblMun(data, cat=''){
-  const catBadge = c => {
-    if(c==='Paradoxo territorial') return `<span class="badge b-red">${c}</span>`;
-    if(c==='Só logístico')         return `<span class="badge b-blue">${c}</span>`;
-    if(c==='Só vulnerável')        return `<span class="badge b-orange">${c}</span>`;
-    return `<span class="badge b-gray">${c}</span>`;
-  };
-  const lhHtml = m => {
-    if(m.lh==null) return '<span class="badge b-gray">Sem dados</span>';
-    if(m.lh===0)   return '<span class="badge b-gray">R$ 0</span>';
-    return 'R$&nbsp;'+fmtNum(m.lh,2)+'/hab';
-  };
-  document.getElementById('tbodyMun').innerHTML = data.map(m=>{
-    const isP=m.cat==='Paradoxo territorial';
-    const rowStyle = cat && m.cat!==cat ? 'opacity:.35' : '';
-    return `<tr class="${isP?'tr-paradoxo':''}" style="${rowStyle}">
-      <td><strong>${m.nome}</strong></td>
-      <td>${m.sr}</td>
-      <td>${fmtNum(m.idh,3)}</td>
-      <td>${m.log}</td>
-      <td>${catBadge(m.cat)}</td>
-      <td>${m.pop.toLocaleString('pt-BR')}</td>
-      <td>${lhHtml(m)}</td>
-    </tr>`;
-  }).join('');
-}
-
-// =======================================================
-// ABA 5 — CONTRATOS
-// =======================================================
-
-const SR_DISPLAY = {
-  'SR LESTE':'SR Leste','SR CAMPOS GERAIS':'SR Campos Gerais',
-  'SR NORTE':'SR Norte','SR NOROESTE':'SR Noroeste','SR OESTE':'SR Oeste'
-};
-
-const TIPO_COLORS = {
-  'PROCONSERVA':'#2E75B6','COP':'#70AD47','INTEGRA':'#1F4E79',
-  'CREMEP':'#FFC000','EMERGENCIAL':'#C00000'
-};
-
-let contSRFiltro   = '';
-let contTipoFiltro = '';
-
-function renderContratos(){
-  if(!contratos.length) return;
-
-  const totalEmp  = contratos.reduce((a,c)=>a+c.empenhado,0);
-  const totalLiq  = contratos.reduce((a,c)=>a+c.liquidado,0);
-  const pctExec   = totalEmp>0?(totalLiq/totalEmp*100):0;
-
-  // KPI cards
-  document.getElementById('kpi-cont-total').textContent = contratos.length;
-  document.getElementById('kpi-cont-emp').innerHTML     = fmtR(totalEmp);
-  document.getElementById('kpi-cont-liq').innerHTML     = fmtR(totalLiq);
-  document.getElementById('kpi-cont-exec').textContent  = fmtNum(pctExec,1)+'%';
-  const execCard = document.getElementById('kpi-cont-exec-card');
-  if(pctExec<70) execCard.classList.add('alert');
-
-  // Chart 1 — Empenhado vs Liquidado por SR
-  const SR_ORDER_UP=['SR LESTE','SR CAMPOS GERAIS','SR NORTE','SR NOROESTE','SR OESTE'];
-  const srLabels = SR_ORDER_UP.map(s=>SR_DISPLAY[s].replace('SR ',''));
-  const empBySR  = SR_ORDER_UP.map(sr=>contratos.filter(c=>c.sr===sr).reduce((a,c)=>a+c.empenhado,0));
-  const liqBySR  = SR_ORDER_UP.map(sr=>contratos.filter(c=>c.sr===sr).reduce((a,c)=>a+c.liquidado,0));
-
-  new Chart(document.getElementById('chartContSR'),{
-    type:'bar',
-    data:{
-      labels: srLabels,
-      datasets:[
-        { label:'Empenhado', data:empBySR, backgroundColor:'#BDD7EE', borderRadius:3 },
-        { label:'Liquidado', data:liqBySR, backgroundColor:'#2E75B6', borderRadius:3 }
-      ]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'bottom',labels:{font:{size:11},padding:12}},
-        tooltip:{callbacks:{label:ctx=>{
-          const v=ctx.raw;
-          const fmt=v>=1e9?'R$ '+fmtNum(v/1e9,2)+' bi':v>=1e6?'R$ '+fmtNum(v/1e6,1)+' mi':'R$ '+fmtNum(v);
-          return ` ${ctx.dataset.label}: ${fmt}`;
-        }}}
-      },
-      scales:{
-        x:{grid:{display:false}},
-        y:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1e6?fmtNum(v/1e6,0)+' M':v}}
-      }
-    }
-  });
-
-  // Chart 2 — Donut por tipo
-  const tipos = Object.keys(TIPO_COLORS);
-  const tipoCounts = tipos.map(t=>contratos.filter(c=>c.tipo===t).length).filter((_,i)=>contratos.some(c=>c.tipo===tipos[i]));
-  const tiposAtivos = tipos.filter(t=>contratos.some(c=>c.tipo===t));
-
-  new Chart(document.getElementById('chartContTipo'),{
-    type:'doughnut',
-    data:{
-      labels: tiposAtivos,
-      datasets:[{
-        data: tiposAtivos.map(t=>contratos.filter(c=>c.tipo===t).length),
-        backgroundColor: tiposAtivos.map(t=>TIPO_COLORS[t]||'#888'),
-        borderWidth:2,
-        borderColor:'#fff'
-      }]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'bottom',labels:{font:{size:11},padding:10}},
-        tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw} contrato${ctx.raw>1?'s':''}`}}
-      }
-    }
-  });
-
-  // Chart 3 — Liquidado por tipo (horizontal bar)
-  const tipoLiqMap = tiposAtivos.map(t=>({
-    tipo:t,
-    liq:contratos.filter(c=>c.tipo===t).reduce((a,c)=>a+c.liquidado,0)
-  })).sort((a,b)=>b.liq-a.liq);
-
-  new Chart(document.getElementById('chartContLiqTipo'),{
-    type:'bar',
-    data:{
-      labels: tipoLiqMap.map(t=>t.tipo),
-      datasets:[{
-        data: tipoLiqMap.map(t=>t.liq),
-        backgroundColor: tipoLiqMap.map(t=>TIPO_COLORS[t.tipo]||'#888'),
-        borderRadius:3
-      }]
-    },
-    options:{
-      indexAxis:'y',
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>{
-          const v=ctx.raw;
-          const fmt=v>=1e9?'R$ '+fmtNum(v/1e9,2)+' bi':v>=1e6?'R$ '+fmtNum(v/1e6,1)+' mi':'R$ '+fmtNum(v);
-          return ` Liquidado: ${fmt}`;
-        }}}
-      },
-      scales:{
-        x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1e6?fmtNum(v/1e6,0)+' M':v}},
-        y:{grid:{display:false}}
-      }
-    }
-  });
-
-  renderTblContratos(contratos);
-}
-
-function renderTblContratos(data){
-  const tipoBadge = t=>{
-    const cls={'PROCONSERVA':'b-blue','COP':'b-green','INTEGRA':'b-blue','CREMEP':'b-yellow','EMERGENCIAL':'b-red'};
-    return `<span class="badge ${cls[t]||'b-gray'}">${t}</span>`;
-  };
-  const tblBody = document.getElementById('tbodyContratos');
-  if(!tblBody) return;
-  tblBody.innerHTML = data.map(c=>{
-    const pct = c.empenhado>0?c.liquidado/c.empenhado*100:0;
-    const emgRow = c.tipo==='EMERGENCIAL'?'background:#FFF5F5':'';
-    return `<tr style="${emgRow}">
-      <td><strong>${c.contrato}</strong></td>
-      <td>${SR_DISPLAY[c.sr]||c.sr}</td>
-      <td>${tipoBadge(c.tipo)}</td>
-      <td>${fmtRF(c.empenhado)}</td>
-      <td>${fmtRF(c.liquidado)}</td>
-      <td>${fmtRF(c.pago)}</td>
-      <td>${execBadge(pct)}</td>
-    </tr>`;
-  }).join('');
-}
-
-// =======================================================
-// CONTROLE DE ABAS
-// =======================================================
-
-const rendered={};
-
-function activateTab(id){
-  document.querySelectorAll('.tab-btn').forEach(b=>{
-    const active=b.dataset.tab===id;
-    b.classList.toggle('active',active);
-    b.setAttribute('aria-selected',active?'true':'false');
-  });
-  document.querySelectorAll('.tab-pane').forEach(p=>{
-    p.classList.remove('active');
-    p.style.display='none';
-  });
-  const pane=document.getElementById('tab-'+id);
-  pane.style.display='block';
-  // forçar reflow antes da animação
-  void pane.offsetHeight;
-  pane.classList.add('active');
-
-  if(!rendered[id]){
-    rendered[id]=true;
-    setTimeout(()=>{
-      if(id==='execucao') renderExecucao();
-      else if(id==='eficiencia') renderEficiencia();
-      else if(id==='malha') renderMalha();
-      else if(id==='paradoxo') renderParadoxo();
-      else if(id==='contratos') renderContratos();
-    }, 30);
-  }
-}
-
-document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
-document.querySelectorAll('#tblMun th[data-col]').forEach(th=>th.addEventListener('click',()=>sortMun(+th.dataset.col)));
-
-document.getElementById('filtroSR').addEventListener('change', e=>{
-  renderEficiencia(e.target.value);
-});
-
-document.getElementById('filtroCategoria').addEventListener('change', e=>{
-  catFiltro = e.target.value;
-  renderMapa(catFiltro);
-  renderTblMun(munDisplayData, catFiltro);
-});
-
-document.getElementById('filtroContSR').addEventListener('change', e=>{
-  contSRFiltro = e.target.value;
-  const filtered = contratos.filter(c=>
-    (!contSRFiltro || c.sr===contSRFiltro) &&
-    (!contTipoFiltro || c.tipo===contTipoFiltro)
-  );
-  renderTblContratos(filtered);
-});
-
-document.getElementById('filtroContTipo').addEventListener('change', e=>{
-  contTipoFiltro = e.target.value;
-  const filtered = contratos.filter(c=>
-    (!contSRFiltro || c.sr===contSRFiltro) &&
-    (!contTipoFiltro || c.tipo===contTipoFiltro)
-  );
-  renderTblContratos(filtered);
-});
-
-// Inicialização via fetch — ver initDashboard() abaixo
-
-// =======================================================
-// CARGA DE DADOS — ../data/der_precomputed.json
-// =======================================================
-
-function initDashboard(d) {
-  const SR_ORDER = ['SR Leste','SR Campos Gerais','SR Norte','SR Noroeste','SR Oeste'];
-
-  // Data de extração no cabeçalho
-  const hdrDataRef = document.getElementById('hdr-data-ref');
-  if(hdrDataRef && d.generated){
-    const gen = new Date(d.generated);
-    hdrDataRef.textContent = 'Dados: SAM/SGP ' + gen.toLocaleDateString('pt-BR');
-  }
-
-  // ── Subprogramas ────────────────────────────────────────
-  subprogramas = Object.entries(d.subprogramas).map(([nome, s]) => ({
-    nome,
-    liquidado: s.liquidado,
-    taxa: s.orcamento > 0 ? Math.round(s.liquidado / s.orcamento * 1000) / 10 : null,
-    custo_km: null
-  }));
-
-  // ── Regionais ───────────────────────────────────────────
-  regionais = SR_ORDER.map(sr => {
-    const r = d.regionais[sr];
-    return {
-      sr,
-      liquidado: r.liquidado,
-      lkm: Math.round(r.liquidado_por_km),
-      iri: Math.round((r.iri.ruim + r.iri.pessimo) * 100) / 100,
-      fwd: Math.round((r.fwd.ruim + r.fwd.pessimo) * 100) / 100,
-      nc:  r.n_contratos,
-      emg: r.emergencial
-    };
-  });
-
-  // ── IRI e FWD (detalhamento por faixa) ──────────────────
-  iri = SR_ORDER.map(sr => ({ sr, ...d.regionais[sr].iri }));
-  fwd = SR_ORDER.map(sr => ({ sr, ...d.regionais[sr].fwd }));
-
-  // ── Municípios ──────────────────────────────────────────
-  municipios = d.municipios.map(m => ({
-    nome: m.nome,
-    idh:  m.idh,
-    log:  m.logistica,
-    cat:  m.categoria,
-    lat:  m.lat,
-    lng:  m.lng,
-    sr:   m.sr,
-    lh:   m.liquidado_por_hab,
-    pop:  m.populacao
-  }));
-  munDisplayData = [...municipios];
-
-  // ── KPI cards ───────────────────────────────────────────
-  const k = d.kpis;
-  const semRastrAbs = k.liquidado_total * k.sem_rastreabilidade_pct / 100;
-  document.getElementById('kpi-total').innerHTML       = fmtR(k.liquidado_total);
-  document.getElementById('kpi-taxa').textContent      = fmtNum(k.taxa_execucao_pct, 1) + '%';
-  document.getElementById('kpi-class').textContent     = fmtNum(k.classificado_subprograma_pct, 1) + '%';
-  document.getElementById('kpi-semrastr').textContent  = fmtNum(k.sem_rastreabilidade_pct, 1) + '%';
-  document.getElementById('kpi-semrastr-sub').innerHTML = fmtR(semRastrAbs) + ' sem meta física vinculada';
-
-  // ── Nota metodológica (Aba 1) ───────────────────────────
-  document.getElementById('nota-metodologica').innerHTML =
-    `<strong>Nota metodológica:</strong> ${fmtNum(k.classificado_subprograma_pct,1)}% do liquidado está classificado por subprograma. ` +
-    `Os ${fmtNum(k.sem_rastreabilidade_pct,1)}% restantes (${fmtR(semRastrAbs)}) não possuem meta física vinculada no PPA e foram mantidos no agregado da ação. ` +
-    `Ver <em>"Resposta à Pergunta Central do Piloto"</em> acima para o impacto dessa lacuna na avaliação de eficiência alocativa.`;
-
-  // ── Valores derivados para narrativas ───────────────────
-  const rastreavel  = regionais.reduce((a, r) => a + r.liquidado, 0);
-  const rastrPct    = Math.round(rastreavel / k.liquidado_total * 100);
-  const avgLkm      = Math.round(regionais.reduce((a, r) => a + r.lkm, 0) / regionais.length);
-  const srPiorIRI   = regionais.reduce((a, b) => b.iri > a.iri ? b : a);
-  const srMenorLkm  = regionais.reduce((a, b) => b.lkm < a.lkm ? b : a);
-  const srsByLkm    = [...regionais].sort((a, b) => b.lkm - a.lkm);
-
-  const munNonNull  = municipios.filter(m => m.lh > 0);
-  const munNonNullRaw = d.municipios.filter(m => m.liquidado_8398 > 0);
-  const munTotal    = municipios.length;
-  const semMunId    = '9999999';
-  const semMunVal   = d.liquidado_por_municipio[semMunId] || 0;
-  const semMunPct   = Math.round(semMunVal / k.liquidado_total * 10000) / 100;
-
-  // ── Arg-block Aba 1 ─────────────────────────────────────
-  let munTerritorialTxt;
-  if (munNonNull.length === 1) {
-    const m0 = munNonNull[0];
-    const liq0 = munNonNullRaw.find(m => m.nome === m0.nome);
-    const liqFmt = liq0 ? fmtR(liq0.liquidado_8398) : '';
-    munTerritorialTxt =
-      `apenas 1 dos ${munTotal} municípios do piloto tem liquidado não-nulo identificado na base do DER ` +
-      `(${m0.nome} — ${liqFmt}, R$ ${fmtNum(m0.lh, 2)}/hab, subprograma PRORESTAURA). ` +
-      `Os demais ${munTotal - 1} apresentam R$ 0 registrado`;
-  } else if (munNonNull.length === 0) {
-    munTerritorialTxt = `nenhum dos ${munTotal} municípios do piloto tem liquidado não-nulo identificado`;
-  } else {
-    munTerritorialTxt = `${munNonNull.length} dos ${munTotal} municípios do piloto têm liquidado não-nulo identificado`;
-  }
-
-  document.getElementById('argblock1').innerHTML =
-    `<h3>Resposta à Pergunta Central do Piloto</h3>` +
-    `<p>Para os ~${fmtR(rastreavel)} rastreáveis por regional (~${rastrPct}% do liquidado da Ação 8398), ` +
-    `existe uma tendência positiva entre criticidade da malha e gasto por km: ` +
-    `a ${srPiorIRI.sr} (pior IRI do estado, ${fmtNum(srPiorIRI.iri, 1)}% crítico) recebe R$ ${fmtNum(srPiorIRI.lkm)}/km, ` +
-    `acima da média das cinco SRs (R$ ${fmtNum(avgLkm)}/km). ` +
-    `Contudo, SRs com malha em melhor condição também recebem valores altos — ` +
-    `${srsByLkm[0].sr} (IRI ${fmtNum(srsByLkm[0].iri, 1)}%) e ${srsByLkm[1].sr} (IRI ${fmtNum(srsByLkm[1].iri, 1)}%) ` +
-    `lideram com R$ ${fmtNum(srsByLkm[0].lkm)}/km e R$ ${fmtNum(srsByLkm[1].lkm)}/km respectivamente. ` +
-    `A relação entre necessidade e intensidade de gasto existe, mas não é linear nem exclusiva: ` +
-    `a ${srMenorLkm.sr} é o principal contraponto, recebendo o menor gasto/km (R$ ${fmtNum(srMenorLkm.lkm)}/km) ` +
-    `apesar de manter ${srMenorLkm.emg} contratos emergenciais em 2025.</p>` +
-    `<p>Essa análise cobre apenas ${rastrPct}% do orçamento da ação. ` +
-    `Os ${fmtNum(k.sem_rastreabilidade_pct, 1)}% do liquidado sem rastreabilidade regional (${fmtR(semRastrAbs)}) não passam pelo mesmo teste. ` +
-    `A ausência de rastreabilidade não é confirmação positiva nem negativa — ` +
-    `é uma lacuna de evidência que impede avaliar se o restante do gasto seguiu a mesma lógica ou não.</p>` +
-    `<p>Na dimensão territorial, a rastreabilidade é ainda mais limitada: ${munTerritorialTxt}, ` +
-    `e ${fmtR(semMunVal)} (${fmtNum(semMunPct, 2)}% do total) estão vinculados a um código genérico sem identificação municipal. ` +
-    `Essa dimensão é desenvolvida na aba <em>Paradoxo Territorial</em>.</p>`;
-
-  // ── Alert card Noroeste (Aba 2) ─────────────────────────
-  const noroeste = regionais.find(r => r.sr === 'SR Noroeste');
-  document.getElementById('alert-noroeste').innerHTML =
-    `<strong>${noroeste.sr} — Contratos Emergenciais 2025:</strong> ` +
-    `${noroeste.emg} contratos emergenciais identificados na base de contratos do DER — ` +
-    `sinal de pressão corretiva não planejada, indicativo de deterioração em trecho sem cobertura contratual regular. ` +
-    `No gráfico de dispersão abaixo, a ${noroeste.sr} aparece destacada por estar abaixo da linha de tendência — ` +
-    `recebendo menos por km do que regionais com malha em condição comparável ` +
-    `(R$ ${fmtNum(noroeste.lkm)}/km, o menor valor entre as ${regionais.length} SRs).`;
-
-  // ── HL cards Aba 3 ──────────────────────────────────────
-  const srNorte    = regionais.find(r => r.sr === 'SR Norte');
-  const srNoroeste = regionais.find(r => r.sr === 'SR Noroeste');
-  const srMaiorLkm = srsByLkm[0];
-  const noroesteKmTotal = Math.round(d.regionais['SR Noroeste'].km_total);
-  document.getElementById('hl-grid').innerHTML =
-    `<div class="hl-card danger">` +
-      `<h4>⚠ ${srNorte.sr} — Pior IRI e FWD do Estado</h4>` +
-      `<p>${fmtNum(srNorte.iri, 1)}% da malha em condição crítica (IRI) e ${fmtNum(srNorte.fwd, 1)}% com estrutura crítica (FWD) — ` +
-      `indicadores mais elevados entre as ${regionais.length} SRs. ` +
-      `Recebe R$ ${fmtNum(srNorte.lkm)}/km, acima da média estadual (R$ ${fmtNum(avgLkm)}/km).</p>` +
-    `</div>` +
-    `<div class="hl-card warn">` +
-      `<h4>${srNoroeste.sr} — Maior Extensão de Malha</h4>` +
-      `<p>Maior rede gerenciada do estado (${fmtNum(noroesteKmTotal)} km). ` +
-      `Pressão estrutural moderada (FWD ${fmtNum(srNoroeste.fwd, 1)}%) com ${srNoroeste.emg} contratos emergenciais em 2025 ` +
-      `— menor gasto/km (R$ ${fmtNum(srNoroeste.lkm)}/km).</p>` +
-    `</div>` +
-    `<div class="hl-card">` +
-      `<h4>${srMaiorLkm.sr} — Maior Liquidado por km</h4>` +
-      `<p>Maior liquidado absoluto (${fmtR(srMaiorLkm.liquidado)}) e maior gasto por km (R$ ${fmtNum(srMaiorLkm.lkm)}/km), ` +
-      `apesar de IRI (${fmtNum(srMaiorLkm.iri, 1)}%) e FWD (${fmtNum(srMaiorLkm.fwd, 1)}%) abaixo dos níveis críticos da ${srNorte.sr}.</p>` +
-    `</div>`;
-
-  // ── Legenda do mapa (Aba 4) ─────────────────────────────
-  const catCounts = municipios.reduce((acc, m) => {
-    acc[m.cat] = (acc[m.cat] || 0) + 1;
-    return acc;
-  }, {});
-  document.getElementById('cnt-paradoxo').textContent  = catCounts['Paradoxo territorial'] || 0;
-  document.getElementById('cnt-logistico').textContent = catCounts['Só logístico']          || 0;
-  document.getElementById('cnt-vulneravel').textContent= catCounts['Só vulnerável']         || 0;
-  document.getElementById('cnt-neutro').textContent    = catCounts['Neutro']                || 0;
-  document.getElementById('cnt-nonnull').textContent   = munNonNull.length;
-  document.getElementById('cnt-total-mun').textContent = munTotal;
-
-  // ── Nota cobertura (Aba 4) ──────────────────────────────
-  let coberturaBody;
-  if (munNonNull.length === 1) {
-    const m0 = munNonNull[0];
-    const liq0 = munNonNullRaw.find(m => m.nome === m0.nome);
-    const liqFmt = liq0 ? fmtR(liq0.liquidado_8398) : '';
-    coberturaBody =
-      `apenas 1 dos ${munTotal} municípios do piloto tem liquidado não-nulo identificado na base do DER — ` +
-      `${m0.nome} (${liqFmt} / R$ ${fmtNum(m0.lh, 2)}/hab, subprograma PRORESTAURA). ` +
-      `Os demais ${munTotal - 1} apresentam R$ 0 registrado`;
-  } else {
-    coberturaBody = `${munNonNull.length} dos ${munTotal} municípios têm liquidado não-nulo identificado`;
-  }
-  document.getElementById('nota-cobertura').innerHTML =
-    `<strong>Cobertura de dados:</strong> ${coberturaBody}. ` +
-    `Em paralelo, ${fmtR(semMunVal)} (${fmtNum(semMunPct, 2)}% do total liquidado) estão vinculados a um código genérico ` +
-    `sem identificação municipal — a categorização (Paradoxo Territorial, Só Logístico, Só Vulnerável, Neutro) ` +
-    `reflete o perfil socioeconômico e logístico do município, não o histórico de investimento recebido.`;
-
-  // ── Arg-block Paradoxo (Aba 4) ──────────────────────────
-  const paradoxoMuns = municipios.filter(m => m.cat === 'Paradoxo territorial');
-  const paradoxoNomes = paradoxoMuns.map(m => m.nome).join(' e ');
-  let munNaoRastr = munNonNull.length === 0
-    ? 'Nenhum município do piloto possui liquidado identificado e não-nulo'
-    : `O único município com liquidado identificado e não-nulo é ${munNonNull[0].nome} ` +
-      `(R$ ${fmtNum(munNonNull[0].lh, 2)}/hab — categoria ${munNonNull[0].cat}), ` +
-      `o que não corresponde à lógica de priorização por necessidade que o Orçamento para Resultados pressupõe`;
-
-  document.getElementById('argblock-paradoxo').innerHTML =
-    `<h3>O Paradoxo Territorial no Contexto do Orçamento para Resultados</h3>` +
-    `<p><strong>Para o gestor público:</strong> ${paradoxoNomes} combinam alta relevância logística com baixo IDH — ` +
-    `municípios onde a rodovia é o principal vetor de acesso a mercados e serviços públicos. ` +
-    `${paradoxoMuns.length > 0 ? 'Ambos constam com R$ 0 de liquidado identificado na base da Ação 8398.' : ''} ` +
-    `Isso não significa necessariamente que nenhuma obra foi realizada nesses territórios, ` +
-    `mas que o sistema orçamentário atual não permite rastrear o gasto até o município. ` +
-    `${munNaoRastr}.</p>` +
-    `<p><strong>Para o Tribunal de Contas (TCE-PR):</strong> A falta de rastreabilidade de ` +
-    `${fmtNum(k.sem_rastreabilidade_pct, 1)}% do liquidado da Ação 8398 por subprograma, ` +
-    `combinada com ${fmtNum(semMunPct, 2)}% do total sem identificação municipal, compromete o controle por resultados. ` +
-    `Quando não há vínculo entre o gasto e a meta física — e tampouco entre o gasto e o território atendido — ` +
-    `os instrumentos tradicionais de auditoria financeira tornam-se insuficientes para avaliar ` +
-    `se o recurso público cumpriu sua finalidade constitucional.</p>` +
-    `<p><strong>Para a política pública:</strong> O programa Orçamento para Resultados pressupõe que o gasto possa ser avaliado por seus efeitos. ` +
-    `A criação de indicadores territorializados — como liquidado/km por SR, custo/km por subprograma e condição da malha por área — ` +
-    `é o primeiro passo para transformar o orçamento de manutenção rodoviária em instrumento de desenvolvimento regional equitativo e auditável.</p>`;
-
-  // ── Inicializa painel ────────────────────────────────────
-  activateTab('execucao');
-}
-
-Promise.all([
-  fetch('../data/der_precomputed.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar der_precomputed.json'); return r.json(); }),
-  fetch('../data/dados_extras.json').then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar dados_extras.json'); return r.json(); })
-]).then(([d, extras])=>{
-  contratos  = extras.contratos_dopsr1 || [];
-  malhaKm    = extras.malha_km        || [];
-  malhaLiqKm = extras.malha_pct       || [];
-  initDashboard(d);
-}).catch(err=>{
-  document.querySelector('.tab-content').innerHTML =
-    `<div style="padding:40px;color:#C00000">` +
-    `<h2 style="font-family:Inter,sans-serif;margin-bottom:12px">Erro ao carregar dados</h2>` +
-    `<p style="font-family:Inter,sans-serif;font-size:14px">Não foi possível carregar os arquivos de dados.</p>` +
-    `<p style="font-family:Inter,sans-serif;font-size:14px;margin-top:8px">Detalhe: ${err.message}</p>` +
-    `<p style="font-family:Inter,sans-serif;font-size:13px;color:#555;margin-top:8px">` +
-    `Abra o painel a partir de um servidor local (ex: <code>python -m http.server</code> na raiz do projeto).</p>` +
-    `</div>`;
-});
-</script>
+<script src="js/painel.js"></script>
 </body>
 </html>
+
+
+
