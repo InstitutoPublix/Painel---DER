@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -6,6 +6,7 @@
 <!-- Dependências externas: manter CDNs até haver cópias locais em assets/vendor. -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <link rel="stylesheet" href="css/painel.css">
 </head>
 <body>
@@ -13,101 +14,37 @@
 <div class="tt" id="tt"></div>
 
 <header class="header-gov">
-
-  <!-- Esquerda: logo OPR + separador + título -->
   <div class="hdr-left">
-
-    <img src="assets/logo OpR.jpeg"
-         alt="Orçamento para Resultados — Estado do Paraná"
-         class="hdr-logo-img hdr-logo-opr">
-
+    <img src="assets/logo OpR.jpeg" alt="Orçamento para Resultados — Estado do Paraná" class="hdr-logo-img hdr-logo-opr">
     <div class="hdr-sep" aria-hidden="true"></div>
-
     <div class="hdr-title-block">
       <div class="hdr-eyebrow">DER PARANÁ &nbsp;·&nbsp; ORÇAMENTO PARA RESULTADOS</div>
       <h1 class="hdr-title">Painel de Desempenho da Gestão de Rodovias</h1>
       <p class="hdr-subtitle">
-        Monitoramento executivo das rodovias estaduais do Paraná &nbsp;·&nbsp; Ação 8398
-        &nbsp;·&nbsp; <span id="hdr-data-ref"></span>
+        Condição da malha e eficiência alocativa por Superintendência Regional &nbsp;·&nbsp; Contratos DOPSR1 &nbsp;·&nbsp; <span id="hdr-data-ref"></span>
       </p>
     </div>
   </div>
-
-  <!-- Direita: logos institucionais -->
   <div class="hdr-right">
-
-    <img src="assets/logo governo do paraná.png"
-         alt="Governo do Estado do Paraná"
-         class="hdr-logo-img">
-
+    <img src="assets/logo governo do paraná.png" alt="Governo do Estado do Paraná" class="hdr-logo-img">
     <div class="hdr-sep" aria-hidden="true"></div>
-
-    <img src="assets/logo der.png"
-         alt="DER-PR — Departamento de Estradas de Rodagem do Paraná"
-         class="hdr-logo-img">
-
+    <img src="assets/logo der.png" alt="DER-PR — Departamento de Estradas de Rodagem do Paraná" class="hdr-logo-img">
   </div>
 </header>
 
+<!-- Ordem: Execução → Malha e Retorno do Investimento → Benchmark -->
 <nav class="tab-nav" role="tablist">
-  <button class="tab-btn active" data-tab="execucao" role="tab" aria-selected="true">Execução Orçamentária e Contratos</button>
-  <button class="tab-btn" data-tab="malha" role="tab" aria-selected="false">Condição da Malha</button>
-  <button class="tab-btn" data-tab="analitica" role="tab" aria-selected="false">Análise de Retorno</button>
-  <button class="tab-btn" data-tab="benchmark" role="tab" aria-selected="false">Benchmark Nacional</button>
-  <button class="tab-btn" data-tab="maparodovias" role="tab" aria-selected="false">Mapa da Malha</button>
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" data-tab="malha-retorno"  role="tab" aria-selected="true">Malha e Retorno do Investimento</button>
+    <button class="tab-btn" data-tab="execucao"              role="tab" aria-selected="false">Contratos DOPSR1</button>
+    <button class="tab-btn" data-tab="benchmark"             role="tab" aria-selected="false">Benchmark Nacional</button>
+  </div>
 </nav>
 
 <div class="tab-content">
 
-  <!-- ABA 1: EXECUÇÃO ORÇAMENTÁRIA + CONTRATOS -->
-  <div id="tab-execucao" class="tab-pane active" role="tabpanel">
-
-    <div class="section-header">Visão Orçamentária — Ação 8398 <span class="periodo-badge">Dados 2025</span></div>
-
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-label">Total Liquidado — Ação 8398 <span class="periodo-badge">2025</span></div>
-        <div class="kpi-value" id="kpi-total">—</div>
-        <div class="kpi-sub">Exercício de referência do piloto</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Taxa de Execução Geral <span class="periodo-badge">2025</span></div>
-        <div class="kpi-value" id="kpi-taxa">—</div>
-        <div class="kpi-sub">Liquidado / dotação autorizada</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Classificado por Subprograma <span class="periodo-badge">2025</span></div>
-        <div class="kpi-value" id="kpi-class">—</div>
-        <div class="kpi-sub">Com meta física vinculada no PPA</div>
-      </div>
-      <div class="kpi-card alert">
-        <div class="kpi-label">⚠ Sem Rastreabilidade <span class="periodo-badge">2025</span></div>
-        <div class="kpi-value" id="kpi-semrastr">—</div>
-        <div class="kpi-sub" id="kpi-semrastr-sub">—</div>
-      </div>
-    </div>
-
-    <div class="chart-container">
-      <div class="chart-title">Liquidado por Subprograma (R$) — cor indica taxa de execução <span class="periodo-badge">Dados 2025</span></div>
-      <div class="chart-h-320"><canvas id="chartSub"></canvas></div>
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Subprograma <span class="periodo-badge on-dark">2025</span></th>
-            <th>Liquidado (R$)</th>
-            <th>Empenhado (R$)</th>
-            <th>Taxa de Execução</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="tbodySub"></tbody>
-      </table>
-    </div>
-
-    <div class="note gray" id="nota-metodologica"></div>
+  <!-- ABA 2: EXECUÇÃO ORÇAMENTÁRIA + CONTRATOS -->
+  <div id="tab-execucao" class="tab-pane" role="tabpanel">
 
     <!-- SEÇÃO: CONTRATOS DOPSR1 -->
     <div class="section-sep"><span>Contratos DOPSR1 <span class="periodo-badge">Dados 2025</span></span></div>
@@ -192,64 +129,72 @@
     <div id="contratoFilterEmpty" class="contract-filter-empty" hidden>Nenhum contrato encontrado com os filtros selecionados.</div>
   </div>
 
-  <!-- ABA 2: CONDIÇÃO DA MALHA -->
-  <div id="tab-malha" class="tab-pane" role="tabpanel">
+  <!-- ABA 3: MALHA E RETORNO DO INVESTIMENTO -->
+  <div id="tab-malha-retorno" class="tab-pane" role="tabpanel">
+
+    <!-- ── SEÇÃO A: DIAGNÓSTICO TÉCNICO DA MALHA ── -->
+    <div class="section-header">Diagnóstico Técnico da Malha <span class="periodo-badge">SAM 2025 · Indicadores Estruturais: IRI/FWD 2021–2022</span></div>
+
     <div class="grid-2">
       <div class="chart-container mb-0">
-        <div class="chart-title">Condição da Malha — IRI (% inspecionado) <span class="periodo-badge">Levantamento SGP 2021–2022</span></div>
+        <div class="chart-title">Irregularidade Superficial — IRI <span class="fn" style="font-style:normal;color:#888;font-weight:400">indicador estrutural complementar</span> <span class="periodo-badge">SGP 2021–2022</span></div>
         <div class="chart-h-260"><canvas id="chartIRI"></canvas></div>
       </div>
       <div class="chart-container mb-0">
-        <div class="chart-title">Condição Estrutural — FWD (% inspecionado) <span class="periodo-badge">Levantamento SGP 2021–2022</span></div>
+        <div class="chart-title">Capacidade Estrutural — FWD <span class="fn" style="font-style:normal;color:#888;font-weight:400">indicador estrutural complementar</span> <span class="periodo-badge">SGP 2021–2022</span></div>
         <div class="chart-h-260"><canvas id="chartFWD"></canvas></div>
       </div>
     </div>
 
     <div class="hl-grid" id="hl-grid"></div>
 
-    <div class="chart-container">
-      <div class="chart-title">Extensão da Malha por Condição e Regional (km absoluto) <span class="periodo-badge">Dados 2025</span></div>
-      <div class="chart-h-260"><canvas id="chartMalhaKm"></canvas></div>
+    <div class="grid-2">
+      <div class="chart-container mb-0">
+        <div class="chart-title">Extensão da Malha por Condição e Regional (km absoluto) <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-h-260"><canvas id="chartMalhaKm"></canvas></div>
+      </div>
+      <div class="chart-container mb-0">
+        <div class="chart-title">km em Condição Crítica por Regional (Ruim + Péssimo) <span class="periodo-badge">SAM 2025</span></div>
+        <div class="chart-h-260"><canvas id="chartKmCriticos"></canvas></div>
+      </div>
     </div>
-
-    <div class="chart-container">
-      <div class="chart-title">Gasto por km vs. % Malha Crítica (IRI) por Regional <span class="periodo-badge mix">Liquidado 2025 · IRI 2021–2022</span></div>
-      <div class="chart-h-220"><canvas id="chartLiqKmSR"></canvas></div>
-    </div>
-
-    <div class="chart-container">
-      <div class="chart-title">Custo por km de Malha Estadual por Regional (R$/km) — ordenado decrescente <span class="periodo-badge">Dados 2025</span></div>
-      <div class="chart-h-200"><canvas id="chartCustoKm"></canvas></div>
-    </div>
-    <details class="method-details mt-neg-12">
-      <summary>Ver nota metodológica</summary>
-      <p>O valor representa o liquidado total da Ação 8398 dividido pelo total de km de malha gerenciada pela SR. Não é o custo do km efetivamente intervido, pois a base não separa o km com intervenção do total de rede sob responsabilidade da regional.</p>
-    </details>
-
-    <div class="section-sep"><span>Índice de Eficiência Transversal por Regional</span></div>
-
-    <div class="chart-container">
-      <div class="chart-title">% Malha em Boa Condição por R$ 1.000/km Gastos — Índice Transversal <span class="periodo-badge">Dados 2025</span></div>
-      <div class="chart-h-220"><canvas id="chartEficTransversal"></canvas></div>
-    </div>
-
-    <details class="method-details">
-      <summary>Ver interpretação do índice</summary>
-      <p>O índice compara, em 2025, quanta malha em boa condição (IRI Bom + Muito Bom) cada regional sustenta por real gasto por km. Não mede melhora ao longo do tempo nem estabelece causalidade, pois não há série histórica de condição da malha vinculada ao gasto acumulado por regional.</p>
-    </details>
 
     <div class="note">
-      <strong>Nota técnica — Indicadores de condição:</strong><br>
-      <strong>IRI (Índice de Irregularidade Internacional):</strong> mede o conforto de rolamento. Valores altos indicam superfície irregular (ondulações, afundamentos), causando desgaste veicular e desconforto ao usuário.<br>
-      <strong>FWD (Falling Weight Deflectometer):</strong> mede a capacidade estrutural do pavimento sob carga. Valores críticos indicam risco de colapso estrutural, exigindo intervenções mais profundas e custosas que a simples recomposição superficial.
+      <strong>Fontes de condição — hierarquia de uso neste painel:</strong><br>
+      <strong>SAM 2025 (Sistema de Avaliação de Malha):</strong> fonte primária para o cruzamento condição × gasto. Mede irregularidade superficial no mesmo ano dos contratos (2025), eliminando defasagem temporal. Base do Relatório de Pesquisa nº 001/2026 (Consórcio Gerenciador EDVP).<br>
+      <strong>IRI (Índice de Irregularidade Internacional) — 2021–2022:</strong> indicador estrutural complementar. Mede conforto de rolamento; valores críticos indicam superfície com ondulações e afundamentos.<br>
+      <strong>FWD (Falling Weight Deflectometer) — 2021–2022:</strong> indicador estrutural complementar. Mede capacidade portante do pavimento sob carga; valores críticos indicam risco de colapso que exige intervenção profunda — dimensão que o SAM não captura.<br>
+      <strong>Nota sobre extensão por SR:</strong> parte da quilometragem administrada por cada Regional pode incluir segmentos contados mais de uma vez, quando contratos emergenciais cobriram trechos que já estavam computados em contratos anteriores encerrados. Ressalva técnica do próprio consórcio (Relatório 001/2026).
     </div>
-  </div>
 
-  <!-- ABA 3: ANÁLISE DE RETORNO -->
-  <div id="tab-analitica" class="tab-pane" role="tabpanel">
+    <div class="section-sep"><span>Mapa Exploratório da Malha por Superintendência Regional <span class="periodo-badge">Geometria: OpenStreetMap · Condição: IRI 2021–2022</span></span></div>
 
-    <!-- SEÇÃO 1: Retorno sobre a Despesa -->
+    <div id="mapa-rod-error"></div>
+
+    <div class="note warn is-hidden" id="mapa-rod-alerta-aprox">
+      <strong>Aviso — atribuição de SR por aproximação:</strong> A atribuição de trechos à sua Superintendência Regional foi estimada por proximidade ao município-sede de cada SR (Voronoi simples), pois não foi encontrada uma lista completa de municípios por SR no projeto — a cobertura disponível é apenas dos 21 municípios do piloto. Confirme com a equipe de SIG do DER-PR antes de usar este mapa em material formal.
+    </div>
+
+    <div class="leaflet-map-wrap">
+      <div id="map-rodovias" class="leaflet-map"></div>
+    </div>
+
+    <div class="note">
+      <strong>Nota metodológica:</strong> As linhas mostram o traçado real das rodovias estaduais do Paraná (fonte: OpenStreetMap). A cor de cada trecho reflete a condição média da Superintendência Regional onde ele está localizado (dados de IRI/FWD agregados por SR, levantamento SGP 2021–2022) — não existe, na base disponível, uma nota de condição por trecho individual.
+    </div>
+
+    <div class="note gray">
+      <strong>Fonte geométrica:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="link-blue">OpenStreetMap contributors</a> — dados obtidos via Overpass API. Para regenerar o arquivo de geometria execute: <code>python scripts/fetch_rodovias_pr.py</code>
+    </div>
+
+    <!-- ── SEPARADOR ── -->
+    <div class="section-sep"><span>Eficiência do Investimento</span></div>
+
+    <!-- ── SEÇÃO B: EFICIÊNCIA DO INVESTIMENTO ── -->
+
     <div class="section-header">Retorno sobre a Despesa Pública <span class="periodo-badge">Dados 2025</span></div>
+
+    <div class="note">Esta análise cruza condição SAM 2025 com liquidado DOPSR1 do mesmo ano — eliminando a defasagem temporal da comparação anterior. Os indicadores IRI e FWD (levantamento 2021–2022) são mantidos como referência estrutural complementar, pois capturam dimensões que o SAM não mede. A análise não estabelece causalidade entre investimento e condição observada; reflete o estado num único corte temporal. Fonte metodológica: Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026).</div>
 
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -274,24 +219,35 @@
       </div>
     </div>
 
-    <div class="grid-2">
+    <div class="grid-3">
       <div class="chart-container mb-0">
-        <div class="chart-title">km em Boa/Muito Boa Condição por R$ Milhão Investido — por SR <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-title">km em Boa Condição por R$ Milhão — por SR <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-240"><canvas id="chartROIKm"></canvas></div>
       </div>
       <div class="chart-container mb-0">
-        <div class="chart-title">Custo por km Mantido em Boa Condição (R$/km) — por SR <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-title">Custo/km em Boa Condição (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: km IRI Bom+Muito Bom</span> <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-240"><canvas id="chartROICusto"></canvas></div>
+      </div>
+      <div class="chart-container mb-0">
+        <div class="chart-title">Custo/km de Rede Total (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: todos os km gerenciados</span> <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-h-240"><canvas id="chartCustoKm"></canvas></div>
       </div>
     </div>
 
     <details class="method-details mt-24">
       <summary>Ver metodologia do retorno sobre a despesa</summary>
-      <p>O indicador <em>km em boa condição por R$ milhão</em> mede quantos quilômetros de malha (IRI Bom + Muito Bom) são mantidos para cada R$ 1 milhão liquidado por SR. Não mensura novos quilômetros melhorados; avalia eficiência relativa na preservação do patrimônio existente e deve ser lido junto ao porte de cada regional.</p>
+      <p>O indicador <em>km em boa condição por R$ milhão</em> mede quantos quilômetros de malha em condição Bom + Muito Bom (SAM 2025) são mantidos para cada R$ 1 milhão liquidado por SR (Contratos DOPSR1). Não mensura novos quilômetros melhorados; avalia eficiência relativa na preservação do patrimônio existente e deve ser lido junto ao porte de cada regional.<br><br>
+      O <em>custo/km em boa condição</em> (denominador: km SAM Bom+Muito Bom) e o <em>custo/km de rede total</em> (denominador: todos os km gerenciados pela SR) são complementares: o primeiro mede o custo por unidade de qualidade; o segundo mede o custo de gestão de toda a rede, independentemente do estado de conservação.<br><br>
+      <strong>Ressalva sobre extensão (km):</strong> a quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados. Ressalva técnica do Relatório de Pesquisa nº 001/2026 (Consórcio Gerenciador EDVP).</p>
     </details>
 
-    <!-- SEÇÃO 2: Eficiência por Regional -->
     <div class="section-sep"><span>Eficiência por Regional</span></div>
+
+    <div class="chart-container">
+      <div class="chart-title">Condição SAM 2025 e Investimento/km por SR <span class="fn" style="font-style:normal;color:#888;font-weight:400">Figura 6 — Relatório 001/2026</span> <span class="periodo-badge">Dados 2025</span></div>
+      <div class="chart-h-320"><canvas id="chartFig6"></canvas></div>
+      <p class="fn mt-8">Fonte: Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026). Condição: Sistema de Avaliação de Malha (SAM) 2025; Investimento: Liquidado DOPSR1 por SR. Ordenado do maior ao menor % Bom+Muito Bom. <strong>Nota sobre extensão:</strong> a quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).</p>
+    </div>
 
     <div class="filter-bar">
       <label for="filtroSR">Filtrar por SR:</label>
@@ -312,8 +268,9 @@
             <th>SR</th>
             <th>Liquidado (R$) <span class="periodo-badge on-dark">2025</span></th>
             <th>Liquidado/km (R$) <span class="periodo-badge on-dark">2025</span></th>
-            <th>% Malha Crítica (IRI) <span class="periodo-badge mix on-dark">2021–2022</span></th>
-            <th>% Estrutura Crítica (FWD) <span class="periodo-badge mix on-dark">2021–2022</span></th>
+            <th>% Bom+Muito Bom (SAM) <span class="periodo-badge on-dark">2025</span></th>
+            <th>% Crítica IRI <span class="periodo-badge mix on-dark">2021–2022</span></th>
+            <th>% Crítica FWD <span class="periodo-badge mix on-dark">2021–2022</span></th>
             <th>Nº Contratos <span class="periodo-badge on-dark">2025</span></th>
             <th>Emergenciais</th>
           </tr>
@@ -327,50 +284,37 @@
       <div id="alert-noroeste"></div>
     </div>
 
-    <div class="svg-container">
-      <div class="chart-title">Criticidade da Malha × Intensidade do Gasto por km <span class="periodo-badge mix">Liquidado 2025 × IRI 2021–2022 (períodos distintos)</span></div>
-      <svg id="scatter" class="responsive" viewBox="0 0 720 400"></svg>
-      <p class="fn mt-8">Linha de tendência ilustrativa — 5 observações (uma por SR). Não representa correlação estatisticamente validada. <strong>Atenção:</strong> eixo X usa levantamento SGP 2021–2022; eixo Y usa liquidado 2025.</p>
+    <div class="chart-container">
+      <div class="chart-title">Condição SAM 2025 × Intensidade do Gasto por km <span class="periodo-badge">Dados 2025 — mesmo corte temporal</span></div>
+      <div class="chart-h-280"><canvas id="scatter"></canvas></div>
+      <p class="fn mt-8">Linha de tendência ilustrativa — 5 observações (uma por SR). Não representa correlação estatisticamente validada. Eixo X: % Ruim+Péssimo SAM 2025; Eixo Y: Liquidado/km 2025 (Contratos DOPSR1). Fonte: Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP.</p>
     </div>
 
-    <!-- SEÇÃO 3: Pergunta Central do Piloto -->
-    <div class="section-sep"><span>Resposta à Pergunta Central do Piloto</span></div>
-    <div class="arg-block" id="argblock1"></div>
+    <div class="section-sep"><span>Síntese Executiva <span class="periodo-badge">SAM 2025 · Relatório 001/2026</span></span></div>
 
-    <!-- SEÇÃO 4: Liquidado por Município -->
-    <div class="section-sep"><span>Liquidado por Município <span class="periodo-badge">Dados 2025</span></span></div>
-
-    <div class="svg-container">
-      <div class="chart-title">Municípios do Piloto — Distribuição no Paraná <span class="periodo-badge">Dados 2025</span></div>
-      <svg id="mapa" class="responsive" viewBox="0 0 720 400"></svg>
-      <div class="map-legend">
-        <div class="leg-item"><div class="leg-dot" style="background:#0D2B5E"></div>Com liquidado identificado na base do DER</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#BDD7EE"></div>Sem liquidado identificado (R$ 0 na base)</div>
-        <div class="leg-item" style="font-style:italic;color:#888;margin-left:8px">Tamanho proporcional à população</div>
-        <div class="leg-item" style="margin-left:8px;color:#C00000;font-weight:600">⚠ <span id="cnt-nonnull">—</span>/<span id="cnt-total-mun">—</span> municípios com liquidado não-nulo identificado</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">SR com Melhor Condição (SAM) <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-sint-sr-melhor">—</div>
+        <div class="kpi-sub" id="kpi-sint-sr-melhor-sub">% Bom+Muito Bom</div>
       </div>
-      <div class="note gray" id="nota-cobertura" style="margin-top:14px;margin-bottom:0"></div>
+      <div class="kpi-card">
+        <div class="kpi-label">SR com Pior Condição (SAM) <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-sint-sr-pior">—</div>
+        <div class="kpi-sub" id="kpi-sint-sr-pior-sub">% Bom+Muito Bom</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">SR com Maior Liquidado/km <span class="periodo-badge">2025</span></div>
+        <div class="kpi-value" id="kpi-sint-sr-gasto">—</div>
+        <div class="kpi-sub" id="kpi-sint-sr-gasto-sub">—</div>
+      </div>
     </div>
 
-    <div class="table-wrap">
-      <table id="tblMun">
-        <thead>
-          <tr>
-            <th data-col="0" class="sortable">Município ↕</th>
-            <th data-col="1" class="sortable">SR ↕</th>
-            <th data-col="2" class="sortable">População ↕</th>
-            <th data-col="3" class="sortable">Liquidado/hab ↕</th>
-          </tr>
-        </thead>
-        <tbody id="tbodyMun"></tbody>
-      </table>
-    </div>
-
-    <div class="arg-block" id="argblock-paradoxo"></div>
+    <div class="note" id="sint-narrativa" style="margin-top:16px"></div>
 
   </div>
 
-  <!-- ABA 4: BENCHMARK NACIONAL -->
+  <!-- ABA 5: BENCHMARK NACIONAL -->
   <div id="tab-benchmark" class="tab-pane" role="tabpanel">
 
     <div class="section-header">Benchmark Nacional — Pesquisa CNT de Rodovias <span class="periodo-badge">Série 2015–2025</span></div>
@@ -381,7 +325,6 @@
       <strong>Fonte:</strong> Pesquisa CNT de Rodovias, consolidada na planilha de indicadores SEFA &nbsp;·&nbsp; Série 2015–2025 &nbsp;·&nbsp; <strong>Sem levantamento em 2020 e 2023</strong> — esses anos não constam na série e não foram interpolados.
     </div>
 
-    <!-- Controles de ano -->
     <div class="bench-controls">
       <button id="benchPlayBtn" class="bench-play">&#9654; Play</button>
       <span class="bench-year-disp" id="benchYearLabel">2025</span>
@@ -389,7 +332,6 @@
       <span class="bench-hint">← Arraste para navegar pelos anos da série</span>
     </div>
 
-    <!-- 3 cards de métrica -->
     <div class="kpi-grid kpi-grid-3">
       <div class="kpi-card">
         <div class="kpi-label">Paraná &nbsp;·&nbsp; % Boa ou Ótima <span class="periodo-badge" id="benchBadgePR">2025</span></div>
@@ -408,49 +350,21 @@
       </div>
     </div>
 
-    <!-- Gráfico de ranking -->
     <div class="chart-container">
       <div class="chart-title">Ranking Estadual — % Malha em Boa ou Ótima Condição <span class="periodo-badge" id="benchRankingBadge">2025</span></div>
       <div class="chart-h-680"><canvas id="chartBenchRanking"></canvas></div>
     </div>
 
-    <!-- Evolução Paraná × Brasil -->
     <div class="chart-container">
       <div class="chart-title">Evolução ao Longo do Tempo — Paraná × Brasil <span class="periodo-badge">Série 2015–2025</span></div>
       <div class="chart-h-280"><canvas id="chartBenchLine"></canvas></div>
       <p class="fn mt-8">Os anos 2020 e 2023 não foram cobertos pela Pesquisa CNT e não estão no eixo — os pontos são exibidos na sequência real da série, sem interpolação dos anos faltantes. O ponto destacado corresponde ao ano selecionado no slider.</p>
     </div>
 
-    <!-- Nota metodológica obrigatória -->
     <details class="method-details">
       <summary>Ver nota metodológica sobre benchmark e causalidade</summary>
       <p>Este benchmark situa o Paraná no contexto nacional, mas não estabelece relação causal entre investimento da Ação 8398 e melhora da malha. A base de liquidado tratado tem apenas 2024 e 2025, e a malha DER-PR representa uma fração do universo CNT; por isso, não é possível isolar a contribuição específica do Paraná para a variação nacional.</p>
     </details>
-
-  </div>
-
-  <!-- ABA 5: MAPA DA MALHA POR REGIONAL -->
-  <div id="tab-maparodovias" class="tab-pane" role="tabpanel">
-
-    <div class="section-header">Mapa da Malha por Superintendência Regional <span class="periodo-badge">Geometria: OpenStreetMap · Condição: IRI 2021–2022</span></div>
-
-    <div id="mapa-rod-error"></div>
-
-    <div class="note warn is-hidden" id="mapa-rod-alerta-aprox">
-      <strong>Aviso — atribuição de SR por aproximação:</strong> A atribuição de trechos à sua Superintendência Regional foi estimada por proximidade ao município-sede de cada SR (Voronoi simples), pois não foi encontrada uma lista completa de municípios por SR no projeto — a cobertura disponível é apenas dos 21 municípios do piloto. Confirme com a equipe de SIG do DER-PR antes de usar este mapa em material formal.
-    </div>
-
-    <div class="leaflet-map-wrap">
-      <div id="map-rodovias" class="leaflet-map"></div>
-    </div>
-
-    <div class="note">
-      <strong>Nota metodológica:</strong> As linhas mostram o traçado real das rodovias estaduais do Paraná (fonte: OpenStreetMap). A cor de cada trecho reflete a condição média da Superintendência Regional onde ele está localizado (dados de IRI/FWD agregados por SR, levantamento SGP 2021–2022) — não existe, na base disponível, uma nota de condição por trecho individual.
-    </div>
-
-    <div class="note gray">
-      <strong>Fonte geométrica:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="link-blue">OpenStreetMap contributors</a> — dados obtidos via Overpass API. Para regenerar o arquivo de geometria execute: <code>python scripts/fetch_rodovias_pr.py</code>
-    </div>
 
   </div>
 
@@ -459,6 +373,3 @@
 <script src="js/painel.js"></script>
 </body>
 </html>
-
-
-
