@@ -7,6 +7,19 @@ const DATA_PATH = Object.freeze({
   DASHBOARD: 'data/'
 });
 
+const STANDALONE_DATA = window.STANDALONE_DATA || null;
+const STANDALONE_MODE = !!STANDALONE_DATA;
+
+function loadJsonData(key, url, label){
+  if(STANDALONE_DATA && STANDALONE_DATA[key] !== undefined){
+    return Promise.resolve(STANDALONE_DATA[key]);
+  }
+  return fetch(url).then(r => {
+    if(!r.ok) throw new Error('HTTP ' + r.status + ' ao carregar ' + label);
+    return r.json();
+  });
+}
+
 // Dados carregados dinamicamente de DATA_PATH.ROOT via initDashboard()
 let regionais    = [];
 let iri          = [];
@@ -689,7 +702,8 @@ function renderSRTipoMatrix(){
         }).join('') +
         `<td style="text-align:center;font-weight:600">${total}</td></tr>`;
     }).join('') +
-    `</tbody></table></div>`;
+    `</tbody></table></div>` +
+    `<p class="chart-source"><strong>Fonte:</strong> Contratos DOPSR1 por Regional.xlsx.</p>`;
 }
 
 function renderTblContratos(data){
@@ -872,8 +886,7 @@ function updateBenchYear(idx){
 
 function renderBenchmark(){
   const errEl = document.getElementById('bench-error');
-  fetch(`${DATA_PATH.DASHBOARD}benchmark_nacional.json`)
-    .then(r => { if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar benchmark_nacional.json'); return r.json(); })
+  loadJsonData('benchmark_nacional', `${DATA_PATH.DASHBOARD}benchmark_nacional.json`, 'benchmark_nacional.json')
     .then(data => {
       benchmarkEstados = data.estados || {};
       benchmarkBrasil  = data.brasil  || {};
@@ -1012,6 +1025,13 @@ function _mapaRodColor(pct){
 
 function _loadLeaflet(cb){
   if(window.L){ cb(); return; }
+  if(STANDALONE_MODE){
+    const errEl = document.getElementById('mapa-rod-error');
+    if(errEl) errEl.innerHTML =
+      `<div class="note warn mt-8"><strong>Mapa indisponível no arquivo autossuficiente:</strong> ` +
+      `a biblioteca Leaflet não foi embutida corretamente. Gere novamente o HTML standalone.</div>`;
+    return;
+  }
   // Dependência externa: substituir por assets/vendor/leaflet quando houver versão local.
   const lnk = document.createElement('link');
   lnk.rel = 'stylesheet';
@@ -1031,14 +1051,19 @@ function _initLeafletMap(){
   leafletMapInstance = map;
   // TODO: adicionar filtro por SR usando uma camada Leaflet filtrável, se a tela precisar dessa segmentação.
 
-  // Dependência externa de mapa-base: manter OSM até haver tile/cache local definido pelo projeto.
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-    maxZoom: 18
-  }).addTo(map);
+  if(STANDALONE_MODE){
+    const mapEl = document.getElementById('map-rodovias');
+    if(mapEl) mapEl.classList.add('leaflet-offline-map');
+    map.attributionControl.addAttribution('Geometria: © OpenStreetMap contributors');
+  } else {
+    // Dependência externa de mapa-base: manter OSM até haver tile/cache local definido pelo projeto.
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+      maxZoom: 18
+    }).addTo(map);
+  }
 
-  fetch(`${DATA_PATH.DASHBOARD}rodovias_pr.geojson`)
-    .then(r => { if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar rodovias_pr.geojson'); return r.json(); })
+  loadJsonData('rodovias_pr', `${DATA_PATH.DASHBOARD}rodovias_pr.geojson`, 'rodovias_pr.geojson')
     .then(geojson => {
       if(errEl) errEl.innerHTML = '';
 
@@ -1285,8 +1310,8 @@ function initDashboard(d) {
 }
 
 Promise.all([
-  fetch(`${DATA_PATH.ROOT}der_precomputed.json`).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar der_precomputed.json'); return r.json(); }),
-  fetch(`${DATA_PATH.ROOT}dados_extras.json`).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status+' ao carregar dados_extras.json'); return r.json(); })
+  loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json'),
+  loadJsonData('dados_extras', `${DATA_PATH.ROOT}dados_extras.json`, 'dados_extras.json')
 ]).then(([d, extras])=>{
   contratos  = extras.contratos_dopsr1 || [];
   malhaKm    = extras.malha_km        || [];

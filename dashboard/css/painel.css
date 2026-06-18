@@ -124,6 +124,8 @@ body{font-family:'Inter',sans-serif;background:#F5F7FA;color:#1A1A2E;min-width:0
 /* Chart containers */
 .chart-container{background:#fff;border-radius:8px;padding:22px 24px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:24px}
 .chart-title{font-size:14px;font-weight:600;color:#1F4E79;margin-bottom:16px}
+.chart-source{font-size:11px;color:#777;line-height:1.45;margin-top:10px}
+.chart-source strong{font-weight:600;color:#555}
 
 /* Tables */
 .table-wrap{background:#fff;border-radius:8px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow-x:auto;overflow-y:hidden;margin-bottom:24px}
@@ -248,6 +250,7 @@ svg.responsive{display:block;width:100%}
 .is-hidden{display:none}
 .link-blue{color:#2E75B6}
 .leaflet-map{height:600px;width:100%}
+.leaflet-offline-map{background:#EAF0F6}
 
 /* Benchmark Nacional */
 .bench-controls{display:flex;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}

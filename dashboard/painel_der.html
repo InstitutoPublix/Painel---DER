@@ -76,10 +76,12 @@
       <div class="chart-container mb-0">
         <div class="chart-title">Empenhado / Liquidado / Pago por SR (R$) <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-260"><canvas id="chartContSR"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Contratos DOPSR1 por Regional.xlsx.</p>
       </div>
       <div class="chart-container mb-0">
         <div class="chart-title">Liquidado por Tipo de Contrato (R$) <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-260"><canvas id="chartContTipo"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Contratos DOPSR1 por Regional.xlsx.</p>
       </div>
     </div>
 
@@ -152,10 +154,12 @@
       <div class="chart-container mb-0">
         <div class="chart-title">Irregularidade Superficial — IRI <span class="fn" style="font-style:normal;color:#888;font-weight:400">indicador estrutural complementar</span> <span class="periodo-badge">SGP 2021–2022</span></div>
         <div class="chart-h-260"><canvas id="chartIRI"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> IRI_e_FWD.xlsx, aba IRI (levantamento SGP 2021-2022).</p>
       </div>
       <div class="chart-container mb-0">
         <div class="chart-title">Capacidade Estrutural — FWD <span class="fn" style="font-style:normal;color:#888;font-weight:400">indicador estrutural complementar</span> <span class="periodo-badge">SGP 2021–2022</span></div>
         <div class="chart-h-260"><canvas id="chartFWD"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> IRI_e_FWD.xlsx, aba FWD (levantamento SGP 2021-2022).</p>
       </div>
     </div>
 
@@ -165,10 +169,12 @@
       <div class="chart-container mb-0">
         <div class="chart-title">Extensão da Malha por Condição e Regional (km absoluto) <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-260"><canvas id="chartMalhaKm"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Condição da malha 2025.xlsx (SAM 2025).</p>
       </div>
       <div class="chart-container mb-0">
         <div class="chart-title">km em Condição Crítica por Regional (Ruim + Péssimo) <span class="periodo-badge">SAM 2025</span></div>
         <div class="chart-h-260"><canvas id="chartKmCriticos"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Condição da malha 2025.xlsx (SAM 2025).</p>
       </div>
     </div>
 
@@ -236,14 +242,17 @@
       <div class="chart-container mb-0">
         <div class="chart-title">km em Boa Condição por R$ Milhão — por SR <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-240"><canvas id="chartROIKm"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Condição da malha 2025.xlsx (km Bom+Muito Bom, SAM 2025) e Contratos DOPSR1 por Regional.xlsx (liquidado 2025).</p>
       </div>
       <div class="chart-container mb-0">
-        <div class="chart-title">Custo/km em Boa Condição (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: km IRI Bom+Muito Bom</span> <span class="periodo-badge">Dados 2025</span></div>
+        <div class="chart-title">Custo/km em Boa Condição (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: km SAM Bom+Muito Bom</span> <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-240"><canvas id="chartROICusto"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Condição da malha 2025.xlsx (km Bom+Muito Bom, SAM 2025) e Contratos DOPSR1 por Regional.xlsx (liquidado 2025).</p>
       </div>
       <div class="chart-container mb-0">
         <div class="chart-title">Custo/km de Rede Total (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: todos os km gerenciados</span> <span class="periodo-badge">Dados 2025</span></div>
         <div class="chart-h-240"><canvas id="chartCustoKm"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Condição da malha 2025.xlsx (km total/SAM 2025) e Contratos DOPSR1 por Regional.xlsx (liquidado 2025).</p>
       </div>
     </div>
 
@@ -259,7 +268,7 @@
     <div class="chart-container">
       <div class="chart-title">Condição SAM 2025 e Investimento/km por SR <span class="fn" style="font-style:normal;color:#888;font-weight:400">Figura 6 — Relatório 001/2026</span> <span class="periodo-badge">Dados 2025</span></div>
       <div class="chart-h-320"><canvas id="chartFig6"></canvas></div>
-      <p class="fn mt-8">Fonte: Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026). Condição: Sistema de Avaliação de Malha (SAM) 2025; Investimento: Liquidado DOPSR1 por SR. Ordenado do maior ao menor % Bom+Muito Bom. <strong>Nota sobre extensão:</strong> a quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).</p>
+      <p class="chart-source"><strong>Fonte:</strong> Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026); Condição da malha 2025.xlsx (SAM 2025); Contratos DOPSR1 por Regional.xlsx (liquidado 2025). Ordenado do maior ao menor % Bom+Muito Bom. <strong>Nota sobre extensão:</strong> a quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).</p>
     </div>
 
     <div class="filter-bar">
@@ -300,7 +309,7 @@
     <div class="chart-container">
       <div class="chart-title">Condição SAM 2025 × Intensidade do Gasto por km <span class="periodo-badge">Dados 2025 — mesmo corte temporal</span></div>
       <div class="chart-h-280"><canvas id="scatter"></canvas></div>
-      <p class="fn mt-8">Linha de tendência ilustrativa — 5 observações (uma por SR). Não representa correlação estatisticamente validada. Eixo X: % Ruim+Péssimo SAM 2025; Eixo Y: Liquidado/km 2025 (Contratos DOPSR1). Fonte: Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP.</p>
+      <p class="chart-source"><strong>Fonte:</strong> Condição da malha 2025.xlsx (SAM 2025) e Contratos DOPSR1 por Regional.xlsx (liquidado/km 2025). Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.</p>
     </div>
 
     <div class="section-sep"><span>Síntese Executiva <span class="periodo-badge">SAM 2025 · Relatório 001/2026</span></span></div>
@@ -366,12 +375,13 @@
     <div class="chart-container">
       <div class="chart-title">Ranking Estadual — % Malha em Boa ou Ótima Condição <span class="periodo-badge" id="benchRankingBadge">2025</span></div>
       <div class="chart-h-680"><canvas id="chartBenchRanking"></canvas></div>
+      <p class="chart-source"><strong>Fonte:</strong> Pesquisa CNT de Rodovias, consolidada na planilha INDICADORES SEFA_GERAL.xlsx.</p>
     </div>
 
     <div class="chart-container">
       <div class="chart-title">Evolução ao Longo do Tempo — Paraná × Brasil <span class="periodo-badge">Série 2015–2025</span></div>
       <div class="chart-h-280"><canvas id="chartBenchLine"></canvas></div>
-      <p class="fn mt-8">Os anos 2020 e 2023 não foram cobertos pela Pesquisa CNT e não estão no eixo — os pontos são exibidos na sequência real da série, sem interpolação dos anos faltantes. O ponto destacado corresponde ao ano selecionado no slider.</p>
+      <p class="chart-source"><strong>Fonte:</strong> Pesquisa CNT de Rodovias, consolidada na planilha INDICADORES SEFA_GERAL.xlsx. Os anos 2020 e 2023 não foram cobertos pela Pesquisa CNT e não estão no eixo — os pontos são exibidos na sequência real da série, sem interpolação dos anos faltantes.</p>
     </div>
 
     <details class="method-details">
