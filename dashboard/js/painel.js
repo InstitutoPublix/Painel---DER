@@ -655,7 +655,41 @@ function renderContratos(data = contratos){
   });
 
   renderTblContratos(data);
+  renderSRTipoMatrix();
   updateContratoFilterCount(data.length);
+}
+
+function renderSRTipoMatrix(){
+  const el = document.getElementById('tblSRTipo');
+  if(!el || !contratos.length) return;
+
+  const srs  = ['SR LESTE','SR CAMPOS GERAIS','SR NORTE','SR NOROESTE','SR OESTE'];
+  const tipos = Object.keys(TIPO_COLORS);
+  const tipoLabel = {PROCONSERVA:'ProConserva',COP:'COP',INTEGRA:'IntegraParaná',CREMEP:'CREMEP',EMERGENCIAL:'Emergencial'};
+
+  const cnt = {};
+  srs.forEach(sr => { cnt[sr] = {}; tipos.forEach(t => { cnt[sr][t] = 0; }); });
+  contratos.forEach(c => { if(cnt[c.sr] && cnt[c.sr][c.tipo] !== undefined) cnt[c.sr][c.tipo]++; });
+
+  const tiposAtivos = tipos.filter(t => srs.some(sr => cnt[sr][t] > 0));
+
+  el.innerHTML =
+    `<div class="chart-title" style="margin-bottom:8px">Distribuição de Contratos por SR e Tipo <span class="periodo-badge">Dados 2025</span></div>` +
+    `<div class="table-wrap" style="margin-bottom:0"><table class="tbl-sr-tipo">` +
+    `<thead><tr><th>SR</th>` +
+    tiposAtivos.map(t=>`<th style="text-align:center"><span class="badge" style="background:${TIPO_COLORS[t]};color:#fff;font-size:11px">${tipoLabel[t]||t}</span></th>`).join('') +
+    `<th style="text-align:center">Total</th></tr></thead><tbody>` +
+    srs.map(sr=>{
+      const total = tiposAtivos.reduce((a,t)=>a+cnt[sr][t],0);
+      return `<tr>` +
+        `<td><strong>${SR_DISPLAY[sr]||sr}</strong></td>` +
+        tiposAtivos.map(t=>{
+          const n = cnt[sr][t];
+          return `<td style="text-align:center">${n>0?`<strong>${n}</strong>`:'<span style="color:#ccc">—</span>'}</td>`;
+        }).join('') +
+        `<td style="text-align:center;font-weight:600">${total}</td></tr>`;
+    }).join('') +
+    `</tbody></table></div>`;
 }
 
 function renderTblContratos(data){
@@ -1221,15 +1255,17 @@ function initDashboard(d) {
     `(R$&nbsp;${fmtNum(noroeste.lkm)}/km, o menor valor entre as ${regionais.length} SRs).`;
 
   // ── HL cards Aba 3 ──────────────────────────────────────
-  const srNorte    = regionais.find(r => r.sr === 'SR Norte');
-  const srNoroeste = regionais.find(r => r.sr === 'SR Noroeste');
+  const srNorte        = regionais.find(r => r.sr === 'SR Norte');
+  const srNoroeste     = regionais.find(r => r.sr === 'SR Noroeste');
+  const srCamposGerais = regionais.find(r => r.sr === 'SR Campos Gerais');
   const srMaiorLkm = srsByLkm[0];
   const noroesteKmTotal = Math.round(d.regionais['SR Noroeste'].km_total);
   document.getElementById('hl-grid').innerHTML =
     `<div class="hl-card danger">` +
-      `<h4>⚠ ${esc(srNorte.sr)} — Pior IRI e FWD do Estado <span class="periodo-badge">Levantamento 2021–2022</span></h4>` +
-      `<p>${fmtNum(srNorte.iri, 1)}% da malha em condição crítica (IRI) e ${fmtNum(srNorte.fwd, 1)}% com estrutura crítica (FWD) — ` +
-      `indicadores mais elevados entre as ${regionais.length} SRs. ` +
+      `<h4>⚠ ${esc(srNorte.sr)} — Pior IRI do Estado <span class="periodo-badge">Levantamento 2021–2022</span></h4>` +
+      `<p>${fmtNum(srNorte.iri, 1)}% da malha com irregularidade superficial crítica (IRI) — mais do que o dobro das demais SRs. ` +
+      `Em estrutura de pavimento (FWD), ${esc(srNorte.sr)} (${fmtNum(srNorte.fwd, 1)}%) e ${esc(srCamposGerais.sr)} (${fmtNum(srCamposGerais.fwd, 1)}%) ` +
+      `estão tecnicamente empatadas entre as piores — diferença inferior a 1 ponto percentual. ` +
       `Recebe R$ ${fmtNum(srNorte.lkm)}/km (2025), acima da média estadual (R$ ${fmtNum(avgLkm)}/km).</p>` +
     `</div>` +
     `<div class="hl-card warn">` +
