@@ -48,10 +48,20 @@ const COND_COLORS = {
   muito_bom:'#1A6B3A'
 };
 
+// Limiares do benchmark interno de custo por km (parâmetros de regra de negócio — ajuste aqui)
+const LIMIAR_BENCHMARK     = 0.15; // ±15% da mediana: >+15% = elevado, <−15% = baixo
+const LIMIAR_PARTICIPACAO  = 5;    // p.p.: >+5 = gasta acima da criticidade relativa; <−5 = abaixo
+const LIMIAR_ADERENCIA_LOW  = 0.8; // índice abaixo deste → possível subalocação relativa
+const LIMIAR_ADERENCIA_HIGH = 1.2; // índice acima deste → acima da participação crítica
+const LIMIAR_PRESSAO_ALTA   = 0.67; // IPF ≥ 0.67 → pressão alta (vermelho)
+const LIMIAR_PRESSAO_MEDIA  = 0.33; // IPF ≥ 0.33 → pressão média (amarelo); abaixo → baixa (verde)
+
 // ── Instâncias de gráficos reutilizáveis ─────────────────
 let chScatter        = null;
 let chScatterFilter  = '';
 let chFig6           = null;
+let chMalhaIRI       = null, chMalhaFWD  = null;
+let chQuadrantes     = null;
 
 // =======================================================
 // UTILITÁRIOS
@@ -84,6 +94,27 @@ function fmtR(v){
 }
 function fmtRF(v){ return v==null?'—':'R$&nbsp;'+fmtNum(Math.round(v)); }
 function fmtP(v){ return v==null?'—':fmtNum(v,1)+' %'; }
+
+function showChartRenderError(canvas, err){
+  const wrap = canvas && canvas.parentElement;
+  if(!wrap || wrap.querySelector('.chart-error-inline')) return;
+  const msg = document.createElement('div');
+  msg.className = 'chart-error-inline';
+  msg.textContent = 'Grafico indisponivel nesta abertura. Os dados do painel continuam carregados.';
+  wrap.appendChild(msg);
+  console.error('Erro ao renderizar grafico', canvas && canvas.id ? canvas.id : canvas, err);
+}
+
+function makeChart(canvas, config){
+  const el = typeof canvas === 'string' ? document.getElementById(canvas) : canvas;
+  if(!el || !window.Chart) return null;
+  try{
+    return new Chart(el, config);
+  }catch(err){
+    showChartRenderError(el, err);
+    return null;
+  }
+}
 
 function median(arr){
   const s = [...arr].sort((a,b)=>a-b);
@@ -133,7 +164,7 @@ function renderFig6(){
   const sorted = [...malhaLiqKm].sort((a,b) => b.pct_bom - a.pct_bom);
   const labels = sorted.map(r => r.sr.replace('SR ', ''));
 
-  chFig6 = new Chart(canvas, {
+  chFig6 = makeChart(canvas, {
     type: 'bar',
     data: {
       labels,
@@ -267,7 +298,7 @@ function renderScatter(sr=''){
     return;
   }
 
-  chScatter = new Chart(canvas,{
+  chScatter = makeChart(canvas,{
     type:'scatter',
     data:{
       datasets:[
@@ -339,9 +370,9 @@ function renderScatter(sr=''){
 // =======================================================
 
 function renderMalha(){
-  // Ordena SRs por criticidade (ruim+pessimo) crescente (melhor no topo)
-  const iriSorted = [...iri].sort((a,b)=>(a.ruim+a.pessimo)-(b.ruim+b.pessimo));
-  const fwdSorted = [...fwd].sort((a,b)=>(a.ruim+a.pessimo)-(b.ruim+b.pessimo));
+  // Ordena SRs por criticidade (ruim+pessimo) decrescente (pior no topo)
+  const iriSorted = [...iri].sort((a,b)=>(b.ruim+b.pessimo)-(a.ruim+a.pessimo));
+  const fwdSorted = [...fwd].sort((a,b)=>(b.ruim+b.pessimo)-(a.ruim+a.pessimo));
 
   const stackDatasets = (arr) => [
     { label:'Péssimo',  data:arr.map(r=>r.pessimo),  backgroundColor:COND_COLORS.pessimo  },
@@ -365,12 +396,12 @@ function renderMalha(){
     }
   };
 
-  new Chart(document.getElementById('chartIRI'),{
+  chMalhaIRI = makeChart(document.getElementById('chartIRI'),{
     type:'bar',
     data:{ labels:iriSorted.map(r=>r.sr.replace('SR ','')), datasets:stackDatasets(iriSorted) },
     options:stackOpts
   });
-  new Chart(document.getElementById('chartFWD'),{
+  chMalhaFWD = makeChart(document.getElementById('chartFWD'),{
     type:'bar',
     data:{ labels:fwdSorted.map(r=>r.sr.replace('SR ','')), datasets:stackDatasets(fwdSorted) },
     options:stackOpts
@@ -379,7 +410,7 @@ function renderMalha(){
   // Gráfico de extensão absoluta em km
   if(malhaKm.length > 0){
     const kmSorted = [...malhaKm].sort((a,b)=>(a.ruim_km+a.pessimo_km)-(b.ruim_km+b.pessimo_km));
-    new Chart(document.getElementById('chartMalhaKm'),{
+    makeChart(document.getElementById('chartMalhaKm'),{
       type:'bar',
       data:{
         labels: kmSorted.map(r=>r.sr.replace('SR ','')),
@@ -409,7 +440,7 @@ function renderMalha(){
     const critSorted = [...malhaKm]
       .map(r=>({sr:r.sr, crit:(r.ruim_km||0)+(r.pessimo_km||0), ruim:r.ruim_km||0, pessimo:r.pessimo_km||0}))
       .sort((a,b)=>b.crit-a.crit);
-    new Chart(document.getElementById('chartKmCriticos'),{
+    makeChart(document.getElementById('chartKmCriticos'),{
       type:'bar',
       data:{
         labels: critSorted.map(r=>r.sr.replace('SR ','')),
@@ -433,13 +464,52 @@ function renderMalha(){
       }
     });
   }
+  renderWaffleRodovias();
   renderMapaRodovias();
+}
+
+function renderWaffleRodovias(){
+  const container = document.getElementById('waffleRodovias');
+  if(!container || !malhaKm.length) return;
+  const SEGS = [
+    {key:'pessimo_km',  label:'Péssimo',  color:COND_COLORS.pessimo  },
+    {key:'ruim_km',     label:'Ruim',     color:COND_COLORS.ruim     },
+    {key:'regular_km',  label:'Regular',  color:COND_COLORS.regular  },
+    {key:'boa_km',      label:'Boa',      color:COND_COLORS.bom      },
+    {key:'muito_boa_km',label:'Muito Boa',color:COND_COLORS.muito_bom}
+  ];
+  const data = malhaKm
+    .map(r => ({...r, total: SEGS.reduce((s,sg) => s+(r[sg.key]||0), 0)}))
+    .sort((a,b) => b.total - a.total);
+  const KM_PER_BLOCK = Math.max(1, Math.ceil(data[0].total / 50));
+  const rows = data.map(r => {
+    const srName = r.sr.replace('SR ','');
+    let blocks = '';
+    for(const sg of SEGS){
+      const km = r[sg.key] || 0;
+      if(km <= 0) continue;
+      const n = Math.max(1, Math.round(km / KM_PER_BLOCK));
+      for(let i=0; i<n; i++){
+        const approx = Math.round(i < n-1 ? KM_PER_BLOCK : km - (n-1)*KM_PER_BLOCK);
+        blocks += `<div class="waffle-block" style="background:${sg.color}" title="${esc(sg.label)}: ~${fmtNum(approx)} km"></div>`;
+      }
+    }
+    return `<div class="waffle-row"><div class="waffle-label"><strong>${esc(srName)}</strong><span class="waffle-km">${fmtNum(Math.round(r.total))} km</span></div><div class="waffle-blocks">${blocks}</div></div>`;
+  }).join('');
+  const legend = SEGS.map(sg =>
+    `<div class="waffle-legend-item"><div class="waffle-legend-swatch" style="background:${sg.color}"></div><span>${esc(sg.label)}</span></div>`
+  ).join('');
+  container.innerHTML =
+    `<div class="chart-title">Faixa de Condição da Malha por Regional <span class="fn" style="font-style:normal;color:#888;font-weight:400">1 bloco ≈ ${fmtNum(KM_PER_BLOCK)} km</span> <span class="periodo-badge">SAM 2025</span></div>` +
+    `<div class="waffle-grid" style="margin-top:16px">${rows}</div>` +
+    `<div class="waffle-legend">${legend}</div>` +
+    `<p class="chart-source" style="margin-top:8px"><strong>Fonte:</strong> Condição da malha 2025.xlsx (SAM 2025).</p>`;
 }
 
 function renderRegionalAlignmentCharts(){
   if(!malhaKm.length) return;
   const custoSorted = [...regionais].sort((a,b)=>b.lkm-a.lkm);
-  new Chart(document.getElementById('chartCustoKm'),{
+  makeChart(document.getElementById('chartCustoKm'),{
     type:'bar',
     data:{
       labels: custoSorted.map(r=>r.sr.replace('SR ','')),
@@ -574,6 +644,17 @@ function setupContratoTableFilters(){
     });
   }
 
+  const btnMostrarTodas = document.getElementById('btnMostrarTodasContSR');
+  if(btnMostrarTodas){
+    btnMostrarTodas.addEventListener('click', ()=>{
+      if(!chContSR) return;
+      chContSR.data.datasets.forEach((_,i)=>{
+        chContSR.getDatasetMeta(i).hidden = false;
+      });
+      chContSR.update();
+    });
+  }
+
   contratoFiltersReady = true;
 }
 
@@ -611,7 +692,7 @@ function renderContratos(data = contratos){
 
   const fmtCur = v => v>=1e9?'R$ '+fmtNum(v/1e9,2)+' bi':v>=1e6?'R$ '+fmtNum(v/1e6,1)+' mi':'R$ '+fmtNum(v);
 
-  chContSR = new Chart(document.getElementById('chartContSR'),{
+  chContSR = makeChart(document.getElementById('chartContSR'),{
     type:'bar',
     data:{
       labels: srLabels,
@@ -642,7 +723,7 @@ function renderContratos(data = contratos){
     liq: data.filter(c=>c.tipo===t).reduce((a,c)=>a+c.liquidado,0)
   })).sort((a,b)=>b.liq-a.liq);
 
-  chContTipo = new Chart(document.getElementById('chartContTipo'),{
+  chContTipo = makeChart(document.getElementById('chartContTipo'),{
     type:'bar',
     data:{
       labels: tipoLiqMap.map(t=>t.tipo),
@@ -760,7 +841,7 @@ function renderAnalitica(){
 
     // Chart: km bom por R$ milhão liquidado (decrescente = mais eficiente primeiro)
     const sortedROI = [...roiData].sort((a,b)=>b.kmPorMilhao-a.kmPorMilhao);
-    new Chart(document.getElementById('chartROIKm'),{
+    makeChart(document.getElementById('chartROIKm'),{
       type:'bar',
       data:{
         labels: sortedROI.map(r=>r.sr.replace('SR ','')),
@@ -787,7 +868,7 @@ function renderAnalitica(){
 
     // Chart: custo por km em boa condição (crescente = mais eficiente primeiro)
     const sortedCusto = [...roiData].filter(r=>r.custoPorKmBom!=null).sort((a,b)=>a.custoPorKmBom-b.custoPorKmBom);
-    new Chart(document.getElementById('chartROICusto'),{
+    makeChart(document.getElementById('chartROICusto'),{
       type:'bar',
       data:{
         labels: sortedCusto.map(r=>r.sr.replace('SR ','')),
@@ -818,6 +899,360 @@ function renderAnalitica(){
 
   // ── Alinhamento por Regional ─────────────────────────────
   renderEficiencia('');
+  renderBenchmarkInterno();
+  renderParticipacaoCriticidade();
+  renderQuadrantesNecessidade();
+  renderIndicePressaoFutura();
+}
+
+// =======================================================
+// BENCHMARK INTERNO DE CUSTO POR KM
+// =======================================================
+
+function calcularBenchmarkInterno(dadosPorSR) {
+  const valores = dadosPorSR.map(r => r.lkm);
+  const med = median(valores);
+  return dadosPorSR.map(r => {
+    const desvio = med > 0 ? (r.lkm - med) / med : 0;
+    let classificacao;
+    if (desvio > LIMIAR_BENCHMARK)       classificacao = 'Custo elevado relativo';
+    else if (desvio < -LIMIAR_BENCHMARK) classificacao = 'Custo baixo relativo';
+    else                                  classificacao = 'Custo intermediário';
+    return { sr: r.sr, lkm: r.lkm, desvio, classificacao };
+  });
+}
+
+function renderBenchmarkInterno() {
+  const tbody = document.getElementById('tbodyBenchmarkInterno');
+  if (!tbody || !regionais.length) return;
+  const benchData = calcularBenchmarkInterno(regionais);
+  const sorted    = [...benchData].sort((a, b) => b.lkm - a.lkm);
+  const classBadge = c => {
+    if (c === 'Custo elevado relativo') return 'b-red';
+    if (c === 'Custo baixo relativo')   return 'b-green';
+    return 'b-yellow';
+  };
+  tbody.innerHTML = sorted.map(item => {
+    const cor       = SR_COLORS[item.sr] || '#888';
+    const sinal     = item.desvio >= 0 ? '+' : '';
+    const desvioPct = fmtNum(item.desvio * 100, 1);
+    return `<tr>
+      <td><strong style="color:${cor}">${esc(item.sr)}</strong></td>
+      <td>R$&nbsp;${fmtNum(item.lkm)}</td>
+      <td>${sinal}${desvioPct}%</td>
+      <td><span class="badge ${classBadge(item.classificacao)}">${esc(item.classificacao)}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// =======================================================
+// PARTICIPAÇÃO NO GASTO × PARTICIPAÇÃO NA CRITICIDADE
+// =======================================================
+
+function calcularParticipacaoGastoVsCriticidade(dadosPorSR) {
+  const totalLiq  = dadosPorSR.reduce((s, r) => s + (r.liquidado  || 0), 0);
+  const totalCrit = dadosPorSR.reduce((s, r) => s + (r.ruim_km    || 0) + (r.pessimo_km || 0), 0);
+  return dadosPorSR.map(r => {
+    const liq      = r.liquidado  || 0;
+    const crit     = (r.ruim_km || 0) + (r.pessimo_km || 0);
+    const pctGasto = totalLiq  > 0 ? liq  / totalLiq  * 100 : 0;
+    const pctCrit  = totalCrit > 0 ? crit / totalCrit * 100 : 0;
+    const diff   = pctGasto - pctCrit;
+    const indice = pctCrit > 0 ? pctGasto / pctCrit : null; // null → sem km críticos (N/A)
+    return { sr: r.sr, pctGasto, pctCrit, diff, indice };
+  });
+}
+
+function renderParticipacaoCriticidade() {
+  const tbody = document.getElementById('tbodyParticipacaoCriticidade');
+  if (!tbody || !malhaKm.length) return;
+  const dados  = calcularParticipacaoGastoVsCriticidade(malhaKm);
+  const sorted = [...dados].sort((a, b) => b.diff - a.diff);
+  tbody.innerHTML = sorted.map(r => {
+    const cor       = SR_COLORS[r.sr] || '#888';
+    const sinal     = r.diff >= 0 ? '+' : '';
+    const diffStyle = r.diff > LIMIAR_PARTICIPACAO
+      ? 'color:#C00000;font-weight:600'
+      : r.diff < -LIMIAR_PARTICIPACAO
+        ? 'color:#1A6B3A;font-weight:600'
+        : 'color:#888';
+    const indiceStr   = r.indice === null ? 'N/A' : fmtNum(r.indice, 2);
+    const indiceBadge = r.indice === null
+      ? '<span class="badge b-yellow">N/A</span>'
+      : r.indice > LIMIAR_ADERENCIA_HIGH
+        ? '<span class="badge b-red">acima da criticidade</span>'
+        : r.indice < LIMIAR_ADERENCIA_LOW
+          ? '<span class="badge b-green">possível subalocação</span>'
+          : '<span class="badge b-yellow">proporcional</span>';
+    return `<tr>
+      <td><strong style="color:${cor}">${esc(r.sr)}</strong></td>
+      <td>${fmtNum(r.pctGasto, 1)}%</td>
+      <td>${fmtNum(r.pctCrit, 1)}%</td>
+      <td style="${diffStyle}">${sinal}${fmtNum(r.diff, 1)}&nbsp;p.p.</td>
+      <td>${indiceStr}&nbsp;${indiceBadge}</td>
+    </tr>`;
+  }).join('');
+}
+
+// =======================================================
+// MATRIZ DE QUADRANTES NECESSIDADE × INVESTIMENTO
+// =======================================================
+
+function calcularQuadrantesNecessidadeInvestimento(dadosPorSR) {
+  const samLookup = Object.fromEntries(malhaLiqKm.map(m => [m.sr, m]));
+  const pts = dadosPorSR.map(r => {
+    const sam = samLookup[r.sr] || {};
+    return {
+      sr: r.sr,
+      x: +((sam.pct_ruim_pessimo || 0) * 100).toFixed(2), // % Ruim+Péssimo SAM 2025
+      y: r.lkm                                             // Liquidado/km 2025
+    };
+  });
+  const medX = median(pts.map(p => p.x));
+  const medY = median(pts.map(p => p.y));
+  return pts.map(p => {
+    const altaCrit = p.x >= medX;
+    const altoInv  = p.y >= medY;
+    let quadrante;
+    if      ( altaCrit &&  altoInv) quadrante = 'Alta criticidade + Alto investimento';
+    else if ( altaCrit && !altoInv) quadrante = 'Alta criticidade + Baixo investimento';
+    else if (!altaCrit &&  altoInv) quadrante = 'Baixa criticidade + Alto investimento';
+    else                            quadrante = 'Baixa criticidade + Baixo investimento';
+    return { ...p, medX, medY, quadrante };
+  });
+}
+
+function renderQuadrantesNecessidade() {
+  const canvas    = document.getElementById('chartQuadrantes');
+  const resumoDiv = document.getElementById('quadrantesResumo');
+  if (!canvas || !regionais.length || !malhaLiqKm.length) return;
+
+  const dados      = calcularQuadrantesNecessidadeInvestimento(regionais);
+  const { medX, medY } = dados[0];
+
+  const xVals = dados.map(p => p.x);
+  const yVals = dados.map(p => p.y);
+  const xSpan = Math.max(Math.max(...xVals) - Math.min(...xVals), 2);
+  const ySpan = Math.max(Math.max(...yVals) - Math.min(...yVals), 1000);
+  const xMin  = Math.max(0, Math.min(...xVals) - xSpan * 0.3);
+  const xMax  = Math.max(...xVals) + xSpan * 0.3;
+  const yMin  = Math.max(0, Math.min(...yVals) - ySpan * 0.3);
+  const yMax  = Math.max(...yVals) + ySpan * 0.3;
+
+  const quadPlugin = {
+    id: 'quadZones',
+    beforeDatasetsDraw(ch) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales } = ch;
+      const mxPx = scales.x.getPixelForValue(medX);
+      const myPx = scales.y.getPixelForValue(medY);
+      ctx.save();
+      ctx.beginPath(); ctx.rect(left, top, right - left, bottom - top); ctx.clip();
+
+      // Zone fills
+      const zones = [
+        { x1: mxPx, x2: right, y1: top,  y2: myPx,   fill: 'rgba(224,123,0,0.07)',   label: ['Alta crit.', 'Alto invest.'],    tx: right-6, ty: top+6,    ta:'right', tb:'top'    },
+        { x1: left,  x2: mxPx, y1: top,  y2: myPx,   fill: 'rgba(150,150,150,0.05)', label: ['Baixa crit.', 'Alto invest.'],   tx: left+6,  ty: top+6,    ta:'left',  tb:'top'    },
+        { x1: mxPx, x2: right, y1: myPx, y2: bottom, fill: 'rgba(192,0,0,0.09)',     label: ['Alta crit.', '⚠ Baixo invest.'], tx: right-6, ty: bottom-6, ta:'right', tb:'bottom' },
+        { x1: left,  x2: mxPx, y1: myPx, y2: bottom, fill: 'rgba(112,173,71,0.06)',  label: ['Baixa crit.', 'Baixo invest.'],  tx: left+6,  ty: bottom-6, ta:'left',  tb:'bottom' }
+      ];
+      zones.forEach(z => {
+        ctx.fillStyle = z.fill;
+        ctx.fillRect(z.x1, z.y1, z.x2 - z.x1, z.y2 - z.y1);
+      });
+
+      // Median lines
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = 'rgba(100,100,100,0.40)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(mxPx, top);  ctx.lineTo(mxPx, bottom); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(left, myPx); ctx.lineTo(right, myPx);  ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Quadrant corner labels
+      ctx.font = 'italic 9.5px sans-serif';
+      zones.forEach(z => {
+        ctx.fillStyle   = 'rgba(80,80,80,0.5)';
+        ctx.textAlign   = z.ta;
+        ctx.textBaseline = z.tb;
+        z.label.forEach((ln, i) => {
+          const yOff = z.tb === 'top' ? z.ty + i * 13 : z.ty - (z.label.length - 1 - i) * 13;
+          ctx.fillText(ln, z.tx, yOff);
+        });
+      });
+      ctx.restore();
+    },
+    afterDatasetsDraw(ch) {
+      // SR name labels above each point
+      const { ctx, scales } = ch;
+      const ds = ch.data.datasets[0];
+      if (!ds) return;
+      ctx.save();
+      ctx.font         = 'bold 10px sans-serif';
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'bottom';
+      (ds.data || []).forEach((pt, i) => {
+        const px = scales.x.getPixelForValue(pt.x);
+        const py = scales.y.getPixelForValue(pt.y);
+        ctx.fillStyle = Array.isArray(ds.pointBackgroundColor) ? ds.pointBackgroundColor[i] : '#333';
+        ctx.fillText(pt.sr.replace('SR ', ''), px, py - 11);
+      });
+      ctx.restore();
+    }
+  };
+
+  chQuadrantes = makeChart(canvas, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'SR',
+        data:  dados.map(p => ({ x: p.x, y: p.y, sr: p.sr, quadrante: p.quadrante })),
+        pointBackgroundColor: dados.map(p => SR_COLORS[p.sr] || '#888'),
+        pointBorderColor:    'white',
+        pointBorderWidth:    2,
+        pointRadius:         9,
+        pointHoverRadius:    12
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: () => '',
+            label: ctx => {
+              const d = ctx.raw;
+              return [
+                d.sr,
+                `% Ruim+Péssimo (SAM 2025): ${fmtNum(d.x, 1)}%`,
+                `Liquidado/km: R\$ ${fmtNum(d.y)}`,
+                `Quadrante: ${d.quadrante}`
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: '% Ruim+Péssimo (SAM 2025)', font: { size: 11 } },
+          min: xMin, max: xMax,
+          grid: { color: '#F0F0F0' },
+          ticks: { callback: v => fmtNum(v, 1) + '%' }
+        },
+        y: {
+          title: { display: true, text: 'Liquidado/km (R$)', font: { size: 11 } },
+          min: yMin, max: yMax,
+          grid: { color: '#F0F0F0' },
+          ticks: { callback: v => v >= 1000 ? fmtNum(v / 1000, 0) + 'k' : fmtNum(v, 0) }
+        }
+      }
+    },
+    plugins: [quadPlugin]
+  });
+
+  // Tabela-resumo de quadrantes
+  if (resumoDiv) {
+    const quadBadge = q => {
+      if (q === 'Alta criticidade + Baixo investimento')  return 'b-red';
+      if (q === 'Baixa criticidade + Baixo investimento') return 'b-green';
+      return 'b-yellow';
+    };
+    const quadOrder = [
+      'Alta criticidade + Baixo investimento',
+      'Alta criticidade + Alto investimento',
+      'Baixa criticidade + Alto investimento',
+      'Baixa criticidade + Baixo investimento'
+    ];
+    const sorted = [...dados].sort((a, b) => quadOrder.indexOf(a.quadrante) - quadOrder.indexOf(b.quadrante));
+    resumoDiv.innerHTML = `<div class="table-wrap" style="margin-top:16px">
+      <table>
+        <thead><tr>
+          <th>SR</th>
+          <th>% Ruim+Péssimo (SAM 2025)</th>
+          <th>Liquidado/km (R$)</th>
+          <th>Quadrante</th>
+        </tr></thead>
+        <tbody>${sorted.map(p => {
+          const cor = SR_COLORS[p.sr] || '#888';
+          return `<tr>
+            <td><strong style="color:${cor}">${esc(p.sr)}</strong></td>
+            <td>${fmtNum(p.x, 1)}%</td>
+            <td>R\$&nbsp;${fmtNum(p.y)}</td>
+            <td><span class="badge ${quadBadge(p.quadrante)}">${esc(p.quadrante)}</span></td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+  }
+}
+
+// =======================================================
+// ÍNDICE DE PRESSÃO FUTURA
+// =======================================================
+
+function calcularIndicePressaoFutura(dadosPorSR) {
+  // Pesos dos componentes (escolha metodológica — iguais por simplicidade, ajustáveis)
+  const PESO_REGULAR     = 1 / 3; // sinal de risco de deterioração
+  const PESO_RUIM_PESS   = 1 / 3; // pressão crítica atual
+  const PESO_EMERGENCIAL = 1 / 3; // pressão corretiva (% contratos emergenciais)
+  // Fórmula: IPF = PESO_REGULAR × norm(% Regular)
+  //               + PESO_RUIM_PESS × norm(% Ruim+Péssimo)
+  //               + PESO_EMERGENCIAL × norm(% Emergenciais)
+  // Normalização: valor / máximo observado entre as 5 SRs (min-max com min=0)
+  // Liquidado/km exibido como referência de resposta, NÃO entra na fórmula
+
+  const samLookup = Object.fromEntries(malhaLiqKm.map(m => [m.sr, m]));
+  const raw = dadosPorSR.map(r => {
+    const sam = samLookup[r.sr] || {};
+    return {
+      sr:           r.sr,
+      pctRegular:   +((sam.pct_regular       || 0) * 100).toFixed(2),
+      pctRuimPess:  +((sam.pct_ruim_pessimo  || 0) * 100).toFixed(2),
+      pctEmg:       r.nc > 0 ? +(r.emg / r.nc * 100).toFixed(2) : 0,
+      lkm:          r.lkm
+    };
+  });
+
+  const maxReg  = Math.max(...raw.map(r => r.pctRegular),  0.001);
+  const maxRuim = Math.max(...raw.map(r => r.pctRuimPess), 0.001);
+  const maxEmg  = Math.max(...raw.map(r => r.pctEmg),      0.001);
+
+  return raw.map(r => {
+    const nReg  = r.pctRegular  / maxReg;
+    const nRuim = r.pctRuimPess / maxRuim;
+    const nEmg  = r.pctEmg      / maxEmg;
+    const ipf   = +(PESO_REGULAR * nReg + PESO_RUIM_PESS * nRuim + PESO_EMERGENCIAL * nEmg).toFixed(3);
+    return { ...r, nReg, nRuim, nEmg, ipf };
+  });
+}
+
+function renderIndicePressaoFutura() {
+  const tbody = document.getElementById('tbodyPressaoFutura');
+  if (!tbody || !regionais.length || !malhaLiqKm.length) return;
+  const dados  = calcularIndicePressaoFutura(regionais);
+  const sorted = [...dados].sort((a, b) => b.ipf - a.ipf);
+  tbody.innerHTML = sorted.map(r => {
+    const cor      = SR_COLORS[r.sr] || '#888';
+    const ipfStyle = r.ipf >= LIMIAR_PRESSAO_ALTA
+      ? 'color:#C00000;font-weight:700'
+      : r.ipf >= LIMIAR_PRESSAO_MEDIA
+        ? 'color:#E07B00;font-weight:600'
+        : 'color:#1A6B3A;font-weight:600';
+    const ipfLabel = r.ipf >= LIMIAR_PRESSAO_ALTA
+      ? '<span class="badge b-red">alta</span>'
+      : r.ipf >= LIMIAR_PRESSAO_MEDIA
+        ? '<span class="badge b-yellow">média</span>'
+        : '<span class="badge b-green">baixa</span>';
+    return `<tr>
+      <td><strong style="color:${cor}">${esc(r.sr)}</strong></td>
+      <td>${fmtNum(r.pctRegular, 1)}%</td>
+      <td>${fmtNum(r.pctRuimPess, 1)}%</td>
+      <td>${fmtNum(r.pctEmg, 1)}%</td>
+      <td style="${ipfStyle}">${fmtNum(r.ipf, 3)}&nbsp;${ipfLabel}</td>
+      <td>R$&nbsp;${fmtNum(r.lkm)}</td>
+    </tr>`;
+  }).join('');
 }
 
 // =======================================================
@@ -910,7 +1345,7 @@ function _initBenchCharts(){
   const initRadius  = benchmarkAnos.map((_,i) => i===benchAnoIdx ? 8 : 4);
   const initBW      = benchmarkAnos.map((_,i) => i===benchAnoIdx ? 3 : 1);
 
-  chBenchLine = new Chart(document.getElementById('chartBenchLine'),{
+  chBenchLine = makeChart(document.getElementById('chartBenchLine'),{
     type:'line',
     data:{
       labels: lineLabels,
@@ -962,7 +1397,7 @@ function _initBenchCharts(){
     }
   });
 
-  chBenchRanking = new Chart(document.getElementById('chartBenchRanking'),{
+  chBenchRanking = makeChart(document.getElementById('chartBenchRanking'),{
     type:'bar',
     data:{labels:[],datasets:[{data:[],backgroundColor:[],borderRadius:3,barPercentage:.75}]},
     options:{
@@ -1309,24 +1744,40 @@ function initDashboard(d) {
   activateTab('malha-retorno');
 }
 
-Promise.all([
-  loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json'),
-  loadJsonData('dados_extras', `${DATA_PATH.ROOT}dados_extras.json`, 'dados_extras.json')
-]).then(([d, extras])=>{
+if (window.STANDALONE_DATA && window.STANDALONE_DATA.der_precomputed) {
+  const d      = window.STANDALONE_DATA.der_precomputed;
+  const extras = window.STANDALONE_DATA.dados_extras || {};
   contratos  = extras.contratos_dopsr1 || [];
   malhaKm    = extras.malha_km        || [];
   malhaLiqKm = extras.malha_pct       || [];
   initDashboard(d);
-}).catch(err=>{
-  document.querySelector('.tab-content').innerHTML =
-    `<div class="error-panel">` +
-    `<h2>Erro ao carregar dados</h2>` +
-    `<p>Não foi possível carregar os arquivos de dados.</p>` +
-    `<p class="error-detail">Detalhe: ${esc(err.message)}</p>` +
-    `<p class="error-help">` +
-    `Abra o painel a partir de um servidor local (ex: <code>python -m http.server</code> na raiz do projeto).</p>` +
-    `</div>`;
-});
+} else {
+  Promise.all([
+    loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json'),
+    loadJsonData('dados_extras', `${DATA_PATH.ROOT}dados_extras.json`, 'dados_extras.json')
+  ]).then(([d, extras])=>{
+    contratos  = extras.contratos_dopsr1 || [];
+    malhaKm    = extras.malha_km        || [];
+    malhaLiqKm = extras.malha_pct       || [];
+    initDashboard(d);
+  }).catch(err=>{
+    document.querySelector('.tab-content').innerHTML =
+      `<div class="error-panel"><h2>Erro ao carregar dados</h2><p>Não foi possível carregar os arquivos de dados.</p><p class="error-detail">Detalhe: ${esc(err.message)}</p><p class="error-help">Abra o painel a partir de um servidor local (ex: <code>python -m http.server</code> na raiz do projeto).</p></div>`;
+  });
+}
+
+// Botões "Limpar filtro" para os gráficos de condição da malha (IRI e FWD)
+(function(){
+  function resetMalhaChart(ch){
+    if(!ch) return;
+    ch.data.datasets.forEach((_,i)=>{ ch.getDatasetMeta(i).hidden = false; });
+    ch.update();
+  }
+  const btnIRI = document.getElementById('btnLimparIRI');
+  if(btnIRI) btnIRI.addEventListener('click', ()=>resetMalhaChart(chMalhaIRI));
+  const btnFWD = document.getElementById('btnLimparFWD');
+  if(btnFWD) btnFWD.addEventListener('click', ()=>resetMalhaChart(chMalhaFWD));
+})();
 
 // Sincroniza o top do tab-nav com a altura real do header em qualquer breakpoint
 (function(){

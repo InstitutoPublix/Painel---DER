@@ -126,6 +126,7 @@ body{font-family:'Inter',sans-serif;background:#F5F7FA;color:#1A1A2E;min-width:0
 .chart-title{font-size:14px;font-weight:600;color:#1F4E79;margin-bottom:16px}
 .chart-source{font-size:11px;color:#777;line-height:1.45;margin-top:10px}
 .chart-source strong{font-weight:600;color:#555}
+.chart-error-inline{font-size:11px;color:#9A3412;background:#FFF7ED;border:1px solid #FED7AA;border-radius:6px;padding:7px 9px;margin-top:8px;line-height:1.45}
 
 /* Tables */
 .table-wrap{background:#fff;border-radius:8px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow-x:auto;overflow-y:hidden;margin-bottom:24px}
@@ -318,4 +319,19 @@ svg.responsive{display:block;width:100%}
   .hdr-logo-img{height:50px}
   .hdr-logo-opr{height:64px}
 }
+
+/* ── Faixa de Condição da Malha (waffle road strip) ── */
+.waffle-grid{display:flex;flex-direction:column;gap:8px}
+.waffle-row{display:flex;align-items:flex-start;gap:10px}
+.waffle-label{flex:0 0 150px;font-size:11px;line-height:1.5;color:#333}
+.waffle-label strong{display:block;font-size:12px;color:#1A1A2E;margin-bottom:1px}
+.waffle-km{color:#888;font-size:10px}
+.waffle-blocks{display:flex;flex-wrap:wrap;gap:2px;align-content:flex-start}
+.waffle-block{width:10px;height:14px;border-radius:1px;flex-shrink:0;cursor:default}
+.waffle-block:hover{opacity:.7;outline:1px solid rgba(0,0,0,.25)}
+.waffle-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:14px;padding-top:10px;border-top:1px solid #EEE}
+.waffle-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#555}
+.waffle-legend-swatch{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+@media(max-width:700px){.waffle-label{flex:0 0 100px}.waffle-block{width:7px;height:10px}}
+@media(max-width:460px){.waffle-label{flex:0 0 80px}.waffle-block{width:5px;height:8px}}
 
