@@ -387,7 +387,17 @@ function renderMalha(){
     responsive:true,
     maintainAspectRatio:false,
     plugins:{
-      legend:{position:'bottom',labels:{font:{size:11},padding:12}},
+      legend:{
+        position:'bottom',
+        labels:{font:{size:11},padding:12},
+        onClick(evt, legendItem, legend){
+          // Toggle independente: cada categoria pode ser ocultada/exibida separadamente
+          const idx  = legendItem.datasetIndex;
+          const meta = legend.chart.getDatasetMeta(idx);
+          meta.hidden = !meta.hidden;
+          legend.chart.update();
+        }
+      },
       tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)}%`}}
     },
     scales:{
@@ -706,7 +716,17 @@ function renderContratos(data = contratos){
       responsive:true,
       maintainAspectRatio:false,
       plugins:{
-        legend:{position:'bottom',labels:{font:{size:11},padding:12}},
+        legend:{
+          position:'bottom',
+          labels:{font:{size:11},padding:12},
+          onClick(evt, legendItem, legend){
+            // Toggle independente por série (Empenhado / Liquidado / Pago)
+            const idx  = legendItem.datasetIndex;
+            const meta = legend.chart.getDatasetMeta(idx);
+            meta.hidden = !meta.hidden;
+            legend.chart.update();
+          }
+        },
         tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtCur(ctx.raw)}`}}
       },
       scales:{
@@ -1005,7 +1025,7 @@ function calcularQuadrantesNecessidadeInvestimento(dadosPorSR) {
     return {
       sr: r.sr,
       x: +((sam.pct_ruim_pessimo || 0) * 100).toFixed(2), // % Ruim+Péssimo SAM 2025
-      y: r.lkm                                             // Liquidado/km 2025
+      y: r.lkm                                             // Liquidado/km da malha SAM avaliada 2025
     };
   });
   const medX = median(pts.map(p => p.x));
@@ -1253,6 +1273,18 @@ function renderIndicePressaoFutura() {
       <td>R$&nbsp;${fmtNum(r.lkm)}</td>
     </tr>`;
   }).join('');
+
+  // Popula card KPI na Síntese Executiva
+  const srMaiorIPF = sorted[0];
+  if (srMaiorIPF) {
+    const elVal = document.getElementById('kpi-sint-sr-pressao');
+    const elSub = document.getElementById('kpi-sint-sr-pressao-sub');
+    if (elVal) elVal.textContent = (srMaiorIPF.sr || '').replace('SR ', '');
+    if (elSub) {
+      const nivel = srMaiorIPF.ipf >= LIMIAR_PRESSAO_ALTA ? 'alta' : srMaiorIPF.ipf >= LIMIAR_PRESSAO_MEDIA ? 'média' : 'baixa';
+      elSub.textContent = 'IPF ' + fmtNum(srMaiorIPF.ipf, 3) + ' — pressão ' + nivel;
+    }
+  }
 }
 
 // =======================================================
