@@ -209,16 +209,23 @@ svg.responsive{display:block;width:100%}
 .filter-bar label{font-size:13px;font-weight:500;color:#555;white-space:nowrap}
 .filter-select{font-family:'Inter',sans-serif;font-size:13px;padding:7px 12px;border:1px solid #D9D9D9;border-radius:6px;background:#fff;color:#1A1A2E;cursor:pointer}
 .filter-select:hover,.filter-select:focus{border-color:#2E75B6;outline:none}
-.contract-filter-panel{display:grid;grid-template-columns:minmax(180px,1.4fr) repeat(3,minmax(150px,1fr)) auto;gap:12px;align-items:end;background:#fff;border:1px solid #D9E1EC;border-radius:8px;padding:16px;margin:0 0 18px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.contract-filter-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.contract-filter-panel{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;background:#fff;border:1px solid #D9E1EC;border-radius:8px;padding:16px;margin:0 0 18px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.contract-filter-field{display:flex;flex-direction:column;gap:6px;min-width:160px;flex:1 1 160px}
 .contract-filter-field label{font-size:12px;font-weight:600;color:#555}
-.contract-filter-input,.contract-filter-select{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 11px;border:1px solid #D9D9D9;border-radius:6px;background:#fff;color:#1A1A2E;min-height:38px}
+.contract-filter-input,.contract-filter-select{width:100%;box-sizing:border-box;font-family:'Inter',sans-serif;font-size:13px;padding:9px 11px;border:1px solid #D9D9D9;border-radius:6px;background:#fff;color:#1A1A2E;min-height:38px}
 .contract-filter-input::placeholder{color:#9A9A9A}
 .contract-filter-input:hover,.contract-filter-input:focus,.contract-filter-select:hover,.contract-filter-select:focus{border-color:#2E75B6;outline:none}
-.contract-filter-clear{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#1F4E79;background:#F7FAFD;border:1px solid #D9E1EC;border-radius:6px;padding:9px 14px;min-height:38px;cursor:pointer;white-space:nowrap}
+.contract-filter-clear{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#1F4E79;background:#F7FAFD;border:1px solid #D9E1EC;border-radius:6px;padding:9px 14px;min-height:38px;cursor:pointer;white-space:nowrap;align-self:flex-end}
 .contract-filter-clear:hover,.contract-filter-clear:focus{background:#EAF2FA;border-color:#2E75B6;outline:none}
 .contract-filter-count{font-size:12px;color:#666;margin:-6px 0 12px;text-align:right}
 .contract-filter-empty{font-size:12px;color:#666;background:#F7FAFD;border:1px solid #D9E1EC;border-radius:8px;padding:11px 14px;margin-top:-10px;margin-bottom:24px}
+/* Barra de filtro de condição (IRI / FWD) */
+.condicao-filter-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px}
+.cond-pill{border-radius:20px;padding:3px 12px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;border:2px solid transparent;background:color-mix(in srgb,var(--pill-color,#888) 20%,#fff);color:var(--pill-color,#555);font-weight:500;transition:background .15s,color .15s}
+.cond-pill:hover{background:color-mix(in srgb,var(--pill-color,#888) 35%,#fff)}
+.cond-pill.active{background:var(--pill-color,#888);color:#fff;border-color:var(--pill-color,#888)}
+.cond-pill-clear{margin-left:auto;border-radius:20px;padding:3px 12px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;border:2px solid #ccc;background:#fff;color:#555;font-weight:500;transition:background .15s,border-color .15s}
+.cond-pill-clear:hover{background:#F7FAFD;border-color:#2E75B6;color:#1F4E79}
 /* Section dividers and headers */
 .section-sep{display:flex;align-items:center;gap:16px;margin:36px 0 22px;color:#1F4E79;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.4px}
 .section-sep::before,.section-sep::after{content:'';flex:1;height:1px;background:#D9D9D9}
@@ -282,7 +289,6 @@ svg.responsive{display:block;width:100%}
   .header-gov{padding:0 24px}
   .kpi-grid,.kpi-grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid-3,.hl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .contract-filter-panel{grid-template-columns:repeat(2,minmax(0,1fr))}
   .contract-filter-clear{width:100%}
 }
 
@@ -304,7 +310,7 @@ svg.responsive{display:block;width:100%}
   .header-gov{flex-direction:column}
   .hdr-right{width:100%;justify-content:flex-start}
   .hdr-sep{display:none}
-  .kpi-grid,.kpi-grid-3,.grid-2,.grid-3,.hl-grid,.contract-filter-panel{grid-template-columns:1fr}
+  .kpi-grid,.kpi-grid-3,.grid-2,.grid-3,.hl-grid{grid-template-columns:1fr}
   .chart-container,.svg-container,.kpi-card,.arg-block{padding:18px}
   .kpi-value{font-size:26px}
   .filter-bar{align-items:stretch;flex-direction:column}

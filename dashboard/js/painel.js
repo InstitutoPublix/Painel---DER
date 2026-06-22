@@ -779,7 +779,7 @@ function renderSRTipoMatrix(){
 
   const srs  = ['SR LESTE','SR CAMPOS GERAIS','SR NORTE','SR NOROESTE','SR OESTE'];
   const tipos = Object.keys(TIPO_COLORS);
-  const tipoLabel = {PROCONSERVA:'ProConserva',COP:'COP',INTEGRA:'IntegraParaná',CREMEP:'CREMEP',EMERGENCIAL:'Emergencial'};
+  const tipoLabel = {PROCONSERVA:'PROCONSERVA',COP:'COP',INTEGRA:'INTEGRA',CREMEP:'CREMEP',EMERGENCIAL:'Emergencial'};
 
   const cnt = {};
   srs.forEach(sr => { cnt[sr] = {}; tipos.forEach(t => { cnt[sr][t] = 0; }); });
