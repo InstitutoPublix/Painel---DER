@@ -4,6 +4,14 @@ Monta painel_der.html autossuficiente:
 - Embute CSS, JS, bibliotecas, imagens (base64) e dados JSON.
 - Saída: dashboard/painel_der.html (sobrescreve in-place).
 """
+# Descontinuado em 2026-07-17 — a fonte shell (dashboard/painel_der.html com
+# <link>/<script> externos) foi destruída por uma execução anterior deste
+# script, que lê e sobrescreve o mesmo arquivo in-place. O fluxo atual edita
+# dashboard/painel_der.html diretamente (dados embutidos via bloco
+# window.STANDALONE_DATA, atualizado manualmente a partir de
+# data/der_precomputed.json). Não execute este script sem antes reconstruir
+# uma fonte shell válida, ou ele vai duplicar CSS/JS/dados já embutidos,
+# corrompendo o arquivo.
 
 import base64
 import json
