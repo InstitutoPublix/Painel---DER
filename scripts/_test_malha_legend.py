@@ -34,7 +34,7 @@ with sync_playwright() as p:
     page.goto(URL, wait_until='networkidle', timeout=30000)
     page.wait_for_timeout(1500)
 
-    # A aba Malha e Retorno é a default - espera renderizar
+    # A aba Diagnóstico da Malha é a default - espera renderizar
     page.wait_for_timeout(2000)
 
     # 1. Botoes presentes

@@ -16,7 +16,7 @@ with sync_playwright() as p:
     page.goto(file_url, wait_until='networkidle', timeout=30000)
     time.sleep(2)
 
-    # Já começa na aba malha-retorno — aguarda render
+    # Já começa na aba Diagnóstico da Malha — aguarda render
     page.wait_for_timeout(2000)
 
     # Verifica tbodyBenchmarkInterno
@@ -29,7 +29,7 @@ with sync_playwright() as p:
         cells = row.query_selector_all('td')
         row_data.append([c.inner_text() for c in cells])
 
-    # Pega também os valores da tabela de eficiência por regional para comparar
+    # Pega também os valores da tabela por regional para comparar
     tbody_reg = page.query_selector('#tbodyReg')
     reg_rows  = tbody_reg.query_selector_all('tr') if tbody_reg else []
     reg_data  = []

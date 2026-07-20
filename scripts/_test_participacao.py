@@ -15,7 +15,7 @@ with sync_playwright() as p:
     page.goto(URL, wait_until='networkidle', timeout=30000)
     page.wait_for_timeout(2000)
 
-    # Ativa aba "Malha e Retorno do Investimento" (tab index 0)
+    # Ativa aba "Diagnóstico da Malha" (tab index 0)
     tabs = page.query_selector_all('.tab-btn')
     print(f'Abas encontradas: {len(tabs)}')
     for i, t in enumerate(tabs):

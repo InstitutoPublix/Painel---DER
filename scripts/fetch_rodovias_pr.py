@@ -13,7 +13,7 @@ Confirme com a equipe de SIG do DER antes de usar em material formal.
 Para reexecutar (a partir da raiz do projeto):
     python scripts/fetch_rodovias_pr.py
 
-Lê:   data/der_precomputed.json   (condição IRI Bom+Muito Bom por SR)
+Lê:   data/der_precomputed.json   (condição SAM Bom+Muito Bom por SR)
 Gera: dashboard/data/rodovias_pr.geojson
 Tempo estimado: 2–5 minutos (depende da velocidade da Overpass API).
 """
@@ -116,17 +116,18 @@ def fetch_overpass(query, retries=3):
                 raise
 
 
-# ── Carrega condição IRI por SR ──────────────────────────────────────────────
-print('Carregando condição da malha (IRI)...')
+# ── Carrega condição SAM por SR ──────────────────────────────────────────────
+print('Carregando condição da malha (SAM)...')
 with open(PRECOMPUTED, encoding='utf-8') as f:
     precomp = json.load(f)
 
 sr_pct_bom = {}
 for sr_name, r in precomp['regionais'].items():
-    bom = round(r['iri']['bom'] + r['iri']['muito_bom'], 2)
-    sr_pct_bom[sr_name] = bom
+    sr_pct_bom[sr_name] = round(r['pct_bom_muito_bom'], 2)
 
-print('  IRI Bom+Muito Bom por SR:')
+ano_referencia_malha = next(iter(precomp['regionais'].values())).get('ano_referencia_malha', '')
+
+print('  SAM Bom+Muito Bom por SR:')
 for sr, pct in sorted(sr_pct_bom.items()):
     print(f'    {sr}: {pct}%')
 
@@ -187,7 +188,7 @@ geojson = {
     'type':              'FeatureCollection',
     'gerado_em':         str(date.today()),
     'fonte_geometria':   'OpenStreetMap via Overpass API (https://overpass-api.de)',
-    'fonte_condicao':    'DER-PR — IRI Bom+Muito Bom por SR (der_precomputed.json, levantamento SGP 2021–2022)',
+    'fonte_condicao':    f'DER-PR — SAM Bom+Muito Bom por SR (der_precomputed.json, SAM {ano_referencia_malha})',
     'atribuicao_sr':     (
         'Voronoi por município-sede de cada SR (aproximação). '
         'Lista completa de municípios por SR não disponível no projeto — '
@@ -209,4 +210,4 @@ print('\nTrechos por SR:')
 for sr in sorted(SR_SEDES):
     cnt = sr_counts.get(sr, 0)
     pct = sr_pct_bom.get(sr, 0.0)
-    print(f'  {sr}: {cnt} trechos  |  IRI Bom+Muito Bom: {pct:.1f}%')
+    print(f'  {sr}: {cnt} trechos  |  SAM Bom+Muito Bom: {pct:.1f}%')

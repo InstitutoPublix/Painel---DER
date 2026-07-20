@@ -1,4 +1,4 @@
-﻿{
+{
     "generated":  "2026-06-15T16:08:27.0095935-03:00",
     "malha_km":  [
                      {
@@ -84,106 +84,6 @@
                           "liq_por_km":  66110.939973981
                       }
                   ],
-    "iri_por_condicao":  [
-                             {
-                                 "condicao":  "Ruim",
-                                 "SR Leste":  4.86,
-                                 "SR Campos Gerais":  3.88,
-                                 "SR Norte":  10.39,
-                                 "SR Noroeste":  4.58,
-                                 "SR Oeste":  5.28
-                             },
-                             {
-                                 "condicao":  "Péssimo",
-                                 "SR Leste":  9.61,
-                                 "SR Campos Gerais":  8.42,
-                                 "SR Norte":  27.05,
-                                 "SR Noroeste":  12.5,
-                                 "SR Oeste":  13.44
-                             },
-                             {
-                                 "condicao":  "Regular",
-                                 "SR Leste":  27.67,
-                                 "SR Campos Gerais":  29.84,
-                                 "SR Norte":  41.53,
-                                 "SR Noroeste":  37.08,
-                                 "SR Oeste":  35.36
-                             },
-                             {
-                                 "condicao":  "Bom",
-                                 "SR Leste":  40.76,
-                                 "SR Campos Gerais":  40.15,
-                                 "SR Norte":  17.37,
-                                 "SR Noroeste":  31.21,
-                                 "SR Oeste":  27.9
-                             },
-                             {
-                                 "condicao":  "Muito Bom",
-                                 "SR Leste":  17.1,
-                                 "SR Campos Gerais":  17.73,
-                                 "SR Norte":  3.66,
-                                 "SR Noroeste":  14.63,
-                                 "SR Oeste":  18.03
-                             },
-                             {
-                                 "condicao":  "Nota",
-                                 "SR Leste":  0,
-                                 "SR Campos Gerais":  0,
-                                 "SR Norte":  0,
-                                 "SR Noroeste":  0,
-                                 "SR Oeste":  0
-                             }
-                         ],
-    "fwd_por_condicao":  [
-                             {
-                                 "condicao":  "Ruim",
-                                 "SR Leste":  13.26,
-                                 "SR Campos Gerais":  15.98,
-                                 "SR Norte":  14.19,
-                                 "SR Noroeste":  10.89,
-                                 "SR Oeste":  6.69
-                             },
-                             {
-                                 "condicao":  "Péssimo",
-                                 "SR Leste":  15.47,
-                                 "SR Campos Gerais":  13.88,
-                                 "SR Norte":  16.19,
-                                 "SR Noroeste":  13.12,
-                                 "SR Oeste":  16.21
-                             },
-                             {
-                                 "condicao":  "Regular",
-                                 "SR Leste":  24.31,
-                                 "SR Campos Gerais":  23.06,
-                                 "SR Norte":  25.39,
-                                 "SR Noroeste":  22.12,
-                                 "SR Oeste":  28.66
-                             },
-                             {
-                                 "condicao":  "Bom",
-                                 "SR Leste":  26.19,
-                                 "SR Campos Gerais":  28.32,
-                                 "SR Norte":  24.29,
-                                 "SR Noroeste":  27.62,
-                                 "SR Oeste":  30.32
-                             },
-                             {
-                                 "condicao":  "Muito Bom",
-                                 "SR Leste":  20.77,
-                                 "SR Campos Gerais":  18.76,
-                                 "SR Norte":  19.91,
-                                 "SR Noroeste":  26.24,
-                                 "SR Oeste":  18.11
-                             },
-                             {
-                                 "condicao":  "Muito Bom",
-                                 "SR Leste":  0,
-                                 "SR Campos Gerais":  0,
-                                 "SR Norte":  0,
-                                 "SR Noroeste":  0,
-                                 "SR Oeste":  0
-                             }
-                         ],
     "contratos_dopsr1":  [
                              {
                                  "contrato":  "CO056/2022DOP",

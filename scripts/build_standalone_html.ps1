@@ -1,129 +1,75 @@
 param(
-  [string]$Output = "dashboard\painel_der_autossuficiente.html"
+  [string]$OutputPath = "dashboard\painel_der.html"
 )
 
-$ErrorActionPreference = "Stop"
-$Root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$ErrorActionPreference = 'Stop'
+$Root = Split-Path -Parent $PSScriptRoot
 $Utf8NoBom = [System.Text.UTF8Encoding]::new($false)
 
-function Join-Root([string]$RelativePath) {
-  Join-Path $Root $RelativePath
-}
-
 function Read-Text([string]$RelativePath) {
-  [System.IO.File]::ReadAllText((Join-Root $RelativePath), [System.Text.Encoding]::UTF8)
+  $path = Join-Path $Root $RelativePath
+  if(-not (Test-Path $path)){ throw "Arquivo não encontrado: $RelativePath" }
+  [System.IO.File]::ReadAllText($path, $Utf8NoBom)
 }
 
-function Write-Text([string]$RelativePath, [string]$Content) {
-  $path = Join-Root $RelativePath
-  $dir = Split-Path -Parent $path
-  if($dir -and -not (Test-Path -LiteralPath $dir)) {
-    New-Item -ItemType Directory -Force -Path $dir | Out-Null
-  }
-  [System.IO.File]::WriteAllText($path, $Content, $Utf8NoBom)
+function Read-JsonLiteral([string]$RelativePath) {
+  (Read-Text $RelativePath).Trim() -replace '</script', '<\/script'
 }
 
-function Escape-Script-End([string]$Text) {
-  $Text -replace "</", "<\/"
-}
+$templatePath = Join-Path $Root 'dashboard\painel_der.html'
+$html = [System.IO.File]::ReadAllText($templatePath, $Utf8NoBom)
 
-function Data-Uri([string]$RelativePath, [string]$MimeType) {
-  $bytes = [System.IO.File]::ReadAllBytes((Join-Root $RelativePath))
-  "data:$MimeType;base64," + [System.Convert]::ToBase64String($bytes)
-}
+$eAgudo = [char]0x00E9
+$labelRuimPessimo = "SR com Maior Ruim+P$($eAgudo)ssimo (SAM)"
+$subRuimPessimo = "% Ruim+P$($eAgudo)ssimo"
+$html = [regex]::Replace($html, 'SR com Pior Condi..o \(SAM\)', $labelRuimPessimo, 1)
+$html = [regex]::Replace($html, '<div class="kpi-sub" id="kpi-sint-sr-pior-sub">.*?</div>', '<div class="kpi-sub" id="kpi-sint-sr-pior-sub">' + $subRuimPessimo + '</div>', 1)
 
-function Data-Uri-Path([string]$Path, [string]$MimeType) {
-  $bytes = [System.IO.File]::ReadAllBytes($Path)
-  "data:$MimeType;base64," + [System.Convert]::ToBase64String($bytes)
-}
-
-$assetsDir = Join-Root "dashboard\assets"
-$logoGoverno = Get-ChildItem -LiteralPath $assetsDir -Filter "logo governo do par*.png" |
-  Select-Object -First 1
-if(-not $logoGoverno) {
-  throw "Logo do Governo do Parana nao encontrada em dashboard\assets."
-}
-
-$required = @(
-  "dashboard\painel_der.html",
-  "dashboard\css\painel.css",
-  "dashboard\js\painel.js",
-  "dashboard\vendor\chart.umd.min.js",
-  "dashboard\vendor\chartjs-plugin-datalabels.min.js",
-  "dashboard\vendor\leaflet.js",
-  "dashboard\vendor\leaflet.css",
-  "data\der_precomputed.json",
-  "data\dados_extras.json",
-  "dashboard\data\benchmark_nacional.json",
-  "dashboard\data\rodovias_pr.geojson",
-  "dashboard\assets\logo OpR.jpeg",
-  "dashboard\assets\logo der.png"
-)
-
-$missing = $required | Where-Object { -not (Test-Path -LiteralPath (Join-Root $_)) }
-if($missing.Count -gt 0) {
-  throw "Arquivos ausentes para gerar o HTML autossuficiente: $($missing -join ', ')"
-}
-
-$html = Read-Text "dashboard\painel_der.html"
-$painelCss = Read-Text "dashboard\css\painel.css"
-$leafletCss = Read-Text "dashboard\vendor\leaflet.css"
-$chartJs = Escape-Script-End (Read-Text "dashboard\vendor\chart.umd.min.js")
-$datalabelsJs = Escape-Script-End (Read-Text "dashboard\vendor\chartjs-plugin-datalabels.min.js")
-$leafletJs = Escape-Script-End (Read-Text "dashboard\vendor\leaflet.js")
-$painelJs = Escape-Script-End (Read-Text "dashboard\js\painel.js")
-
-$derJson = Escape-Script-End (Read-Text "data\der_precomputed.json")
-$extrasJson = Escape-Script-End (Read-Text "data\dados_extras.json")
-$benchmarkJson = Escape-Script-End (Read-Text "dashboard\data\benchmark_nacional.json")
-$rodoviasJson = Escape-Script-End (Read-Text "dashboard\data\rodovias_pr.geojson")
-
-$headBlock = @"
-<!-- Arquivo autossuficiente: CSS e bibliotecas embutidos pelo script scripts/build_standalone_html.ps1. -->
-<style>
-$leafletCss
-$painelCss
-</style>
+$dataScript = @"
 <script>
-$chartJs
-</script>
-<script>
-$datalabelsJs
-</script>
-<script>
-$leafletJs
-</script>
-"@
-
-$dataBlock = @"
-<script>
-window.PAINEL_STANDALONE = true;
 window.STANDALONE_DATA = {
-  der_precomputed: $derJson,
-  dados_extras: $extrasJson,
-  benchmark_nacional: $benchmarkJson,
-  rodovias_pr: $rodoviasJson
+  "der_precomputed": $(Read-JsonLiteral 'data\der_precomputed.json'),
+  "dados_extras": $(Read-JsonLiteral 'data\dados_extras.json'),
+  "benchmark_nacional": $(Read-JsonLiteral 'dashboard\data\benchmark_nacional.json'),
+  "rodovias_pr": $(Read-JsonLiteral 'dashboard\data\rodovias_pr.geojson')
 };
 </script>
-<script>
-$painelJs
-</script>
 "@
 
-$html = [regex]::Replace(
-  $html,
-  '(?s)(<!--.*?-->\s*)?<link href="https://fonts\.googleapis\.com.*?<link rel="stylesheet" href="css/painel\.css">\s*',
-  $headBlock + "`r`n"
-)
+$dataIdx = $html.IndexOf('window.STANDALONE_DATA')
+if($dataIdx -lt 0){ throw 'Bloco window.STANDALONE_DATA não encontrado.' }
+$dataStart = $html.LastIndexOf('<script', $dataIdx)
+$dataEnd = $html.IndexOf('</script>', $dataIdx)
+if($dataStart -lt 0 -or $dataEnd -lt 0){ throw 'Tag <script> do STANDALONE_DATA não encontrada.' }
+$dataEnd += '</script>'.Length
+$html = $html.Substring(0, $dataStart) + $dataScript + $html.Substring($dataEnd)
 
-$html = $html.Replace('src="assets/logo OpR.jpeg"', 'src="' + (Data-Uri "dashboard\assets\logo OpR.jpeg" "image/jpeg") + '"')
-$html = [regex]::Replace($html, 'src="assets/logo governo do par.*?\.png"', 'src="' + (Data-Uri-Path $logoGoverno.FullName "image/png") + '"', 1)
-$html = $html.Replace('src="assets/logo der.png"', 'src="' + (Data-Uri "dashboard\assets\logo der.png" "image/png") + '"')
-$html = $html.Replace('<script src="js/painel.js"></script>', $dataBlock)
+$analytics = (Read-Text 'dashboard\src\malha-analytics.js').Trim()
+$app = (Read-Text 'dashboard\src\painel-app.js').Trim()
+$appScripts = @"
+<script>
+/* malha-analytics.js - embutido de dashboard/src/malha-analytics.js */
+$analytics
+</script>
+<script>
+/* painel.js - embutido de dashboard/src/painel-app.js */
+$app
+</script>
+</body>
+"@
 
-Write-Text $Output $html
+$appIdx = $html.LastIndexOf('painel.js')
+if($appIdx -lt 0){ throw 'Marcador painel.js não encontrado.' }
+$appStart = $html.LastIndexOf('<script', $appIdx)
+$analyticsIdx = $html.IndexOf('malha-analytics.js')
+if($analyticsIdx -ge 0 -and $analyticsIdx -lt $appIdx){
+  $analyticsStart = $html.LastIndexOf('<script', $analyticsIdx)
+  if($analyticsStart -ge 0){ $appStart = $analyticsStart }
+}
+$bodyIdx = $html.IndexOf('</body>', $appIdx)
+if($appStart -lt 0 -or $bodyIdx -lt 0){ throw 'Bloco de scripts do painel não encontrado.' }
+$html = $html.Substring(0, $appStart) + $appScripts + $html.Substring($bodyIdx + '</body>'.Length)
 
-$outPath = Join-Root $Output
-$sizeMb = [math]::Round((Get-Item -LiteralPath $outPath).Length / 1MB, 2)
-Write-Host "HTML autossuficiente gerado em: $outPath"
-Write-Host "Tamanho: $sizeMb MB"
+$out = Join-Path $Root $OutputPath
+[System.IO.File]::WriteAllText($out, $html, $Utf8NoBom)
+Write-Host "Standalone regenerado: $OutputPath"

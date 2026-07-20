@@ -29,12 +29,12 @@ entregar.
 
 O painel tem 5 abas, nesta ordem:
 
-1. **Diagnóstico da Malha** (`tab-malha-retorno`) — fotografia técnica da
+1. **Diagnóstico da Malha** (`tab-malha-diagnostico`) — fotografia técnica da
    condição da malha avaliada (SAM 2025; IRI/FWD 2021–2022), antes de
    qualquer leitura financeira ou cruzamento interpretativo. Inclui mapa
    exploratório por Superintendência Regional.
 2. **Pressão e Execução** (`tab-pressao-execucao`) — dividida em dois blocos:
-   pressão operacional (sinalizador IPF e perfil de conservação por
+   pressão operacional (SPC e perfil de conservação por
    regional) e execução financeira observada (contratos DOPSR1: empenhado,
    liquidado, distribuição por tipo de contrato).
 3. **Leitura Integrada** (`tab-leitura-regional`) — combina condição da
@@ -133,9 +133,10 @@ Reproduzidas das notas metodológicas já presentes no próprio painel:
   2025 — não em série histórica contínua.** A variação entre os dois anos
   não deve ser lida como tendência de melhoria ou piora; reflete apenas a
   diferença observada entre esses dois retratos.
-- **O Índice de Pressão Futura (IPF)** é calculado sobre um corte único de
-  2025, sem série histórica homogênea disponível — não mede tendência real
-  nem prevê deterioração futura; serve como sinalizador de atenção.
+- **O Sinalizador de Pressão de Conservação (SPC)** é calculado sobre o
+  recorte selecionado, sem calibração preditiva formal. Ele não mede efeito
+  do gasto nem antecipa resultado futuro; serve como sinalizador relativo de
+  atenção entre as cinco SRs.
 - **IRI e FWD** usam levantamento de 2021–2022 (SGP), mantido como
   referência estrutural complementar porque mede dimensões que o SAM não
   captura — mas não deve ser confundido com dado do ano corrente.
