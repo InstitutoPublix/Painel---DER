@@ -822,6 +822,14 @@ body{font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#F5
 .chart-source strong{font-weight:600;color:#555}
 .chart-error-inline{font-size:11px;color:#9A3412;background:#FFF7ED;border:1px solid #FED7AA;border-radius:6px;padding:7px 9px;margin-top:8px;line-height:1.45}
 
+/* Popover de nota metodológica — ícone "ⓘ" clicável ao lado de chart-source,
+   desacopla ressalva metodológica de atribuição de fonte simples. */
+.nota-info-trigger{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;margin-left:5px;border:1px solid var(--cor-azul-hover);border-radius:50%;background:#fff;color:var(--cor-navy);font-size:10px;font-weight:700;line-height:1;cursor:pointer;padding:0;vertical-align:middle;font-family:inherit}
+.nota-info-trigger:hover,.nota-info-trigger:focus-visible{background:var(--cor-azul-hover);color:#fff;outline:none}
+.nota-info-trigger[aria-expanded="true"]{background:var(--cor-navy-escura);border-color:var(--cor-navy-escura);color:#fff}
+.nota-popover{position:absolute;z-index:900;max-width:360px;background:#fff;border:1px solid #D9D9D9;border-left:4px solid var(--cor-azul-hover);border-radius:0 6px 6px 0;box-shadow:0 4px 16px rgba(0,0,0,.18);padding:12px 14px;font-size:12.5px;line-height:1.55;color:#333}
+.nota-popover[hidden]{display:none}
+
 /* Tables */
 .table-wrap{background:#fff;border-radius:8px;border:1px solid #D9D9D9;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow-x:auto;overflow-y:hidden;margin-bottom:24px}
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -3996,8 +4004,8 @@ window.STANDALONE_DATA = {
     <div class="chart-container">
       <div class="chart-title">TMDA Médio × Condição da Malha (SAM) por Superintendência Regional <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
       <div class="chart-h-280"><canvas id="chartTmdaCondicao" role="img" aria-label="Gráfico de dispersão relacionando tráfego médio diário e condição da malha por Superintendência Regional"></canvas></div>
-      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span> (condição) · TMDA médio por SR — planilha "Dados Estatísticos por Área de Gestão" (sem CSV/JSON digitalizado no projeto; valores de referência). Cor de cada bolha segue a mesma escala de condição do mapa acima.</p>
-      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> TMDA disponível apenas agregado por SR na fonte atual — não permite análise por trecho nem correlação estatística validada. Cruzamento ilustrativo com n=5 observações (uma por SR). O eixo Y (condição SAM) responde ao seletor de ano; o eixo X (TMDA) não tem granularidade por ano na fonte disponível — os mesmos 5 valores de referência por SR são aplicados a 2024 e 2025.</p>
+      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span> (condição) · TMDA médio por SR — planilha "Dados Estatísticos por Área de Gestão". Cor de cada bolha segue a mesma escala de condição do mapa acima. <button type="button" class="nota-info-trigger" data-nota-id="tmda-cobertura" aria-expanded="false" aria-label="Ver nota completa sobre cobertura do dado de TMDA">ⓘ</button></p>
+      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica</strong> <button type="button" class="nota-info-trigger" data-nota-id="tmda-metodologia" aria-expanded="false" aria-label="Ver nota metodológica completa sobre TMDA">ⓘ</button></p>
     </div>
 
     <div class="section-sep"><span>Qualidade e Cobertura dos Dados</span></div>
@@ -4228,8 +4236,8 @@ window.STANDALONE_DATA = {
         <button class="cond-pill-clear">Limpar</button>
       </div>
       <div class="chart-h-320"><canvas id="chartFig6" role="img" aria-label="Gráfico combinando condição da malha e investimento por quilômetro por ano, por Superintendência Regional"></canvas></div>
-      <p class="chart-source"><strong>Fonte:</strong> Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026); <span data-periodo-malha="SAM {ano}">SAM 2025</span>; <span data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 2025</span> Ordenado do maior ao menor % Bom+Muito Bom. <strong>Nota sobre extensão:</strong> a quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).</p>
-      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica — Investimento/km/ano (linha):</strong> Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> (fluxo anual) dividido pela quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> — o mesmo denominador (SAM-km) usado pelos demais indicadores de R$/km/ano do painel, portanto consistente com eles, e não um indicador à parte.</p>
+      <p class="chart-source"><strong>Fonte:</strong> Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026); <span data-periodo-malha="SAM {ano}">SAM 2025</span>; <span data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 2025</span> Ordenado do maior ao menor % Bom+Muito Bom. <button type="button" class="nota-info-trigger" data-nota-id="fig6-extensao" aria-expanded="false" aria-label="Ver nota sobre extensão contada em dobro">ⓘ</button></p>
+      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica — Investimento/km/ano (linha)</strong> <button type="button" class="nota-info-trigger" data-nota-id="fig6-investimento-km" aria-expanded="false" aria-label="Ver nota metodológica completa sobre Investimento/km/ano">ⓘ</button></p>
     </div>
 
     <div class="grid-2">
@@ -4466,8 +4474,8 @@ window.STANDALONE_DATA = {
       <div class="note" style="margin-bottom:14px;font-size:12px"><strong>Como ler esta matriz:</strong> os quadrantes mostram combinações relativas entre condição da malha e liquidado/km no ano selecionado. A posição de uma regional deve ser interpretada como ponto de investigação técnica, não como conclusão sobre suficiência do investimento. A avaliação completa depende de informações complementares sobre tipo de intervenção, passivo acumulado, contratos vigentes, extensão administrada, complexidade das obras e planejamento plurianual.</div>
       <div class="chart-h-300"><canvas id="chartQuadrantes" role="img" aria-label="Gráfico de quadrantes: cruzamento entre criticidade da malha e execução financeira por Superintendência Regional"></canvas></div>
       <div id="quadrantesResumo"></div>
-      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. Linhas de corte = medianas das 5 SRs, calculadas dinamicamente.</p>
-      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.</p>
+      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. <button type="button" class="nota-info-trigger" data-nota-id="quadrantes-linhas-corte" aria-expanded="false" aria-label="Ver nota sobre linhas de corte">ⓘ</button></p>
+      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica</strong> <button type="button" class="nota-info-trigger" data-nota-id="denominador-liquidado-km-fig6" aria-expanded="false" aria-label="Ver nota sobre denominador do indicador">ⓘ</button></p>
     </div>
 
     <details class="method-details">
@@ -4479,8 +4487,8 @@ window.STANDALONE_DATA = {
     <div class="chart-container">
       <div class="chart-title">Condição SAM <span data-periodo-malha="{ano}">2025</span> × Liquidado/km/ano da Malha SAM Avaliada <span class="periodo-badge" data-periodo-malha="Dados {ano} — mesmo corte temporal">Dados 2025 — mesmo corte temporal</span></div>
       <div class="chart-h-280"><canvas id="scatter" role="img" aria-label="Gráfico de dispersão: condição da malha versus liquidado por quilômetro/ano, com linha de tendência"></canvas></div>
-      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.</p>
-      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.</p>
+      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. <button type="button" class="nota-info-trigger" data-nota-id="scatter-tendencia" aria-expanded="false" aria-label="Ver nota sobre linha de tendência">ⓘ</button></p>
+      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica</strong> <button type="button" class="nota-info-trigger" data-nota-id="denominador-liquidado-km-fig6" aria-expanded="false" aria-label="Ver nota sobre denominador do indicador">ⓘ</button></p>
     </div>
 
   </div>
@@ -5102,6 +5110,84 @@ function wireCondPillBar(barId, getChart, setState){
       reaplicarIsolamento(getChart(), null);
     });
   }
+}
+
+// ── Popover de notas metodológicas ──────────────────────
+// Texto completo de ressalvas metodológicas que antes ficavam sempre visíveis
+// dentro de .chart-source; agora vivem aqui e só aparecem sob demanda, via
+// ícone "ⓘ" (data-nota-id aponta a chave correspondente). Pode conter o mesmo
+// markup usado no HTML estático (ex.: spans [data-periodo-malha]) — o popover
+// roda updatePeriodoBadges() de novo ao abrir para manter os anos corretos.
+const NOTAS_METODOLOGICAS = {
+  'tmda-cobertura': 'TMDA médio por SR — planilha "Dados Estatísticos por Área de Gestão" (sem CSV/JSON digitalizado no projeto; valores de referência).',
+  'tmda-metodologia': 'TMDA disponível apenas agregado por SR na fonte atual — não permite análise por trecho nem correlação estatística validada. Cruzamento ilustrativo com n=5 observações (uma por SR). O eixo Y (condição SAM) responde ao seletor de ano; o eixo X (TMDA) não tem granularidade por ano na fonte disponível — os mesmos 5 valores de referência por SR são aplicados a 2024 e 2025.',
+  'fig6-extensao': 'A quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).',
+  'fig6-investimento-km': 'Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> (fluxo anual) dividido pela quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> — o mesmo denominador (SAM-km) usado pelos demais indicadores de R$/km/ano do painel, portanto consistente com eles, e não um indicador à parte.',
+  'quadrantes-linhas-corte': 'Linhas de corte = medianas das 5 SRs, calculadas dinamicamente.',
+  'denominador-liquidado-km-fig6': 'Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.',
+  'scatter-tendencia': 'Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.'
+};
+
+let notaPopoverEl = null;
+let notaPopoverAberto = null; // botão-gatilho atualmente aberto, ou null
+
+function fecharNotaPopover(){
+  if(!notaPopoverEl || notaPopoverEl.hidden) return;
+  notaPopoverEl.hidden = true;
+  if(notaPopoverAberto) notaPopoverAberto.setAttribute('aria-expanded', 'false');
+  notaPopoverAberto = null;
+}
+
+function abrirNotaPopover(trigger){
+  const texto = NOTAS_METODOLOGICAS[trigger.dataset.notaId];
+  if(!texto || !notaPopoverEl) return;
+  notaPopoverEl.innerHTML = texto;
+  notaPopoverEl.hidden = false;
+  updatePeriodoBadges(); // reaplica badges [data-periodo-*] dentro do popover, se houver
+  const rect = trigger.getBoundingClientRect();
+  notaPopoverEl.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+  let left = rect.left + window.scrollX;
+  const maxLeft = window.scrollX + document.documentElement.clientWidth - notaPopoverEl.offsetWidth - 12;
+  if(left > maxLeft) left = Math.max(12, maxLeft);
+  notaPopoverEl.style.left = left + 'px';
+  trigger.setAttribute('aria-expanded', 'true');
+  notaPopoverAberto = trigger;
+}
+
+// Escaneia todos os ícones "ⓘ" já presentes no HTML estático e liga cada um
+// ao seu texto em NOTAS_METODOLOGICAS — uma função genérica só, nenhuma
+// lógica de abrir/fechar duplicada por instância.
+function setupNotaPopovers(){
+  if(!notaPopoverEl){
+    notaPopoverEl = document.createElement('div');
+    notaPopoverEl.id = 'notaPopover';
+    notaPopoverEl.className = 'nota-popover';
+    notaPopoverEl.setAttribute('role', 'dialog');
+    notaPopoverEl.setAttribute('aria-label', 'Nota metodológica');
+    notaPopoverEl.hidden = true;
+    document.body.appendChild(notaPopoverEl);
+
+    document.addEventListener('click', e => {
+      if(!notaPopoverAberto) return;
+      if(e.target.closest('.nota-info-trigger') || e.target.closest('.nota-popover')) return;
+      fecharNotaPopover();
+    });
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && notaPopoverAberto) fecharNotaPopover();
+    });
+    window.addEventListener('resize', fecharNotaPopover);
+    window.addEventListener('scroll', fecharNotaPopover, true);
+  }
+
+  document.querySelectorAll('.nota-info-trigger').forEach(btn => {
+    if(btn.dataset.notaWired) return;
+    btn.dataset.notaWired = '1';
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if(notaPopoverAberto === btn){ fecharNotaPopover(); return; }
+      abrirNotaPopover(btn);
+    });
+  });
 }
 
 // =======================================================
@@ -7272,6 +7358,7 @@ document.getElementById('filtroSR').addEventListener('change', e=>{
 
 wireCondPillBar('filtroKmCriticos', () => chKmCriticos, v => { serieIsoladaKmCriticos = v; });
 wireCondPillBar('filtroCondicaoInvest', () => chFig6, v => { serieIsoladaFig6 = v; });
+setupNotaPopovers();
 
 // Inicialização via fetch — ver initDashboard() abaixo
 

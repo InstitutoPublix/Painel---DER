@@ -316,6 +316,84 @@ function wireCondPillBar(barId, getChart, setState){
   }
 }
 
+// ── Popover de notas metodológicas ──────────────────────
+// Texto completo de ressalvas metodológicas que antes ficavam sempre visíveis
+// dentro de .chart-source; agora vivem aqui e só aparecem sob demanda, via
+// ícone "ⓘ" (data-nota-id aponta a chave correspondente). Pode conter o mesmo
+// markup usado no HTML estático (ex.: spans [data-periodo-malha]) — o popover
+// roda updatePeriodoBadges() de novo ao abrir para manter os anos corretos.
+const NOTAS_METODOLOGICAS = {
+  'tmda-cobertura': 'TMDA médio por SR — planilha "Dados Estatísticos por Área de Gestão" (sem CSV/JSON digitalizado no projeto; valores de referência).',
+  'tmda-metodologia': 'TMDA disponível apenas agregado por SR na fonte atual — não permite análise por trecho nem correlação estatística validada. Cruzamento ilustrativo com n=5 observações (uma por SR). O eixo Y (condição SAM) responde ao seletor de ano; o eixo X (TMDA) não tem granularidade por ano na fonte disponível — os mesmos 5 valores de referência por SR são aplicados a 2024 e 2025.',
+  'fig6-extensao': 'A quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).',
+  'fig6-investimento-km': 'Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> (fluxo anual) dividido pela quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> — o mesmo denominador (SAM-km) usado pelos demais indicadores de R$/km/ano do painel, portanto consistente com eles, e não um indicador à parte.',
+  'quadrantes-linhas-corte': 'Linhas de corte = medianas das 5 SRs, calculadas dinamicamente.',
+  'denominador-liquidado-km-fig6': 'Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.',
+  'scatter-tendencia': 'Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.'
+};
+
+let notaPopoverEl = null;
+let notaPopoverAberto = null; // botão-gatilho atualmente aberto, ou null
+
+function fecharNotaPopover(){
+  if(!notaPopoverEl || notaPopoverEl.hidden) return;
+  notaPopoverEl.hidden = true;
+  if(notaPopoverAberto) notaPopoverAberto.setAttribute('aria-expanded', 'false');
+  notaPopoverAberto = null;
+}
+
+function abrirNotaPopover(trigger){
+  const texto = NOTAS_METODOLOGICAS[trigger.dataset.notaId];
+  if(!texto || !notaPopoverEl) return;
+  notaPopoverEl.innerHTML = texto;
+  notaPopoverEl.hidden = false;
+  updatePeriodoBadges(); // reaplica badges [data-periodo-*] dentro do popover, se houver
+  const rect = trigger.getBoundingClientRect();
+  notaPopoverEl.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+  let left = rect.left + window.scrollX;
+  const maxLeft = window.scrollX + document.documentElement.clientWidth - notaPopoverEl.offsetWidth - 12;
+  if(left > maxLeft) left = Math.max(12, maxLeft);
+  notaPopoverEl.style.left = left + 'px';
+  trigger.setAttribute('aria-expanded', 'true');
+  notaPopoverAberto = trigger;
+}
+
+// Escaneia todos os ícones "ⓘ" já presentes no HTML estático e liga cada um
+// ao seu texto em NOTAS_METODOLOGICAS — uma função genérica só, nenhuma
+// lógica de abrir/fechar duplicada por instância.
+function setupNotaPopovers(){
+  if(!notaPopoverEl){
+    notaPopoverEl = document.createElement('div');
+    notaPopoverEl.id = 'notaPopover';
+    notaPopoverEl.className = 'nota-popover';
+    notaPopoverEl.setAttribute('role', 'dialog');
+    notaPopoverEl.setAttribute('aria-label', 'Nota metodológica');
+    notaPopoverEl.hidden = true;
+    document.body.appendChild(notaPopoverEl);
+
+    document.addEventListener('click', e => {
+      if(!notaPopoverAberto) return;
+      if(e.target.closest('.nota-info-trigger') || e.target.closest('.nota-popover')) return;
+      fecharNotaPopover();
+    });
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && notaPopoverAberto) fecharNotaPopover();
+    });
+    window.addEventListener('resize', fecharNotaPopover);
+    window.addEventListener('scroll', fecharNotaPopover, true);
+  }
+
+  document.querySelectorAll('.nota-info-trigger').forEach(btn => {
+    if(btn.dataset.notaWired) return;
+    btn.dataset.notaWired = '1';
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if(notaPopoverAberto === btn){ fecharNotaPopover(); return; }
+      abrirNotaPopover(btn);
+    });
+  });
+}
+
 // =======================================================
 // UTILITÁRIOS
 // =======================================================
@@ -2484,6 +2562,7 @@ document.getElementById('filtroSR').addEventListener('change', e=>{
 
 wireCondPillBar('filtroKmCriticos', () => chKmCriticos, v => { serieIsoladaKmCriticos = v; });
 wireCondPillBar('filtroCondicaoInvest', () => chFig6, v => { serieIsoladaFig6 = v; });
+setupNotaPopovers();
 
 // Inicialização via fetch — ver initDashboard() abaixo
 
