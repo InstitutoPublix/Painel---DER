@@ -441,7 +441,7 @@ function renderFig6(){
         { label: 'Regular',        data: sorted.map(r => +(r.pct_regular      * 100).toFixed(1)), backgroundColor: COND_COLORS.regular,  stack: 'cond', yAxisID: 'y', order: 1 },
         { label: 'Bom + Muito Bom',data: sorted.map(r => +(r.pct_bom          * 100).toFixed(1)), backgroundColor: COND_COLORS.bom,      stack: 'cond', yAxisID: 'y', order: 1 },
         {
-          type: 'line', label: 'Investimento/km (R$ mil)',
+          type: 'line', label: 'Investimento/km/ano (R$ mil)',
           data: sorted.map(r => +(r.liq_por_km / 1000).toFixed(1)),
           borderColor: '#1F4E79', backgroundColor: 'rgba(31,78,121,0.12)',
           borderWidth: 2.5, pointRadius: 6, pointBackgroundColor: '#1F4E79',
@@ -460,7 +460,7 @@ function renderFig6(){
           callbacks: {
             label: ctx => {
               if(ctx.dataset.yAxisID === 'y1')
-                return ` Invest./km: R$ ${fmtNum(ctx.raw, 1)} mil`;
+                return ` Invest./km/ano: R$ ${fmtNum(ctx.raw, 1)} mil`;
               return ` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.y, 1)}%`;
             }
           }
@@ -476,7 +476,7 @@ function renderFig6(){
         },
         y1: {
           position: 'right',
-          title: { display: true, text: 'R$ mil/km', font: { size: 11 }, color: '#1F4E79' },
+          title: { display: true, text: 'R$ mil/km/ano', font: { size: 11 }, color: '#1F4E79' },
           grid: { display: false },
           ticks: { color: '#1F4E79', callback: v => fmtNum(v, 0) + 'k' }
         }
@@ -484,6 +484,95 @@ function renderFig6(){
     }
   });
   reaplicarIsolamento(chFig6, serieIsoladaFig6);
+}
+
+// Cruza a variação de % Bom+Muito Bom entre os dois anos SAM mais recentes
+// (mesma fonte/anos de renderEvolucaoMalha, aba Diagnóstico da Malha) com o
+// Liquidado/km/ano do ano mais recente, por SR. Dois gráficos de barras
+// horizontais lado a lado (mesma ordem de SR em ambos, sem eixo combinado)
+// em vez de eixo duplo, para não sugerir relação funcional entre variação
+// de condição (p.p.) e valor liquidado (R$) — ver nota metodológica no HTML.
+function renderEvolucaoLiquidadoRegional(){
+  const canvasVar = document.getElementById('chartEvolucaoLiquidadoVariacao');
+  const canvasVal = document.getElementById('chartEvolucaoLiquidadoValor');
+  if(!canvasVar || !canvasVal) return;
+
+  const anosSerie = anosDisponiveisMalha();
+  if(anosSerie.length < 2) return;
+  const anoA = anosSerie[anosSerie.length - 2];
+  const anoB = anosSerie[anosSerie.length - 1];
+
+  const periodoEl = document.getElementById('evolucaoLiquidadoPeriodo');
+  if(periodoEl) periodoEl.textContent = anoA + '→' + anoB;
+  const anoRefEl = document.getElementById('evolucaoLiquidadoAnoRef');
+  if(anoRefEl) anoRefEl.textContent = anoB;
+
+  const linhas = SR_ORDER.map(sr => {
+    const porAno = appState.datasets.regionalByYear[sr] || {};
+    const dA = porAno[anoA];
+    const dB = porAno[anoB];
+    if(!dA || !dB) return null;
+    const pctA = (dA.condition.pct.bom_muito_bom || 0) * 100;
+    const pctB = (dB.condition.pct.bom_muito_bom || 0) * 100;
+    return { sr, delta: pctB - pctA, lkm: dB.financial?.liquidado_por_km ?? null };
+  }).filter(Boolean);
+  if(!linhas.length) return;
+
+  // Ordenado da maior melhora para a maior piora; o segundo gráfico usa a
+  // mesma ordem (não reordena por valor liquidado), para permitir leitura
+  // lado a lado SR-a-SR sem forçar um eixo combinado.
+  const sorted = [...linhas].sort((a, b) => b.delta - a.delta);
+  const labels = sorted.map(r => r.sr.replace('SR ', ''));
+
+  makeChart(canvasVar, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: sorted.map(r => +r.delta.toFixed(1)),
+        backgroundColor: sorted.map(r => r.delta >= 0 ? '#4a8a4a' : '#C00000'),
+        borderRadius: 3
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw >= 0 ? '+' : ''}${fmtNum(ctx.raw, 1)} p.p. (${anoA}→${anoB})` } }
+      },
+      scales: {
+        x: { grid: { color: '#F0F0F0' }, ticks: { callback: v => (v >= 0 ? '+' : '') + v + ' p.p.' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  makeChart(canvasVal, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: sorted.map(r => r.lkm != null ? Math.round(r.lkm) : 0),
+        backgroundColor: sorted.map(r => SR_COLORS[r.sr] || '#888'),
+        borderRadius: 3
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` R$ ${fmtNum(ctx.raw)}/km/ano (${anoB})` } }
+      },
+      scales: {
+        x: { grid: { color: '#F0F0F0' }, ticks: { callback: v => v >= 1000 ? fmtNum(v / 1000, 0) + 'k' : v } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
 }
 
 function renderRelacaoRegional(sr=''){
@@ -608,7 +697,7 @@ function renderScatter(sr=''){
               const lines=[d.sr,
                 `% Ruim+Péssimo (SAM ${anoSelecionadoMalha}): ${fmtNum(d.x,1)}%`,
                 `% Bom+Muito Bom (SAM ${anoSelecionadoMalha}): ${fmtNum(d.pctBom,0)}%`,
-                `Liquidado/km: R$ ${fmtNum(d.y)} (${anoSelecionadoMalha})`,
+                `Liquidado/km/ano: R$ ${fmtNum(d.y)} (${anoSelecionadoMalha})`,
                 `Malha total: ${fmtNum(d.kmTotal||0,0)} km`
               ];
               if(d.emg>0) lines.push(`Contratos emergenciais ${anoSelecionadoMalha}: ${d.emg}`);
@@ -624,7 +713,7 @@ function renderScatter(sr=''){
           ticks:{callback:v=>v+'%'}
         },
         y:{
-          title:{display:true,text:'Liquidado/km — ' + anoSelecionadoMalha + ' (R$)',font:{size:12},color:'#555'},
+          title:{display:true,text:'Liquidado/km/ano — ' + anoSelecionadoMalha + ' (R$)',font:{size:12},color:'#555'},
           grid:{color:'#F0F0F0'},
           ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v}
         }
@@ -899,10 +988,10 @@ function renderRegionalAlignmentCharts(){
       maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)}/km de rede total`}}
+        tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)}/km/ano de rede total`}}
       },
       scales:{
-        x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v},title:{display:true,text:'R$/km',font:{size:11}}},
+        x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v},title:{display:true,text:'R$/km/ano',font:{size:11}}},
         y:{grid:{display:false}}
       }
     }
@@ -1105,6 +1194,21 @@ function renderContratos(data = contratos){
     options:{
       responsive:true,
       maintainAspectRatio:false,
+      // Clique numa barra filtra a tabela de contratos abaixo pela SR clicada,
+      // reaproveitando o filtro #filtroContratoRegiao já existente (mesmo
+      // caminho de um usuário trocando o select manualmente).
+      onClick(evt, elements){
+        if(!elements.length) return;
+        const sr = SR_ORDER_UP[elements[0].index];
+        const select = document.getElementById('filtroContratoRegiao');
+        if(!select || !sr) return;
+        select.value = sr;
+        select.dispatchEvent(new Event('change'));
+        document.getElementById('tblContratos')?.scrollIntoView({behavior:'smooth', block:'start'});
+      },
+      onHover(evt, elements){
+        if(evt.native) evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+      },
       plugins:{
         legend:{
           position:'bottom',
@@ -1253,7 +1357,7 @@ function renderAnalitica(){
     document.getElementById('kpi-relacao-km-bom').textContent        = fmtNum(totalKmBom,1)+' km';
     document.getElementById('kpi-relacao-km-por-mi').textContent     = fmtNum(avgKmMi,2)+' km';
     document.getElementById('kpi-relacao-sr-maior').textContent  = srMaiorRelacao.sr.replace('SR ','');
-    document.getElementById('kpi-relacao-sr-maior-sub').textContent = fmtNum(srMaiorRelacao.kmPorMilhao,2)+' km / R$ mi (relacao descritiva)';
+    document.getElementById('kpi-relacao-sr-maior-sub').textContent = fmtNum(srMaiorRelacao.kmPorMilhao,2)+' km / R$ mi liquidado/ano (relacao descritiva)';
     document.getElementById('kpi-relacao-liquidado-km').innerHTML        = 'R$&nbsp;'+fmtNum(avgCusto||0);
 
     // Chart: km favoravel por R$ milhao liquidado, em ordem decrescente.
@@ -1301,7 +1405,7 @@ function renderAnalitica(){
         maintainAspectRatio:false,
         plugins:{
           legend:{display:false},
-          tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)} liquidados / km em condicao favoravel`}}
+          tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)} liquidados/ano / km em condicao favoravel`}}
         },
         scales:{
           x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v}},
@@ -1313,6 +1417,7 @@ function renderAnalitica(){
 
   renderRegionalAlignmentCharts();
   renderFig6();
+  renderEvolucaoLiquidadoRegional();
 
   // ── Alinhamento por Regional ─────────────────────────────
   renderRelacaoRegional('');
@@ -1543,7 +1648,7 @@ function renderQuadrantesNecessidade() {
               return [
                 d.sr,
                 `Criticidade (% Ruim+Péssimo SAM ${anoSelecionadoMalha}): ${fmtNum(d.x, 1)}%`,
-                `Liquidado/km observado: R\$ ${fmtNum(d.y)}`,
+                `Liquidado/km/ano observado: R\$ ${fmtNum(d.y)}`,
                 `Pergunta orientadora: ${d.quadrante}`,
                 `Leitura: ponto para aprofundamento, não conclusão de alocação adequada ou inadequada.`
               ];
@@ -1559,7 +1664,7 @@ function renderQuadrantesNecessidade() {
           ticks: { callback: v => fmtNum(v, 1) + '%' }
         },
         y: {
-          title: { display: true, text: 'Liquidado/km (R$)', font: { size: 11 } },
+          title: { display: true, text: 'Liquidado/km/ano (R$)', font: { size: 11 } },
           min: yMin, max: yMax,
           grid: { color: '#F0F0F0' },
           ticks: { callback: v => v >= 1000 ? fmtNum(v / 1000, 0) + 'k' : fmtNum(v, 0) }
@@ -1584,7 +1689,7 @@ function renderQuadrantesNecessidade() {
         <thead><tr>
           <th>SR</th>
           <th>% Ruim+Péssimo (SAM ${anoSelecionadoMalha})</th>
-          <th>Liquidado/km observado (R$)</th>
+          <th>Liquidado/km/ano observado (R$)</th>
           <th>Pergunta orientadora</th>
         </tr></thead>
         <tbody>${sorted.map(p => {
@@ -1762,23 +1867,23 @@ function renderMatrizRecomendacao() {
 
     const T = {
       'pressao-custo': {
-        badge: 'matriz-sit-pressao-custo', situacao: 'Maior liquidado/km com condição intermediária',
-        evidencia: `Liquidado/km observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctCritFmt} de malha crítica · sinal: ${quadLabel}`,
+        badge: 'matriz-sit-pressao-custo', situacao: 'Maior liquidado/km/ano com condição intermediária',
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctCritFmt} de malha crítica · sinal: ${quadLabel}`,
         interpretacao: `Maior esforço financeiro observado com condição SAM de ${pctBomFmt} Bom+Muito Bom — diferença relativa observada que pode refletir tipo de intervenção, porte da malha ou contratos de recuperação profunda`,
         acao: 'Investigar mix contratual',
         encaminhamento: `Verificar proporção preventivo vs. corretivo na carteira ativa de ${nomeCurto} e avaliar se os contratos vigentes estão alocados nos trechos de maior criticidade técnica (SAM)`
       },
       'crit-estrutural': {
-        badge: 'matriz-sit-crit-estrutural', situacao: 'Alta criticidade, menor liquidado/km observado',
-        evidencia: `${pctCritFmt} de malha Ruim+Péssimo (SAM ${anoSelecionadoMalha}) · menor liquidado/km observado: ${lkmFmt} · sinal: ${quadLabel}`,
+        badge: 'matriz-sit-crit-estrutural', situacao: 'Alta criticidade, menor liquidado/km/ano observado',
+        evidencia: `${pctCritFmt} de malha Ruim+Péssimo (SAM ${anoSelecionadoMalha}) · menor liquidado/km/ano observado: ${lkmFmt} · sinal: ${quadLabel}`,
         interpretacao: `Combinação de criticidade acima da mediana com menor esforço financeiro observado — sinal para investigação técnica sobre demanda reprimida, restrições contratuais, passivo acumulado ou intervenções previstas fora do recorte analisado`,
         acao: 'Investigar carteira e programação',
         encaminhamento: `Verificar se há demanda reprimida, contratos em fase de licitação ou intervenções estruturais previstas para ${nomeCurto}; avaliar passivo acumulado e extensão da malha antes de concluir sobre adequação alocativa`
       },
       'condicao-favoravel': {
         badge: 'matriz-sit-condicao-favoravel', situacao: 'Ponto de atenção analítica - condição favorável',
-        evidencia: `Liquidado/km observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt}`,
-        interpretacao: `Menor liquidado/km observado junto a boa condição SAM - combinação descritiva que merece investigação sobre tipo de intervenção, histórico de manutenção e extensão da malha administrada`,
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt}`,
+        interpretacao: `Menor liquidado/km/ano observado junto a boa condição SAM - combinação descritiva que merece investigação sobre tipo de intervenção, histórico de manutenção e extensão da malha administrada`,
         acao: 'Investigar e documentar contexto',
         encaminhamento: `Registrar perfil de intervenções em ${nomeCurto} para compreender os fatores associados à condição observada; acompanhar o SPC (atual ${spcFmt}) em novos ciclos SAM`
       },
@@ -1787,11 +1892,11 @@ function renderMatrizRecomendacao() {
         evidencia: `${pctEmgFmt} de contratos emergenciais · SPC ${spcFmt} · ${pctCritFmt} de malha crítica (SAM ${anoSelecionadoMalha})`,
         interpretacao: `Concentração de contratos emergenciais indica ciclo reativo — parte do esforço financeiro observado pode estar associada a intervenções de urgência em vez de manutenção programada`,
         acao: 'Investigar tipologia de intervenção',
-        encaminhamento: `Investigar causas da concentração emergencial em ${nomeCurto}; avaliar se o liquidado/km de ${lkmFmt} é influenciado por mobilizações de menor rendimento por km atendido`
+        encaminhamento: `Investigar causas da concentração emergencial em ${nomeCurto}; avaliar se o liquidado/km/ano de ${lkmFmt} é influenciado por mobilizações de menor rendimento por km atendido`
       },
       'atencao': {
         badge: 'matriz-sit-atencao', situacao: 'Perfil para acompanhamento',
-        evidencia: `Liquidado/km observado: ${lkmFmt} · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt} · sinal: ${quadLabel}`,
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt} · sinal: ${quadLabel}`,
         interpretacao: `Perfil sem sinal de alerta agudo no período analisado — acompanhamento dos indicadores de condição no próximo ciclo SAM é suficiente no curto prazo`,
         acao: 'Monitoramento contínuo',
         encaminhamento: `Manter programação vigente em ${nomeCurto} e acompanhar indicadores de condição no próximo ciclo SAM`
@@ -2450,7 +2555,7 @@ function renderSinteseExecutiva(){
   document.getElementById('kpi-sint-sr-pior').textContent       = (srMaiorRuimPessimo.sr||'').replace('SR ','');
   document.getElementById('kpi-sint-sr-pior-sub').textContent   = fmtPctCond(srMaiorRuimPessimo.pct_ruim_pessimo, 0) + ' Ruim+Péssimo';
   document.getElementById('kpi-sint-sr-gasto').textContent      = srsByLkm[0].sr.replace('SR ','');
-  document.getElementById('kpi-sint-sr-gasto-sub').innerHTML    = 'R$&nbsp;' + fmtNum(srsByLkm[0].lkm) + '/km';
+  document.getElementById('kpi-sint-sr-gasto-sub').innerHTML    = 'R$&nbsp;' + fmtNum(srsByLkm[0].lkm) + '/km/ano';
 
   // Narrativa da Síntese — ancorada no Relatório 001/2026
   const sintNarr = document.getElementById('sint-narrativa');

@@ -4069,7 +4069,7 @@ window.STANDALONE_DATA = {
             <th>% Ruim+Péssimo <span class="periodo-badge on-dark" data-periodo-malha="SAM {ano}">SAM 2025</span></th>
             <th>% Contratos Emergenciais <span class="periodo-badge on-dark" data-periodo-combinado="{sam} / {financeiro}">2025</span></th>
             <th>Sinalizador de Pressão de Conservação (SPC)</th>
-            <th>Liquidado/km da Malha SAM <span class="fn" style="font-style:normal;color:#aaa;font-weight:400">(referência)</span></th>
+            <th>Liquidado/km/ano da Malha SAM <span class="fn" style="font-style:normal;color:#aaa;font-weight:400">(referência)</span></th>
           </tr>
         </thead>
         <tbody id="tbodyPressaoFutura"></tbody>
@@ -4220,17 +4220,37 @@ window.STANDALONE_DATA = {
     <div class="section-sep"><span>Leitura integrada por regional</span></div>
 
     <div class="chart-container">
-      <div class="chart-title">Condição <span data-periodo-malha="SAM {ano}">SAM 2025</span> e Investimento/km por SR <span class="fn" style="font-style:normal;color:#888;font-weight:400">Figura 6 — Relatório 001/2026</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
+      <div class="chart-title">Condição <span data-periodo-malha="SAM {ano}">SAM 2025</span> e Investimento/km/ano por SR <span class="fn" style="font-style:normal;color:#888;font-weight:400">Figura 6 — Relatório 001/2026</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
       <div class="condicao-filter-bar" id="filtroCondicaoInvest">
         <button class="cond-pill" data-serie="Ruim + Péssimo">Ruim + Péssimo</button>
         <button class="cond-pill" data-serie="Regular">Regular</button>
         <button class="cond-pill" data-serie="Bom + Muito Bom">Bom + Muito Bom</button>
         <button class="cond-pill-clear">Limpar</button>
       </div>
-      <div class="chart-h-320"><canvas id="chartFig6" role="img" aria-label="Gráfico combinando condição da malha e investimento por quilômetro, por Superintendência Regional"></canvas></div>
+      <div class="chart-h-320"><canvas id="chartFig6" role="img" aria-label="Gráfico combinando condição da malha e investimento por quilômetro por ano, por Superintendência Regional"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026); <span data-periodo-malha="SAM {ano}">SAM 2025</span>; <span data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 2025</span> Ordenado do maior ao menor % Bom+Muito Bom. <strong>Nota sobre extensão:</strong> a quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).</p>
-      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica — Investimento/km (linha):</strong> Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> dividido pela extensão contratual de conservação vinculada a cada Superintendência Regional, conforme Relatório de Pesquisa nº 001/2026. Este denominador é diferente da quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> e não deve ser confundido com outros indicadores de R$/km do painel.</p>
+      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica — Investimento/km/ano (linha):</strong> Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> (fluxo anual) dividido pela quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> — o mesmo denominador (SAM-km) usado pelos demais indicadores de R$/km/ano do painel, portanto consistente com eles, e não um indicador à parte.</p>
     </div>
+
+    <div class="grid-2">
+      <div class="chart-container mb-0">
+        <div class="chart-title">Variação % Bom+Muito Bom por SR <span class="fn" style="font-style:normal;color:#888;font-weight:400" id="evolucaoLiquidadoPeriodo">2024→2025</span></div>
+        <div class="chart-h-260"><canvas id="chartEvolucaoLiquidadoVariacao" role="img" aria-label="Gráfico de barras horizontais: variação em pontos percentuais de malha em boa ou ótima condição entre 2024 e 2025, por Superintendência Regional, ordenado da maior melhora para a maior piora"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> SAM 2024 e SAM 2025 (Condição da malha.xlsx).</p>
+      </div>
+      <div class="chart-container mb-0">
+        <div class="chart-title">Liquidado/km/ano <span class="fn" style="font-style:normal;color:#888;font-weight:400" id="evolucaoLiquidadoAnoRef">2025</span> — mesmas SRs, mesma ordem</div>
+        <div class="chart-h-260"><canvas id="chartEvolucaoLiquidadoValor" role="img" aria-label="Gráfico de barras horizontais: valor liquidado por quilômetro por ano em 2025, por Superintendência Regional, na mesma ordem do gráfico de variação ao lado"></canvas></div>
+        <p class="chart-source"><strong>Fonte:</strong> Contratos DOPSR1 por Regional.xlsx (2025).</p>
+      </div>
+    </div>
+
+    <details class="method-details mb-24">
+      <summary>Ver nota metodológica — Variação da Condição × Liquidado/km/ano por SR</summary>
+      <p>Os dois gráficos acima mostram, lado a lado e na mesma ordem de SR, a <strong>variação de condição entre dois exercícios do SAM (2024 e 2025)</strong> e o <strong>Liquidado/km/ano de 2025</strong> — propositalmente sem eixo combinado, para não sugerir uma relação funcional única entre as duas grandezas.<br><br>
+      <strong>Esta é uma comparação agregada por Superintendência Regional entre dois exercícios, não um rastreamento de contrato específico.</strong> A base de dados disponível não permite vincular um contrato a um trecho físico nem a uma janela de execução — não é possível, portanto, atribuir a variação de condição observada a nenhum contrato individual.<br><br>
+      A variação observada em cada SR pode refletir múltiplos fatores simultâneos — vários contratos em execução em paralelo, desgaste natural do pavimento, mudanças de metodologia ou cobertura entre os dois ciclos de levantamento SAM — e não um único investimento isolado. A leitura correta é de <strong>associação e tendência agregada no período</strong>: o Liquidado/km/ano de cada SR aparece ao lado da variação de condição observada no mesmo intervalo, sem que isso implique relação de causa e efeito entre os dois. Afirmações do tipo "o investimento gerou/causou/resultou nesta variação" não são sustentadas por estes dados.</p>
+    </details>
 
     <div class="filter-bar">
       <label for="filtroSR">Filtrar por SR:</label>
@@ -4250,7 +4270,7 @@ window.STANDALONE_DATA = {
           <tr>
             <th>SR</th>
             <th>Liquidado (R$) <span class="periodo-badge on-dark" data-periodo-combinado="{sam} / {financeiro}">2025</span></th>
-            <th>Liquidado/km da Malha SAM Avaliada (R$) <span class="periodo-badge on-dark" data-periodo-combinado="{sam} / {financeiro}">2025</span></th>
+            <th>Liquidado/km/ano da Malha SAM Avaliada (R$) <span class="periodo-badge on-dark" data-periodo-combinado="{sam} / {financeiro}">2025</span></th>
             <th>% Bom+Muito Bom (SAM) <span class="periodo-badge on-dark" data-periodo-combinado="{sam} / {financeiro}">2025</span></th>
             <th>Nº Contratos <span class="periodo-badge on-dark" data-periodo-combinado="{sam} / {financeiro}">2025</span></th>
             <th>Emergenciais</th>
@@ -4282,7 +4302,7 @@ window.STANDALONE_DATA = {
         <div class="kpi-sub" id="kpi-sint-sr-pressao-sub">SPC (0–1)</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">SR com Maior Liquidado/km da Malha SAM Avaliada <span class="periodo-badge" data-periodo-malha="{ano}">2025</span></div>
+        <div class="kpi-label">SR com Maior Liquidado/km/ano da Malha SAM Avaliada <span class="periodo-badge" data-periodo-malha="{ano}">2025</span></div>
         <div class="kpi-value" id="kpi-sint-sr-gasto">—</div>
         <div class="kpi-sub" id="kpi-sint-sr-gasto-sub">—</div>
       </div>
@@ -4360,9 +4380,9 @@ window.STANDALONE_DATA = {
         <div class="kpi-sub" id="kpi-relacao-sr-maior-sub">relação descritiva, sem classificação de desempenho</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Liquidado por km em Condição Favorável <span class="periodo-badge" data-periodo-malha="{ano}">2025</span></div>
+        <div class="kpi-label">Liquidado por km/ano em Condição Favorável <span class="periodo-badge" data-periodo-malha="{ano}">2025</span></div>
         <div class="kpi-value" id="kpi-relacao-liquidado-km">—</div>
-        <div class="kpi-sub">Liquidado / km em boa condição (SAM Bom+Muito Bom)</div>
+        <div class="kpi-sub">Liquidado anual / km em boa condição (SAM Bom+Muito Bom)</div>
       </div>
     </div>
 
@@ -4373,13 +4393,13 @@ window.STANDALONE_DATA = {
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span></p>
       </div>
       <div class="chart-container mb-0">
-        <div class="chart-title">Liquidado/km em Condição Favorável (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: km SAM Bom+Muito Bom</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
-        <div class="chart-h-240"><canvas id="chartRelacaoLiquidadoKm" role="img" aria-label="Gráfico de barras: valor liquidado por quilômetro em condição favorável, por Superintendência Regional"></canvas></div>
+        <div class="chart-title">Liquidado/km/ano em Condição Favorável (R$/km/ano) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: km SAM Bom+Muito Bom</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
+        <div class="chart-h-240"><canvas id="chartRelacaoLiquidadoKm" role="img" aria-label="Gráfico de barras: valor liquidado por quilômetro por ano em condição favorável, por Superintendência Regional"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span></p>
       </div>
       <div class="chart-container mb-0">
-        <div class="chart-title">Liquidado/km de Rede Total (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: todos os km gerenciados</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
-        <div class="chart-h-240"><canvas id="chartCustoKm" role="img" aria-label="Gráfico de barras: valor liquidado por quilômetro da rede total administrada, por Superintendência Regional"></canvas></div>
+        <div class="chart-title">Liquidado/km/ano de Rede Total (R$/km/ano) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: todos os km gerenciados</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
+        <div class="chart-h-240"><canvas id="chartCustoKm" role="img" aria-label="Gráfico de barras: valor liquidado por quilômetro por ano da rede total administrada, por Superintendência Regional"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano} · Contratos DOP {ano}">SAM 2025 · Contratos DOPSR1 {ano}</span></p>
       </div>
     </div>
@@ -4398,7 +4418,7 @@ window.STANDALONE_DATA = {
         <thead>
           <tr>
             <th>SR</th>
-            <th>Liquidado/km da Malha SAM Avaliada (R$) <span class="periodo-badge on-dark" data-periodo-malha="{ano}">2025</span></th>
+            <th>Liquidado/km/ano da Malha SAM Avaliada (R$) <span class="periodo-badge on-dark" data-periodo-malha="{ano}">2025</span></th>
             <th>Desvio vs Mediana (%)</th>
             <th>Classificação</th>
           </tr>
@@ -4447,7 +4467,7 @@ window.STANDALONE_DATA = {
       <div class="chart-h-300"><canvas id="chartQuadrantes" role="img" aria-label="Gráfico de quadrantes: cruzamento entre criticidade da malha e execução financeira por Superintendência Regional"></canvas></div>
       <div id="quadrantesResumo"></div>
       <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. Linhas de corte = medianas das 5 SRs, calculadas dinamicamente.</p>
-      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado. Portanto, não deve ser confundido com o investimento/km apresentado no Relatório de Pesquisa nº 001/2026, que utiliza a extensão contratual dos contratos de conservação.</p>
+      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.</p>
     </div>
 
     <details class="method-details">
@@ -4457,10 +4477,10 @@ window.STANDALONE_DATA = {
     </details>
 
     <div class="chart-container">
-      <div class="chart-title">Condição SAM <span data-periodo-malha="{ano}">2025</span> × Liquidado/km da Malha SAM Avaliada <span class="periodo-badge" data-periodo-malha="Dados {ano} — mesmo corte temporal">Dados 2025 — mesmo corte temporal</span></div>
-      <div class="chart-h-280"><canvas id="scatter" role="img" aria-label="Gráfico de dispersão: condição da malha versus liquidado por quilômetro, com linha de tendência"></canvas></div>
+      <div class="chart-title">Condição SAM <span data-periodo-malha="{ano}">2025</span> × Liquidado/km/ano da Malha SAM Avaliada <span class="periodo-badge" data-periodo-malha="Dados {ano} — mesmo corte temporal">Dados 2025 — mesmo corte temporal</span></div>
+      <div class="chart-h-280"><canvas id="scatter" role="img" aria-label="Gráfico de dispersão: condição da malha versus liquidado por quilômetro/ano, com linha de tendência"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.</p>
-      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado. Portanto, não deve ser confundido com o investimento/km apresentado no Relatório de Pesquisa nº 001/2026, que utiliza a extensão contratual dos contratos de conservação.</p>
+      <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.</p>
     </div>
 
   </div>
@@ -5209,7 +5229,7 @@ function renderFig6(){
         { label: 'Regular',        data: sorted.map(r => +(r.pct_regular      * 100).toFixed(1)), backgroundColor: COND_COLORS.regular,  stack: 'cond', yAxisID: 'y', order: 1 },
         { label: 'Bom + Muito Bom',data: sorted.map(r => +(r.pct_bom          * 100).toFixed(1)), backgroundColor: COND_COLORS.bom,      stack: 'cond', yAxisID: 'y', order: 1 },
         {
-          type: 'line', label: 'Investimento/km (R$ mil)',
+          type: 'line', label: 'Investimento/km/ano (R$ mil)',
           data: sorted.map(r => +(r.liq_por_km / 1000).toFixed(1)),
           borderColor: '#1F4E79', backgroundColor: 'rgba(31,78,121,0.12)',
           borderWidth: 2.5, pointRadius: 6, pointBackgroundColor: '#1F4E79',
@@ -5228,7 +5248,7 @@ function renderFig6(){
           callbacks: {
             label: ctx => {
               if(ctx.dataset.yAxisID === 'y1')
-                return ` Invest./km: R$ ${fmtNum(ctx.raw, 1)} mil`;
+                return ` Invest./km/ano: R$ ${fmtNum(ctx.raw, 1)} mil`;
               return ` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.y, 1)}%`;
             }
           }
@@ -5244,7 +5264,7 @@ function renderFig6(){
         },
         y1: {
           position: 'right',
-          title: { display: true, text: 'R$ mil/km', font: { size: 11 }, color: '#1F4E79' },
+          title: { display: true, text: 'R$ mil/km/ano', font: { size: 11 }, color: '#1F4E79' },
           grid: { display: false },
           ticks: { color: '#1F4E79', callback: v => fmtNum(v, 0) + 'k' }
         }
@@ -5252,6 +5272,95 @@ function renderFig6(){
     }
   });
   reaplicarIsolamento(chFig6, serieIsoladaFig6);
+}
+
+// Cruza a variação de % Bom+Muito Bom entre os dois anos SAM mais recentes
+// (mesma fonte/anos de renderEvolucaoMalha, aba Diagnóstico da Malha) com o
+// Liquidado/km/ano do ano mais recente, por SR. Dois gráficos de barras
+// horizontais lado a lado (mesma ordem de SR em ambos, sem eixo combinado)
+// em vez de eixo duplo, para não sugerir relação funcional entre variação
+// de condição (p.p.) e valor liquidado (R$) — ver nota metodológica no HTML.
+function renderEvolucaoLiquidadoRegional(){
+  const canvasVar = document.getElementById('chartEvolucaoLiquidadoVariacao');
+  const canvasVal = document.getElementById('chartEvolucaoLiquidadoValor');
+  if(!canvasVar || !canvasVal) return;
+
+  const anosSerie = anosDisponiveisMalha();
+  if(anosSerie.length < 2) return;
+  const anoA = anosSerie[anosSerie.length - 2];
+  const anoB = anosSerie[anosSerie.length - 1];
+
+  const periodoEl = document.getElementById('evolucaoLiquidadoPeriodo');
+  if(periodoEl) periodoEl.textContent = anoA + '→' + anoB;
+  const anoRefEl = document.getElementById('evolucaoLiquidadoAnoRef');
+  if(anoRefEl) anoRefEl.textContent = anoB;
+
+  const linhas = SR_ORDER.map(sr => {
+    const porAno = appState.datasets.regionalByYear[sr] || {};
+    const dA = porAno[anoA];
+    const dB = porAno[anoB];
+    if(!dA || !dB) return null;
+    const pctA = (dA.condition.pct.bom_muito_bom || 0) * 100;
+    const pctB = (dB.condition.pct.bom_muito_bom || 0) * 100;
+    return { sr, delta: pctB - pctA, lkm: dB.financial?.liquidado_por_km ?? null };
+  }).filter(Boolean);
+  if(!linhas.length) return;
+
+  // Ordenado da maior melhora para a maior piora; o segundo gráfico usa a
+  // mesma ordem (não reordena por valor liquidado), para permitir leitura
+  // lado a lado SR-a-SR sem forçar um eixo combinado.
+  const sorted = [...linhas].sort((a, b) => b.delta - a.delta);
+  const labels = sorted.map(r => r.sr.replace('SR ', ''));
+
+  makeChart(canvasVar, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: sorted.map(r => +r.delta.toFixed(1)),
+        backgroundColor: sorted.map(r => r.delta >= 0 ? '#4a8a4a' : '#C00000'),
+        borderRadius: 3
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw >= 0 ? '+' : ''}${fmtNum(ctx.raw, 1)} p.p. (${anoA}→${anoB})` } }
+      },
+      scales: {
+        x: { grid: { color: '#F0F0F0' }, ticks: { callback: v => (v >= 0 ? '+' : '') + v + ' p.p.' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  makeChart(canvasVal, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: sorted.map(r => r.lkm != null ? Math.round(r.lkm) : 0),
+        backgroundColor: sorted.map(r => SR_COLORS[r.sr] || '#888'),
+        borderRadius: 3
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` R$ ${fmtNum(ctx.raw)}/km/ano (${anoB})` } }
+      },
+      scales: {
+        x: { grid: { color: '#F0F0F0' }, ticks: { callback: v => v >= 1000 ? fmtNum(v / 1000, 0) + 'k' : v } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
 }
 
 function renderRelacaoRegional(sr=''){
@@ -5376,7 +5485,7 @@ function renderScatter(sr=''){
               const lines=[d.sr,
                 `% Ruim+Péssimo (SAM ${anoSelecionadoMalha}): ${fmtNum(d.x,1)}%`,
                 `% Bom+Muito Bom (SAM ${anoSelecionadoMalha}): ${fmtNum(d.pctBom,0)}%`,
-                `Liquidado/km: R$ ${fmtNum(d.y)} (${anoSelecionadoMalha})`,
+                `Liquidado/km/ano: R$ ${fmtNum(d.y)} (${anoSelecionadoMalha})`,
                 `Malha total: ${fmtNum(d.kmTotal||0,0)} km`
               ];
               if(d.emg>0) lines.push(`Contratos emergenciais ${anoSelecionadoMalha}: ${d.emg}`);
@@ -5392,7 +5501,7 @@ function renderScatter(sr=''){
           ticks:{callback:v=>v+'%'}
         },
         y:{
-          title:{display:true,text:'Liquidado/km — ' + anoSelecionadoMalha + ' (R$)',font:{size:12},color:'#555'},
+          title:{display:true,text:'Liquidado/km/ano — ' + anoSelecionadoMalha + ' (R$)',font:{size:12},color:'#555'},
           grid:{color:'#F0F0F0'},
           ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v}
         }
@@ -5667,10 +5776,10 @@ function renderRegionalAlignmentCharts(){
       maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)}/km de rede total`}}
+        tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)}/km/ano de rede total`}}
       },
       scales:{
-        x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v},title:{display:true,text:'R$/km',font:{size:11}}},
+        x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v},title:{display:true,text:'R$/km/ano',font:{size:11}}},
         y:{grid:{display:false}}
       }
     }
@@ -5873,6 +5982,21 @@ function renderContratos(data = contratos){
     options:{
       responsive:true,
       maintainAspectRatio:false,
+      // Clique numa barra filtra a tabela de contratos abaixo pela SR clicada,
+      // reaproveitando o filtro #filtroContratoRegiao já existente (mesmo
+      // caminho de um usuário trocando o select manualmente).
+      onClick(evt, elements){
+        if(!elements.length) return;
+        const sr = SR_ORDER_UP[elements[0].index];
+        const select = document.getElementById('filtroContratoRegiao');
+        if(!select || !sr) return;
+        select.value = sr;
+        select.dispatchEvent(new Event('change'));
+        document.getElementById('tblContratos')?.scrollIntoView({behavior:'smooth', block:'start'});
+      },
+      onHover(evt, elements){
+        if(evt.native) evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+      },
       plugins:{
         legend:{
           position:'bottom',
@@ -6021,7 +6145,7 @@ function renderAnalitica(){
     document.getElementById('kpi-relacao-km-bom').textContent        = fmtNum(totalKmBom,1)+' km';
     document.getElementById('kpi-relacao-km-por-mi').textContent     = fmtNum(avgKmMi,2)+' km';
     document.getElementById('kpi-relacao-sr-maior').textContent  = srMaiorRelacao.sr.replace('SR ','');
-    document.getElementById('kpi-relacao-sr-maior-sub').textContent = fmtNum(srMaiorRelacao.kmPorMilhao,2)+' km / R$ mi (relacao descritiva)';
+    document.getElementById('kpi-relacao-sr-maior-sub').textContent = fmtNum(srMaiorRelacao.kmPorMilhao,2)+' km / R$ mi liquidado/ano (relacao descritiva)';
     document.getElementById('kpi-relacao-liquidado-km').innerHTML        = 'R$&nbsp;'+fmtNum(avgCusto||0);
 
     // Chart: km favoravel por R$ milhao liquidado, em ordem decrescente.
@@ -6069,7 +6193,7 @@ function renderAnalitica(){
         maintainAspectRatio:false,
         plugins:{
           legend:{display:false},
-          tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)} liquidados / km em condicao favoravel`}}
+          tooltip:{callbacks:{label:ctx=>` R$ ${fmtNum(ctx.raw)} liquidados/ano / km em condicao favoravel`}}
         },
         scales:{
           x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1000?fmtNum(v/1000,0)+'k':v}},
@@ -6081,6 +6205,7 @@ function renderAnalitica(){
 
   renderRegionalAlignmentCharts();
   renderFig6();
+  renderEvolucaoLiquidadoRegional();
 
   // ── Alinhamento por Regional ─────────────────────────────
   renderRelacaoRegional('');
@@ -6311,7 +6436,7 @@ function renderQuadrantesNecessidade() {
               return [
                 d.sr,
                 `Criticidade (% Ruim+Péssimo SAM ${anoSelecionadoMalha}): ${fmtNum(d.x, 1)}%`,
-                `Liquidado/km observado: R\$ ${fmtNum(d.y)}`,
+                `Liquidado/km/ano observado: R\$ ${fmtNum(d.y)}`,
                 `Pergunta orientadora: ${d.quadrante}`,
                 `Leitura: ponto para aprofundamento, não conclusão de alocação adequada ou inadequada.`
               ];
@@ -6327,7 +6452,7 @@ function renderQuadrantesNecessidade() {
           ticks: { callback: v => fmtNum(v, 1) + '%' }
         },
         y: {
-          title: { display: true, text: 'Liquidado/km (R$)', font: { size: 11 } },
+          title: { display: true, text: 'Liquidado/km/ano (R$)', font: { size: 11 } },
           min: yMin, max: yMax,
           grid: { color: '#F0F0F0' },
           ticks: { callback: v => v >= 1000 ? fmtNum(v / 1000, 0) + 'k' : fmtNum(v, 0) }
@@ -6352,7 +6477,7 @@ function renderQuadrantesNecessidade() {
         <thead><tr>
           <th>SR</th>
           <th>% Ruim+Péssimo (SAM ${anoSelecionadoMalha})</th>
-          <th>Liquidado/km observado (R$)</th>
+          <th>Liquidado/km/ano observado (R$)</th>
           <th>Pergunta orientadora</th>
         </tr></thead>
         <tbody>${sorted.map(p => {
@@ -6530,23 +6655,23 @@ function renderMatrizRecomendacao() {
 
     const T = {
       'pressao-custo': {
-        badge: 'matriz-sit-pressao-custo', situacao: 'Maior liquidado/km com condição intermediária',
-        evidencia: `Liquidado/km observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctCritFmt} de malha crítica · sinal: ${quadLabel}`,
+        badge: 'matriz-sit-pressao-custo', situacao: 'Maior liquidado/km/ano com condição intermediária',
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctCritFmt} de malha crítica · sinal: ${quadLabel}`,
         interpretacao: `Maior esforço financeiro observado com condição SAM de ${pctBomFmt} Bom+Muito Bom — diferença relativa observada que pode refletir tipo de intervenção, porte da malha ou contratos de recuperação profunda`,
         acao: 'Investigar mix contratual',
         encaminhamento: `Verificar proporção preventivo vs. corretivo na carteira ativa de ${nomeCurto} e avaliar se os contratos vigentes estão alocados nos trechos de maior criticidade técnica (SAM)`
       },
       'crit-estrutural': {
-        badge: 'matriz-sit-crit-estrutural', situacao: 'Alta criticidade, menor liquidado/km observado',
-        evidencia: `${pctCritFmt} de malha Ruim+Péssimo (SAM ${anoSelecionadoMalha}) · menor liquidado/km observado: ${lkmFmt} · sinal: ${quadLabel}`,
+        badge: 'matriz-sit-crit-estrutural', situacao: 'Alta criticidade, menor liquidado/km/ano observado',
+        evidencia: `${pctCritFmt} de malha Ruim+Péssimo (SAM ${anoSelecionadoMalha}) · menor liquidado/km/ano observado: ${lkmFmt} · sinal: ${quadLabel}`,
         interpretacao: `Combinação de criticidade acima da mediana com menor esforço financeiro observado — sinal para investigação técnica sobre demanda reprimida, restrições contratuais, passivo acumulado ou intervenções previstas fora do recorte analisado`,
         acao: 'Investigar carteira e programação',
         encaminhamento: `Verificar se há demanda reprimida, contratos em fase de licitação ou intervenções estruturais previstas para ${nomeCurto}; avaliar passivo acumulado e extensão da malha antes de concluir sobre adequação alocativa`
       },
       'condicao-favoravel': {
         badge: 'matriz-sit-condicao-favoravel', situacao: 'Ponto de atenção analítica - condição favorável',
-        evidencia: `Liquidado/km observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt}`,
-        interpretacao: `Menor liquidado/km observado junto a boa condição SAM - combinação descritiva que merece investigação sobre tipo de intervenção, histórico de manutenção e extensão da malha administrada`,
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt}`,
+        interpretacao: `Menor liquidado/km/ano observado junto a boa condição SAM - combinação descritiva que merece investigação sobre tipo de intervenção, histórico de manutenção e extensão da malha administrada`,
         acao: 'Investigar e documentar contexto',
         encaminhamento: `Registrar perfil de intervenções em ${nomeCurto} para compreender os fatores associados à condição observada; acompanhar o SPC (atual ${spcFmt}) em novos ciclos SAM`
       },
@@ -6555,11 +6680,11 @@ function renderMatrizRecomendacao() {
         evidencia: `${pctEmgFmt} de contratos emergenciais · SPC ${spcFmt} · ${pctCritFmt} de malha crítica (SAM ${anoSelecionadoMalha})`,
         interpretacao: `Concentração de contratos emergenciais indica ciclo reativo — parte do esforço financeiro observado pode estar associada a intervenções de urgência em vez de manutenção programada`,
         acao: 'Investigar tipologia de intervenção',
-        encaminhamento: `Investigar causas da concentração emergencial em ${nomeCurto}; avaliar se o liquidado/km de ${lkmFmt} é influenciado por mobilizações de menor rendimento por km atendido`
+        encaminhamento: `Investigar causas da concentração emergencial em ${nomeCurto}; avaliar se o liquidado/km/ano de ${lkmFmt} é influenciado por mobilizações de menor rendimento por km atendido`
       },
       'atencao': {
         badge: 'matriz-sit-atencao', situacao: 'Perfil para acompanhamento',
-        evidencia: `Liquidado/km observado: ${lkmFmt} · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt} · sinal: ${quadLabel}`,
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt} · sinal: ${quadLabel}`,
         interpretacao: `Perfil sem sinal de alerta agudo no período analisado — acompanhamento dos indicadores de condição no próximo ciclo SAM é suficiente no curto prazo`,
         acao: 'Monitoramento contínuo',
         encaminhamento: `Manter programação vigente em ${nomeCurto} e acompanhar indicadores de condição no próximo ciclo SAM`
@@ -7218,7 +7343,7 @@ function renderSinteseExecutiva(){
   document.getElementById('kpi-sint-sr-pior').textContent       = (srMaiorRuimPessimo.sr||'').replace('SR ','');
   document.getElementById('kpi-sint-sr-pior-sub').textContent   = fmtPctCond(srMaiorRuimPessimo.pct_ruim_pessimo, 0) + ' Ruim+Péssimo';
   document.getElementById('kpi-sint-sr-gasto').textContent      = srsByLkm[0].sr.replace('SR ','');
-  document.getElementById('kpi-sint-sr-gasto-sub').innerHTML    = 'R$&nbsp;' + fmtNum(srsByLkm[0].lkm) + '/km';
+  document.getElementById('kpi-sint-sr-gasto-sub').innerHTML    = 'R$&nbsp;' + fmtNum(srsByLkm[0].lkm) + '/km/ano';
 
   // Narrativa da Síntese — ancorada no Relatório 001/2026
   const sintNarr = document.getElementById('sint-narrativa');
