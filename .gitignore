@@ -2,3 +2,7 @@
 *.bak-pre-mojibake-fix
 __pycache__/
 *.pyc
+data/der_malha_financeiro.json
+shot_map.png
+*.png
+!docs/**/*.png

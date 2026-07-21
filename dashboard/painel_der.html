@@ -20,7 +20,7 @@
   --cor-texto: #1A1A2E;
 }
 
-/* â”€â”€ Leaflet CSS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Leaflet CSS ─────────────────────────────────── */
 /* required styles */
 
 .leaflet-pane,
@@ -684,11 +684,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 
-/* â”€â”€ Painel DER CSS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Painel DER CSS ──────────────────────────────── */
 ï»¿*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#F5F7FA;color:#1A1A2E;min-width:0}
 
-/* â”€â”€ HEADER GOVERNAMENTAL â”€â”€ */
+/* ── HEADER GOVERNAMENTAL ── */
 .header-gov{
   background:#fff;
   color:var(--cor-navy-escura);
@@ -898,6 +898,26 @@ svg.responsive{display:block;width:100%}
 
 /* Footnote */
 .fn{font-size:11px;color:#888;font-style:italic}
+
+.tbl-cobertura th { padding: 8px 12px; }
+.tbl-row { border-bottom: 1px solid var(--cinza-borda-alt); }
+.tbl-row-alt { border-bottom: 1px solid var(--cinza-borda-alt); background: #fafafa; }
+.tbl-cell { padding: 8px 12px; }
+.status-ok { color: #2e7d32; font-weight: 600; }
+.status-warn { color: #e65100; font-weight: 600; }
+.status-info { color: #1565c0; font-weight: 600; }
+
+.kpi-value-lg { font-size: 22px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-0 { margin-bottom: 0; }
+.mt-16 { margin-top: 16px; }
+.ta-center { text-align: center; }
+.ta-center-bold { text-align: center; font-weight: 600; }
+.placeholder-muted { color: #ccc; }
+
+.section-intro { font-size: 13px; color: #555; margin: -10px 0 14px; font-style: italic; }
+.note-prefilled { line-height: 1.7; font-size: 13.5px; }
+.note-compact { font-size: 12.5px; color: #555; margin-bottom: 18px; }
 
 /* Filter controls */
 .filter-bar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
@@ -3403,466 +3423,6 @@ window.STANDALONE_DATA = {
     ]
   }
 },
-  "dados_extras": {
-    "generated":  "2026-06-15T16:08:27.0095935-03:00",
-    "malha_km":  [
-                     {
-                         "sr":  "SR Leste",
-                         "ruim_km":  6,
-                         "pessimo_km":  24.36,
-                         "regular_km":  313.55,
-                         "boa_km":  442.59,
-                         "muito_boa_km":  0,
-                         "liquidado":  49640349.2
-                     },
-                     {
-                         "sr":  "SR Campos Gerais",
-                         "ruim_km":  2.3,
-                         "pessimo_km":  74.5,
-                         "regular_km":  424.42,
-                         "boa_km":  1154.85,
-                         "muito_boa_km":  1,
-                         "liquidado":  162041294.03
-                     },
-                     {
-                         "sr":  "SR Norte",
-                         "ruim_km":  3,
-                         "pessimo_km":  71.53,
-                         "regular_km":  707.54,
-                         "boa_km":  1580.6,
-                         "muito_boa_km":  13.17,
-                         "liquidado":  219184299.66
-                     },
-                     {
-                         "sr":  "SR Noroeste",
-                         "ruim_km":  15.14,
-                         "pessimo_km":  79.13,
-                         "regular_km":  823.68,
-                         "boa_km":  2616.76,
-                         "muito_boa_km":  12.27,
-                         "liquidado":  199321703.67
-                     },
-                     {
-                         "sr":  "SR Oeste",
-                         "ruim_km":  1,
-                         "pessimo_km":  80.26,
-                         "regular_km":  568.53,
-                         "boa_km":  1724.16,
-                         "muito_boa_km":  65.38,
-                         "liquidado":  239350030.41
-                     }
-                 ],
-    "malha_pct":  [
-                      {
-                          "sr":  "SR Leste",
-                          "pct_ruim_pessimo":  0.0386013986013986,
-                          "pct_regular":  0.398664971392244,
-                          "pct_bom":  0.562733630006357,
-                          "liq_por_km":  59210.5504729416
-                      },
-                      {
-                          "sr":  "SR Campos Gerais",
-                          "pct_ruim_pessimo":  0.0463468652501102,
-                          "pct_regular":  0.256126777987653,
-                          "pct_bom":  0.697526356762237,
-                          "liq_por_km":  66731.4431032921
-                      },
-                      {
-                          "sr":  "SR Norte",
-                          "pct_ruim_pessimo":  0.0313699575729005,
-                          "pct_regular":  0.297806249579096,
-                          "pct_bom":  0.670823792848003,
-                          "liq_por_km":  86930.6367807977
-                      },
-                      {
-                          "sr":  "SR Noroeste",
-                          "pct_ruim_pessimo":  0.0265775392023637,
-                          "pct_regular":  0.232220085819486,
-                          "pct_bom":  0.74120237497815,
-                          "liq_por_km":  47464.5551652863
-                      },
-                      {
-                          "sr":  "SR Oeste",
-                          "pct_ruim_pessimo":  0.0333124259530281,
-                          "pct_regular":  0.2330680965675,
-                          "pct_bom":  0.733619477479472,
-                          "liq_por_km":  66110.939973981
-                      }
-                  ],
-    "contratos_dopsr1":  [
-                             {
-                                 "contrato":  "CO056/2022DOP",
-                                 "empenhado":  5387569.34,
-                                 "liquidado":  4773569.34,
-                                 "pago":  4773569.34,
-                                 "sr":  "SR LESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO057/2022DOP",
-                                 "empenhado":  16438416.030000001,
-                                 "liquidado":  16338416.030000001,
-                                 "pago":  16338416.030000001,
-                                 "sr":  "SR LESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO058/2022DOP",
-                                 "empenhado":  12794501.700000003,
-                                 "liquidado":  12494501.700000003,
-                                 "pago":  12494501.700000003,
-                                 "sr":  "SR LESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO059/2022DOP",
-                                 "empenhado":  16195739.6,
-                                 "liquidado":  16033862.129999999,
-                                 "pago":  16033862.129999999,
-                                 "sr":  "SR LESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO016/2022DOP",
-                                 "empenhado":  36814568.79,
-                                 "liquidado":  34514568.79,
-                                 "pago":  34514568.79,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO016/2023DOP",
-                                 "empenhado":  33100500.870000005,
-                                 "liquidado":  30464839.950000003,
-                                 "pago":  30464839.950000003,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO024/2023DOP",
-                                 "empenhado":  41356195.38,
-                                 "liquidado":  38934193.080000006,
-                                 "pago":  38934193.080000006,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO091/2024DOP",
-                                 "empenhado":  11123724.71,
-                                 "liquidado":  11123724.71,
-                                 "pago":  11123724.71,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO128/2021DOP",
-                                 "empenhado":  7835202.8800000008,
-                                 "liquidado":  7285203.1100000013,
-                                 "pago":  7285203.1100000013,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "INTEGRA"
-                             },
-                             {
-                                 "contrato":  "CO169/2022DOP",
-                                 "empenhado":  27448798.000000004,
-                                 "liquidado":  27448798.000000004,
-                                 "pago":  27448798.000000004,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO173/2025DOP",
-                                 "empenhado":  14088945.270000001,
-                                 "liquidado":  8088945.2700000014,
-                                 "pago":  8088945.2700000014,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO175/2025DOP",
-                                 "empenhado":  6875286.92,
-                                 "liquidado":  4181021.12,
-                                 "pago":  4181021.12,
-                                 "sr":  "SR CAMPOS GERAIS",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO006/2020DOP",
-                                 "empenhado":  32268826.77,
-                                 "liquidado":  32168826.77,
-                                 "pago":  32168826.77,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "COP"
-                             },
-                             {
-                                 "contrato":  "CO007/2020DOP",
-                                 "empenhado":  20400895.83,
-                                 "liquidado":  20300895.83,
-                                 "pago":  20300895.83,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "COP"
-                             },
-                             {
-                                 "contrato":  "CO023/2023DOP",
-                                 "empenhado":  44495386.00999999,
-                                 "liquidado":  44425386.00999999,
-                                 "pago":  44425386.00999999,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO035/2024DOP",
-                                 "empenhado":  9921695.86,
-                                 "liquidado":  9921695.86,
-                                 "pago":  9921695.86,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO036/2024DOP",
-                                 "empenhado":  60111673.339999996,
-                                 "liquidado":  56611673.339999996,
-                                 "pago":  56611673.339999996,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO045/2023DOP",
-                                 "empenhado":  23283734.32,
-                                 "liquidado":  23222734.32,
-                                 "pago":  23222734.32,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO089/2024DOP",
-                                 "empenhado":  23350268.37,
-                                 "liquidado":  23350268.37,
-                                 "pago":  23350268.37,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "INTEGRA"
-                             },
-                             {
-                                 "contrato":  "CO133/2021DOP",
-                                 "empenhado":  10539400.25,
-                                 "liquidado":  9182819.16,
-                                 "pago":  9182819.16,
-                                 "sr":  "SR NORTE",
-                                 "tipo":  "INTEGRA"
-                             },
-                             {
-                                 "contrato":  "CO004/2020DOP",
-                                 "empenhado":  39431335.78,
-                                 "liquidado":  39131335.78,
-                                 "pago":  39131335.78,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "COP"
-                             },
-                             {
-                                 "contrato":  "CO005/2020DOP",
-                                 "empenhado":  4267004.2299999995,
-                                 "liquidado":  4267004.2299999995,
-                                 "pago":  4267004.2299999995,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "COP"
-                             },
-                             {
-                                 "contrato":  "CO009/2020DOP",
-                                 "empenhado":  34928349.989999995,
-                                 "liquidado":  34404476.339999996,
-                                 "pago":  34404476.339999996,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "COP"
-                             },
-                             {
-                                 "contrato":  "CO015/2023DOP",
-                                 "empenhado":  79356510.750000015,
-                                 "liquidado":  70775630.750000015,
-                                 "pago":  70775630.750000015,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO025/2019DT-DOP",
-                                 "empenhado":  4567926.09,
-                                 "liquidado":  4567926.09,
-                                 "pago":  4567926.09,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "CREMEP"
-                             },
-                             {
-                                 "contrato":  "CO069/2022DOP",
-                                 "empenhado":  81522.77,
-                                 "liquidado":  81522.77,
-                                 "pago":  81522.77,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO072/2022DOP",
-                                 "empenhado":  172207.6,
-                                 "liquidado":  172207.6,
-                                 "pago":  172207.6,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO093/2018DT-DOP",
-                                 "empenhado":  153364.94,
-                                 "liquidado":  153364.94,
-                                 "pago":  153364.94,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "CREMEP"
-                             },
-                             {
-                                 "contrato":  "CO123/2021DOP",
-                                 "empenhado":  39758589.809999995,
-                                 "liquidado":  39138589.809999995,
-                                 "pago":  39138589.809999995,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO137/2025DOP",
-                                 "empenhado":  3500072.62,
-                                 "liquidado":  3173852.84,
-                                 "pago":  3173852.84,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "EMERGENCIAL"
-                             },
-                             {
-                                 "contrato":  "CO142/2018DT-DOP",
-                                 "empenhado":  2532160.16,
-                                 "liquidado":  2532160.16,
-                                 "pago":  2532160.16,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "CREMEP"
-                             },
-                             {
-                                 "contrato":  "CO152/2025DOP",
-                                 "empenhado":  1173632.3599999999,
-                                 "liquidado":  923632.36,
-                                 "pago":  923632.36,
-                                 "sr":  "SR NOROESTE",
-                                 "tipo":  "EMERGENCIAL"
-                             },
-                             {
-                                 "contrato":  "CO006/2023DOP",
-                                 "empenhado":  29366861.930000003,
-                                 "liquidado":  26866861.930000003,
-                                 "pago":  26866861.930000003,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO007/2023DOP",
-                                 "empenhado":  8410678.31,
-                                 "liquidado":  8410678.31,
-                                 "pago":  8410678.31,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO017/2023DOP",
-                                 "empenhado":  16932355.759999998,
-                                 "liquidado":  15748303.049999999,
-                                 "pago":  15748303.049999999,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO018/2023DOP",
-                                 "empenhado":  193539.39,
-                                 "liquidado":  193539.39,
-                                 "pago":  193539.39,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO019/2023DOP",
-                                 "empenhado":  37083406.320000008,
-                                 "liquidado":  35956475.230000004,
-                                 "pago":  35956475.230000004,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO026/2023DOP",
-                                 "empenhado":  38219756.39,
-                                 "liquidado":  34419756.39,
-                                 "pago":  34419756.39,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO028/2023DOP",
-                                 "empenhado":  447415.47000000003,
-                                 "liquidado":  447415.47000000003,
-                                 "pago":  447415.47000000003,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO071/2023DOP",
-                                 "empenhado":  34182626.370000005,
-                                 "liquidado":  32422626.37,
-                                 "pago":  32422626.37,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO072/2025DOP",
-                                 "empenhado":  9463922.370000001,
-                                 "liquidado":  8642922.370000001,
-                                 "pago":  8642922.370000001,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO092/2025DOP",
-                                 "empenhado":  23567371.47,
-                                 "liquidado":  21807371.47,
-                                 "pago":  21807371.47,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO121/2025DOP",
-                                 "empenhado":  18027376.41,
-                                 "liquidado":  13026376.41,
-                                 "pago":  13026376.41,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO124/2021DOP",
-                                 "empenhado":  9243976,
-                                 "liquidado":  9243976,
-                                 "pago":  9243976,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO124/2024DOP",
-                                 "empenhado":  31441685.17,
-                                 "liquidado":  31441685.150000002,
-                                 "pago":  31441685.150000002,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "PROCONSERVA"
-                             },
-                             {
-                                 "contrato":  "CO131/2021DOP",
-                                 "empenhado":  722042.87000000011,
-                                 "liquidado":  722042.87000000011,
-                                 "pago":  722042.87000000011,
-                                 "sr":  "SR OESTE",
-                                 "tipo":  "INTEGRA"
-                             }
-                         ],
-    "fisico_subprograma":  [
-
-                           ]
-},
   "benchmark_nacional": {
   "estados": {
     "AC": {
@@ -4311,11 +3871,11 @@ window.STANDALONE_DATA = {
 <div class="reading-flow" id="reading-flow" role="navigation" aria-label="Ordem de leitura sugerida">
   <span class="reading-flow-label">Ordem de leitura:</span>
   <span class="reading-step active" data-flow-tab="malha-diagnostico"><span class="rs-num">1</span> Diagnóstico da Malha</span>
-  <span class="reading-arrow">â†’</span>
+  <span class="reading-arrow">→</span>
   <span class="reading-step" data-flow-tab="pressao-execucao"><span class="rs-num">2</span> Pressão e Execução</span>
-  <span class="reading-arrow">â†’</span>
+  <span class="reading-arrow">→</span>
   <span class="reading-step" data-flow-tab="leitura-regional"><span class="rs-num">3</span> Leitura Integrada</span>
-  <span class="reading-arrow">â†’</span>
+  <span class="reading-arrow">→</span>
   <span class="reading-step" data-flow-tab="sinais"><span class="rs-num">4</span> Sinais para Investigação</span>
 </div>
 
@@ -4326,7 +3886,7 @@ window.STANDALONE_DATA = {
 
     <!-- ── SEÇÃO 0: VISÃO EXECUTIVA ── -->
     <div class="section-header">Diagnóstico da Malha <span class="periodo-badge" data-periodo-malha="SAM {ano}">SAM 2025</span></div>
-    <p style="font-size:13px;color:#555;margin:-10px 0 14px;font-style:italic">Fotografia técnica da condição da malha avaliada, antes da leitura financeira ou dos cruzamentos interpretativos.</p>
+    <p class="section-intro">Fotografia técnica da condição da malha avaliada, antes da leitura financeira ou dos cruzamentos interpretativos.</p>
 
     <div class="note mb-24" style="background:#f0f4ff;border-left:4px solid var(--cor-azul-hover);padding:14px 18px;">
       Esta seção apresenta a <strong>condição observada da malha</strong>. Os dados financeiros aparecem nas seções seguintes e não devem ser usados, neste primeiro momento, para explicar diretamente a condição da malha. Informações sobre execução financeira, contratos e pressão operacional são tratadas nas abas <em>Pressão e Execução</em> e <em>Leitura Integrada</em>.
@@ -4355,7 +3915,7 @@ window.STANDALONE_DATA = {
       </div>
     </div>
 
-    <div class="note mb-24" id="kpi-exec-narrativa" style="line-height:1.7;font-size:13.5px"></div>
+    <div class="note mb-24 note-prefilled" id="kpi-exec-narrativa"></div>
 
 
     <div class="grid-2">
@@ -4369,7 +3929,7 @@ window.STANDALONE_DATA = {
           <button class="cond-pill" data-serie="Muito Boa">Muito Boa</button>
           <button class="cond-pill-clear">Limpar</button>
         </div>
-        <div class="chart-h-260"><canvas id="chartMalhaKm"></canvas></div>
+        <div class="chart-h-260"><canvas id="chartMalhaKm" role="img" aria-label="Gráfico de barras: extensão da malha rodoviária, em quilômetros, por condição e por Superintendência Regional"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span>.</p>
       </div>
       <div class="chart-container mb-0">
@@ -4379,14 +3939,14 @@ window.STANDALONE_DATA = {
           <button class="cond-pill" data-serie="Péssimo">Péssimo</button>
           <button class="cond-pill-clear">Limpar</button>
         </div>
-        <div class="chart-h-260"><canvas id="chartKmCriticos"></canvas></div>
+        <div class="chart-h-260"><canvas id="chartKmCriticos" role="img" aria-label="Gráfico de barras: quilometragem em condição ruim ou péssima por Superintendência Regional"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span>.</p>
       </div>
     </div>
 
     <div class="chart-container mb-24">
       <div class="chart-title">Composição da Malha por Condição e Regional (%) <span class="periodo-badge" data-periodo-malha="SAM {ano}">SAM 2025</span></div>
-      <div class="chart-h-260"><canvas id="chartMalhaPct"></canvas></div>
+      <div class="chart-h-260"><canvas id="chartMalhaPct" role="img" aria-label="Gráfico de barras empilhadas: percentual da malha por condição e Superintendência Regional"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span>.</p>
     </div>
 
@@ -4398,13 +3958,13 @@ window.STANDALONE_DATA = {
 
     <div class="chart-container mb-24">
       <div class="chart-title">% Boa + Ótima por SR — 2024 vs. 2025 <span class="fn" style="font-style:normal;color:#888;font-weight:400">SAM, ambos os anos</span></div>
-      <div class="chart-h-260"><canvas id="chartEvolucaoMalha"></canvas></div>
+      <div class="chart-h-260"><canvas id="chartEvolucaoMalha" role="img" aria-label="Gráfico comparando o percentual de malha em boa ou ótima condição entre 2024 e 2025, por Superintendência Regional"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> SAM 2024 e SAM 2025 (Condição da malha.xlsx).</p>
     </div>
 
     <div class="kpi-grid kpi-grid-5 mb-24" id="grid-evolucao-malha"></div>
 
-    <div class="note mb-24" id="evolucao-malha-narrativa" style="line-height:1.7;font-size:13.5px"></div>
+    <div class="note mb-24 note-prefilled" id="evolucao-malha-narrativa"></div>
 
     <details class="method-details mt-24">
       <summary>Ver fontes e notas metodológicas</summary>
@@ -4436,7 +3996,7 @@ window.STANDALONE_DATA = {
 </div>
 
     <div class="leaflet-map-wrap">
-      <div id="map-rodovias" class="leaflet-map"></div>
+      <div id="map-rodovias" class="leaflet-map" role="img" aria-label="Mapa esquemático das rodovias estaduais do Paraná, colorido pela condição média de conservação de cada Superintendência Regional"></div>
     </div>
 
     <div class="note">
@@ -4449,46 +4009,46 @@ window.STANDALONE_DATA = {
 
     <div class="chart-container">
       <div class="chart-title">TMDA Médio × Condição da Malha (SAM) por Superintendência Regional <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
-      <div class="chart-h-280"><canvas id="chartTmdaCondicao"></canvas></div>
+      <div class="chart-h-280"><canvas id="chartTmdaCondicao" role="img" aria-label="Gráfico de dispersão relacionando tráfego médio diário e condição da malha por Superintendência Regional"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span> (condição) · TMDA médio por SR — planilha "Dados Estatísticos por Área de Gestão" (sem CSV/JSON digitalizado no projeto; valores de referência). Cor de cada bolha segue a mesma escala de condição do mapa acima.</p>
       <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> TMDA disponível apenas agregado por SR na fonte atual — não permite análise por trecho nem correlação estatística validada. Cruzamento ilustrativo com n=5 observações (uma por SR). O eixo Y (condição SAM) responde ao seletor de ano; o eixo X (TMDA) não tem granularidade por ano na fonte disponível — os mesmos 5 valores de referência por SR são aplicados a 2024 e 2025.</p>
     </div>
 
     <div class="section-sep"><span>Qualidade e Cobertura dos Dados</span></div>
     <div style="overflow-x:auto; margin: 16px 0;">
-      <table style="width:100%; border-collapse:collapse; font-size:0.82rem; color:#333;">
+      <table class="tbl-cobertura" style="width:100%; border-collapse:collapse; font-size:0.82rem; color:#333;">
         <thead>
           <tr>
-            <th style="text-align:left; padding:8px 12px; font-weight:600; color:#fff;">Dimensão</th>
-            <th style="text-align:left; padding:8px 12px; font-weight:600; color:#fff;">Fonte / Referência</th>
-            <th style="text-align:left; padding:8px 12px; font-weight:600; color:#fff;">Status de Cobertura</th>
-            <th style="text-align:left; padding:8px 12px; font-weight:600; color:#fff;">Observação</th>
+            <th>Dimensão</th>
+            <th>Fonte / Referência</th>
+            <th>Status de Cobertura</th>
+            <th>Observação</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid #e2e8f0;">
-            <td style="padding:8px 12px;">Condição da malha (SAM)</td>
-            <td style="padding:8px 12px;">Consórcio EDVP / DER-PR, 2025</td>
-            <td style="padding:8px 12px;"><span style="color:#2e7d32; font-weight:600;">âœ” Principal</span></td>
-            <td style="padding:8px 12px;">Base primária do cruzamento com gasto. Cobertura por SR.</td>
+          <tr class="tbl-row">
+            <td class="tbl-cell">Condição da malha (SAM)</td>
+            <td class="tbl-cell">Consórcio EDVP / DER-PR, 2025</td>
+            <td class="tbl-cell"><span class="status-ok">✔ Principal</span></td>
+            <td class="tbl-cell">Base primária do cruzamento com gasto. Cobertura por SR.</td>
           </tr>
-          <tr style="border-bottom:1px solid #e2e8f0; background:#fafafa;">
-            <td style="padding:8px 12px;">Contratos DOP (Ação 8398)</td>
-            <td style="padding:8px 12px;">DAF / DER-PR, 2025</td>
-            <td style="padding:8px 12px;"><span style="color:#2e7d32; font-weight:600;">âœ” Boa rastreabilidade</span></td>
-            <td style="padding:8px 12px;">46 contratos classificados por SR. Base canônica para análise financeira.</td>
+          <tr class="tbl-row-alt">
+            <td class="tbl-cell">Contratos DOP (Ação 8398)</td>
+            <td class="tbl-cell">DAF / DER-PR, 2025</td>
+            <td class="tbl-cell"><span class="status-ok">✔ Boa rastreabilidade</span></td>
+            <td class="tbl-cell">46 contratos classificados por SR. Base canônica para análise financeira.</td>
           </tr>
-          <tr style="border-bottom:1px solid #e2e8f0;">
-            <td style="padding:8px 12px;">Mapa (geometria)</td>
-            <td style="padding:8px 12px;">OpenStreetMap / Leaflet</td>
-            <td style="padding:8px 12px;"><span style="color:#e65100; font-weight:600;">⚠ Esquemático</span></td>
-            <td style="padding:8px 12px;">Condição agregada por SR. Não representa trecho ou rodovia individual.</td>
+          <tr class="tbl-row">
+            <td class="tbl-cell">Mapa (geometria)</td>
+            <td class="tbl-cell">OpenStreetMap / Leaflet</td>
+            <td class="tbl-cell"><span class="status-warn">⚠ Esquemático</span></td>
+            <td class="tbl-cell">Condição agregada por SR. Não representa trecho ou rodovia individual.</td>
           </tr>
-          <tr style="border-bottom:1px solid #e2e8f0; background:#fafafa;">
-            <td style="padding:8px 12px;">Benchmark CNT</td>
-            <td style="padding:8px 12px;">CNT, série 2015–2025</td>
-            <td style="padding:8px 12px;"><span style="color:#1565c0; font-weight:600;">â„¹ Externo</span></td>
-            <td style="padding:8px 12px;">Universo e metodologia distintos do DER-PR. Usado apenas para posicionamento estadual.</td>
+          <tr class="tbl-row-alt">
+            <td class="tbl-cell">Benchmark CNT</td>
+            <td class="tbl-cell">CNT, série 2015–2025</td>
+            <td class="tbl-cell"><span class="status-info">ℹ Externo</span></td>
+            <td class="tbl-cell">Universo e metodologia distintos do DER-PR. Usado apenas para posicionamento estadual.</td>
           </tr>
         </tbody>
       </table>
@@ -4510,7 +4070,7 @@ window.STANDALONE_DATA = {
     </div>
 
     <div class="sub-section-header amber">1 — Pressão Operacional</div>
-    <div class="note" style="font-size:12.5px;color:#555;margin-bottom:18px">Pressão operacional indica combinação de fatores que podem exigir atenção técnica. Ela não representa, isoladamente, insuficiência ou excesso de investimento.</div>
+    <div class="note note-compact">Pressão operacional indica combinação de fatores que podem exigir atenção técnica. Ela não representa, isoladamente, insuficiência ou excesso de investimento.</div>
 
     <div class="section-sep"><span>Sinalizador de Pressão de Conservação por SR <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
 
@@ -4543,7 +4103,7 @@ window.STANDALONE_DATA = {
 
     <!-- SEÇÃO: EXECUÇÃO FINANCEIRA OBSERVADA -->
     <div class="sub-section-header">2 — Execução Financeira Observada</div>
-    <div class="note" style="font-size:12.5px;color:#555;margin-bottom:18px">Os valores financeiros representam execução observada no período. Eles não indicam, isoladamente, necessidade total de investimento, suficiência da alocação ou efeito direto sobre a condição atual da malha.</div>
+    <div class="note note-compact">Os valores financeiros representam execução observada no período. Eles não indicam, isoladamente, necessidade total de investimento, suficiência da alocação ou efeito direto sobre a condição atual da malha.</div>
 
     <div class="section-sep"><span>Contratos DOPSR1 <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
 
@@ -4600,7 +4160,7 @@ window.STANDALONE_DATA = {
     <div class="grid-2 mt-24">
       <div class="chart-container mb-0">
         <div class="chart-title">Empenhado / Liquidado / Pago por SR (R$) <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></div>
-        <div class="chart-h-260"><canvas id="chartContSR"></canvas></div>
+        <div class="chart-h-260"><canvas id="chartContSR" role="img" aria-label="Gráfico de barras: valores empenhado, liquidado e pago em reais, por Superintendência Regional"></canvas></div>
         <div style="text-align:right;margin-top:6px">
           <button type="button" id="btnMostrarTodasContSR" class="contract-filter-clear" style="font-size:11px;padding:4px 10px;min-height:0">Mostrar todas</button>
         </div>
@@ -4608,7 +4168,7 @@ window.STANDALONE_DATA = {
       </div>
       <div class="chart-container mb-0">
         <div class="chart-title">Liquidado por Tipo de Contrato (R$) <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></div>
-        <div class="chart-h-260"><canvas id="chartContTipo"></canvas></div>
+        <div class="chart-h-260"><canvas id="chartContTipo" role="img" aria-label="Gráfico de valor liquidado em reais por tipo de contrato"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 2025</span>.</p>
       </div>
     </div>
@@ -4645,7 +4205,7 @@ window.STANDALONE_DATA = {
     <div id="contratoFilterEmpty" class="contract-filter-empty" hidden>Nenhum contrato encontrado com os filtros selecionados.</div>
 
     <div class="alert-card">
-      <div class="alert-icon">âš ï¸</div>
+      <div class="alert-icon">⚠️</div>
       <div id="alert-noroeste"></div>
     </div>
 
@@ -4681,7 +4241,7 @@ window.STANDALONE_DATA = {
         <button class="cond-pill" data-serie="Bom + Muito Bom">Bom + Muito Bom</button>
         <button class="cond-pill-clear">Limpar</button>
       </div>
-      <div class="chart-h-320"><canvas id="chartFig6"></canvas></div>
+      <div class="chart-h-320"><canvas id="chartFig6" role="img" aria-label="Gráfico combinando condição da malha e investimento por quilômetro, por Superintendência Regional"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> Relatório de Pesquisa nº 001/2026, Consórcio Gerenciador EDVP (26/05/2026); <span data-periodo-malha="SAM {ano}">SAM 2025</span>; <span data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 2025</span> Ordenado do maior ao menor % Bom+Muito Bom. <strong>Nota sobre extensão:</strong> a quilometragem por SR pode incluir segmentos contados em dobro quando contratos emergenciais cobriram trechos já computados em contratos anteriores encerrados (ressalva técnica do consórcio).</p>
       <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica — Investimento/km (linha):</strong> Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> dividido pela extensão contratual de conservação vinculada a cada Superintendência Regional, conforme Relatório de Pesquisa nº 001/2026. Este denominador é diferente da quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> e não deve ser confundido com outros indicadores de R$/km do painel.</p>
     </div>
@@ -4742,7 +4302,7 @@ window.STANDALONE_DATA = {
       </div>
     </div>
 
-    <div class="note" id="sint-narrativa" style="margin-top:16px"></div>
+    <div class="note mt-16" id="sint-narrativa"></div>
 
 
     <div class="section-sep"><span>Achados Analíticos <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
@@ -4750,25 +4310,25 @@ window.STANDALONE_DATA = {
     <div class="insights-grid">
 
       <div class="insight-card">
-        <div class="insight-icon">ðŸ“Š</div>
+        <div class="insight-icon">📊</div>
         <div class="insight-title">Alocação territorial</div>
         <div class="insight-body">A participação de cada SR no gasto total apresenta diferença relativa observada em relação à sua participação nos quilômetros críticos (Ruim+Péssimo, <span data-periodo-malha="SAM {ano}">SAM 2025</span>). A tabela de índice de aderência na aba <strong>Sinais para Investigação</strong> detalha essas diferenças em pontos percentuais por regional — como ponto de partida para investigação, não como conclusão sobre adequação alocativa.</div>
       </div>
 
       <div class="insight-card">
-        <div class="insight-icon">âš ï¸</div>
+        <div class="insight-icon">⚠️</div>
         <div class="insight-title">Contratos emergenciais como proxy de pressão</div>
         <div class="insight-body">A concentração de contratos do tipo EMERGENCIAL — especialmente na SR Noroeste — sinaliza demanda corretiva não planejada. Esse padrão integra o Sinalizador de Pressão de Conservação (SPC) e sinaliza atenção operacional; não constitui diagnóstico de causalidade.</div>
       </div>
 
       <div class="insight-card">
-        <div class="insight-icon">ðŸ”</div>
+        <div class="insight-icon">🔍</div>
         <div class="insight-title">Condição não é função linear do gasto</div>
         <div class="insight-body">A dispersão das SRs nos quadrantes de investigação (aba Sinais para Investigação) mostra que maior liquidado/km observado não implica necessariamente melhor ou pior condição SAM. Os quadrantes orientam perguntas técnicas — não conclusões sobre suficiência ou inadequação do investimento. Fatores como tipo de intervenção, extensão administrada e histórico de manutenção influenciam os resultados observados.</div>
       </div>
 
       <div class="insight-card">
-        <div class="insight-icon">ðŸ“…</div>
+        <div class="insight-icon">📅</div>
         <div class="insight-title">Limitações do corte temporal</div>
         <div class="insight-body">A análise interna cobre dois retratos pontuais da malha (2024 e 2025), não uma série histórica contínua — a comparação entre os dois anos não deve ser usada para inferir tendência de melhoria ou piora, apenas a variação observada entre esses dois cortes. A condição observada em cada ano reflete decisões de investimento acumuladas ao longo de anos anteriores — não apenas o exercício corrente.</div>
       </div>
@@ -4782,7 +4342,7 @@ window.STANDALONE_DATA = {
   <div id="tab-sinais" class="tab-pane" role="tabpanel">
 
     <div class="section-header">Sinais para Investigação Técnica Complementar <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></div>
-    <p style="font-size:13px;color:#555;margin:-10px 0 14px;font-style:italic">Os cruzamentos desta seção ajudam a identificar pontos para aprofundamento técnico. Eles não indicam, isoladamente, suficiéncia, excesso ou inadequação do investimento.</p>
+    <p class="section-intro">Os cruzamentos desta seção ajudam a identificar pontos para aprofundamento técnico. Eles não indicam, isoladamente, suficiéncia, excesso ou inadequação do investimento.</p>
 
     <div class="note mb-24" style="background:#f5f5f5;border-left:4px solid #888;padding:14px 18px;">
       <strong>Como ler esta seção:</strong> os cruzamentos mostram combinaçóes relativas entre condição da malha, pressão operacional e execução financeira observada. A posição de uma regional pode refletir passivo acumulado, tipo de intervenção, complexidade das obras, contratos vigentes, restriçóes operacionais, extensão administrada ou planejamento plurianual. Por isso, <strong>os gráficos devem orientar perguntas, não produzir conclusóes automáticas sobre alocação</strong>.<br><br>
@@ -4823,17 +4383,17 @@ window.STANDALONE_DATA = {
     <div class="grid-3">
       <div class="chart-container mb-0">
         <div class="chart-title">Relação observada entre km em boa condição e liquidado — por SR <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
-        <div class="chart-h-240"><canvas id="chartRelacaoKm"></canvas></div>
+        <div class="chart-h-240"><canvas id="chartRelacaoKm" role="img" aria-label="Gráfico de dispersão: relação entre quilometragem em boa condição e valor liquidado, por Superintendência Regional"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span></p>
       </div>
       <div class="chart-container mb-0">
         <div class="chart-title">Liquidado/km em Condição Favorável (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: km SAM Bom+Muito Bom</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
-        <div class="chart-h-240"><canvas id="chartRelacaoLiquidadoKm"></canvas></div>
+        <div class="chart-h-240"><canvas id="chartRelacaoLiquidadoKm" role="img" aria-label="Gráfico de barras: valor liquidado por quilômetro em condição favorável, por Superintendência Regional"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span></p>
       </div>
       <div class="chart-container mb-0">
         <div class="chart-title">Liquidado/km de Rede Total (R$/km) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: todos os km gerenciados</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
-        <div class="chart-h-240"><canvas id="chartCustoKm"></canvas></div>
+        <div class="chart-h-240"><canvas id="chartCustoKm" role="img" aria-label="Gráfico de barras: valor liquidado por quilômetro da rede total administrada, por Superintendência Regional"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano} · Contratos DOP {ano}">SAM 2025 · Contratos DOPSR1 {ano}</span></p>
       </div>
     </div>
@@ -4898,7 +4458,7 @@ window.STANDALONE_DATA = {
       <div class="chart-title">Sinais para investigação técnica complementar <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
       <p style="font-size:12px;color:#555;line-height:1.6;margin-bottom:14px">Os quadrantes cruzam criticidade da malha e execução financeira observada para orientar perguntas de análise. Eles não indicam, isoladamente, suficiência, excesso ou inadequação do investimento.</p>
       <div class="note" style="margin-bottom:14px;font-size:12px"><strong>Como ler esta matriz:</strong> os quadrantes mostram combinações relativas entre condição da malha e liquidado/km no ano selecionado. A posição de uma regional deve ser interpretada como ponto de investigação técnica, não como conclusão sobre suficiência do investimento. A avaliação completa depende de informações complementares sobre tipo de intervenção, passivo acumulado, contratos vigentes, extensão administrada, complexidade das obras e planejamento plurianual.</div>
-      <div class="chart-h-300"><canvas id="chartQuadrantes"></canvas></div>
+      <div class="chart-h-300"><canvas id="chartQuadrantes" role="img" aria-label="Gráfico de quadrantes: cruzamento entre criticidade da malha e execução financeira por Superintendência Regional"></canvas></div>
       <div id="quadrantesResumo"></div>
       <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. Linhas de corte = medianas das 5 SRs, calculadas dinamicamente.</p>
       <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado. Portanto, não deve ser confundido com o investimento/km apresentado no Relatório de Pesquisa nº 001/2026, que utiliza a extensão contratual dos contratos de conservação.</p>
@@ -4912,7 +4472,7 @@ window.STANDALONE_DATA = {
 
     <div class="chart-container">
       <div class="chart-title">Condição SAM <span data-periodo-malha="{ano}">2025</span> × Liquidado/km da Malha SAM Avaliada <span class="periodo-badge" data-periodo-malha="Dados {ano} — mesmo corte temporal">Dados 2025 — mesmo corte temporal</span></div>
-      <div class="chart-h-280"><canvas id="scatter"></canvas></div>
+      <div class="chart-h-280"><canvas id="scatter" role="img" aria-label="Gráfico de dispersão: condição da malha versus liquidado por quilômetro, com linha de tendência"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.</p>
       <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica:</strong> Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado. Portanto, não deve ser confundido com o investimento/km apresentado no Relatório de Pesquisa nº 001/2026, que utiliza a extensão contratual dos contratos de conservação.</p>
     </div>
@@ -4987,13 +4547,13 @@ window.STANDALONE_DATA = {
 
     <div class="chart-container">
       <div class="chart-title">Ranking Estadual — % Malha em Boa ou Ótima Condição <span class="periodo-badge" id="benchRankingBadge">2025</span></div>
-      <div class="chart-h-680"><canvas id="chartBenchRanking"></canvas></div>
+      <div class="chart-h-680"><canvas id="chartBenchRanking" role="img" aria-label="Gráfico de ranking: percentual de malha em boa ou ótima condição, comparação entre estados"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> Pesquisa CNT de Rodovias</p>
     </div>
 
     <div class="chart-container">
       <div class="chart-title">Evolução ao Longo do Tempo — Paraná × Brasil <span class="periodo-badge">Série 2015–2025</span></div>
-      <div class="chart-h-280"><canvas id="chartBenchLine"></canvas></div>
+      <div class="chart-h-280"><canvas id="chartBenchLine" role="img" aria-label="Gráfico de linha: evolução histórica de 2015 a 2025 comparando Paraná e média nacional"></canvas></div>
       <p class="chart-source"><strong>Fonte:</strong> Pesquisa CNT de Rodovias</p>
     </div>
 
@@ -5298,7 +4858,7 @@ function loadJsonData(key, url, label){
 // Dados carregados dinamicamente de DATA_PATH.ROOT via initDashboard()
 let regionais    = [];
 
-// Dados de DATA_PATH.ROOT + dados_extras.json
+// Dados de DATA_PATH.ROOT
 let contratos  = [];
 let contratosPorAno = {};
 let malhaKm    = [];
@@ -5320,7 +4880,7 @@ const appState = {
     availableYears: { sam: [], financial: [], contracts: [], emergencyContracts: [] },
     regionalByYear: {},
   },
-  loading: { der_precomputed: 'idle', dados_extras: 'idle' },
+  loading: { der_precomputed: 'idle' },
   error: null,
 };
 
@@ -5330,8 +4890,7 @@ const appState = {
 // por SR (sem série por ano, sem lote/área).
 let tmdaPorSr = {};
 
-// Constrói os arrays malhaKm/malhaLiqKm (mesmo formato que dados_extras.malha_km/malha_pct
-// usava) a partir de regionaisRaw[sr].malha_por_ano[ano].
+// Constrói os arrays malhaKm/malhaLiqKm a partir de regionaisRaw[sr].malha_por_ano[ano].
 function buildMalhaForAno(anoStr){
   const km = [], pct = [];
   Object.keys(appState.datasets.regionalByYear).forEach(sr => {
@@ -6143,17 +5702,12 @@ function normalizaContrato(c, fallbackYear){
   };
 }
 
-function buildContratosPorAno(d, extras){
+function buildContratosPorAno(d){
   const byYear = {};
   const sourceByYear = d.contratos_dopsr1_por_ano || {};
   Object.keys(sourceByYear).forEach(year => {
     byYear[String(year)] = (sourceByYear[year] || []).map(c => normalizaContrato(c, year));
   });
-  if(!Object.keys(byYear).length){
-    const fallbackYear = anosDisponiveisMalha().at(-1) || '2025';
-    const legacy = extras.contratos_dopsr1 || [];
-    if(legacy.length) byYear[fallbackYear] = legacy.map(c => normalizaContrato(c, fallbackYear));
-  }
   return byYear;
 }
 
@@ -7834,14 +7388,14 @@ function setupMalhaPorAno(){
   }
 }
 
-function prepareTemporalDatasets(d, extras = {}){
+function prepareTemporalDatasets(d){
   regionaisRaw = d.regionais || {};
   appState.datasets.regionalByYear = buildRegionalByYear(d);
   appState.datasets.availableYears.sam = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.conditionYear);
   appState.datasets.availableYears.financial = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.financialYear);
   appState.datasets.availableYears.contracts = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.contractsYear);
   appState.datasets.availableYears.emergencyContracts = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.emergencyContractsYear);
-  contratosPorAno = buildContratosPorAno(d, extras);
+  contratosPorAno = buildContratosPorAno(d);
 }
 
 // Chamado quando o usuário troca o ano no seletor — reconstrói malhaKm/malhaLiqKm,
@@ -7902,24 +7456,21 @@ function onAnoMalhaChange(anoStr){
 
 if (window.STANDALONE_DATA && window.STANDALONE_DATA.der_precomputed) {
   const d      = window.STANDALONE_DATA.der_precomputed;
-  const extras = window.STANDALONE_DATA.dados_extras || {};
   tmdaPorSr = d.tmda_por_sr || {};
-  prepareTemporalDatasets(d, extras);
+  prepareTemporalDatasets(d);
   setupMalhaPorAno();
   initDashboard(d);
 } else {
   Promise.all([
-    loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json'),
-    loadJsonData('dados_extras', `${DATA_PATH.ROOT}dados_extras.json`, 'dados_extras.json')
-  ]).then(([d, extras])=>{
+    loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json')
+  ]).then(([d])=>{
     tmdaPorSr = d.tmda_por_sr || {};
-    prepareTemporalDatasets(d, extras);
+    prepareTemporalDatasets(d);
     setupMalhaPorAno();
     initDashboard(d);
   }).catch(err=>{
     const fonteProvavel =
       /der_precomputed/i.test(err.message) ? 'der_precomputed.json' :
-      /dados_extras/i.test(err.message)    ? 'dados_extras.json'    :
       'não identificada pela mensagem de erro';
     console.error('Erro ao carregar dados do painel. Fonte provável:', fonteProvavel, '— erro completo:', err);
     document.querySelector('.tab-content').innerHTML =

@@ -76,7 +76,7 @@ function loadJsonData(key, url, label){
 // Dados carregados dinamicamente de DATA_PATH.ROOT via initDashboard()
 let regionais    = [];
 
-// Dados de DATA_PATH.ROOT + dados_extras.json
+// Dados de DATA_PATH.ROOT
 let contratos  = [];
 let contratosPorAno = {};
 let malhaKm    = [];
@@ -98,7 +98,7 @@ const appState = {
     availableYears: { sam: [], financial: [], contracts: [], emergencyContracts: [] },
     regionalByYear: {},
   },
-  loading: { der_precomputed: 'idle', dados_extras: 'idle' },
+  loading: { der_precomputed: 'idle' },
   error: null,
 };
 
@@ -108,8 +108,7 @@ const appState = {
 // por SR (sem série por ano, sem lote/área).
 let tmdaPorSr = {};
 
-// Constrói os arrays malhaKm/malhaLiqKm (mesmo formato que dados_extras.malha_km/malha_pct
-// usava) a partir de regionaisRaw[sr].malha_por_ano[ano].
+// Constrói os arrays malhaKm/malhaLiqKm a partir de regionaisRaw[sr].malha_por_ano[ano].
 function buildMalhaForAno(anoStr){
   const km = [], pct = [];
   Object.keys(appState.datasets.regionalByYear).forEach(sr => {
@@ -921,17 +920,12 @@ function normalizaContrato(c, fallbackYear){
   };
 }
 
-function buildContratosPorAno(d, extras){
+function buildContratosPorAno(d){
   const byYear = {};
   const sourceByYear = d.contratos_dopsr1_por_ano || {};
   Object.keys(sourceByYear).forEach(year => {
     byYear[String(year)] = (sourceByYear[year] || []).map(c => normalizaContrato(c, year));
   });
-  if(!Object.keys(byYear).length){
-    const fallbackYear = anosDisponiveisMalha().at(-1) || '2025';
-    const legacy = extras.contratos_dopsr1 || [];
-    if(legacy.length) byYear[fallbackYear] = legacy.map(c => normalizaContrato(c, fallbackYear));
-  }
   return byYear;
 }
 
@@ -2612,14 +2606,14 @@ function setupMalhaPorAno(){
   }
 }
 
-function prepareTemporalDatasets(d, extras = {}){
+function prepareTemporalDatasets(d){
   regionaisRaw = d.regionais || {};
   appState.datasets.regionalByYear = buildRegionalByYear(d);
   appState.datasets.availableYears.sam = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.conditionYear);
   appState.datasets.availableYears.financial = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.financialYear);
   appState.datasets.availableYears.contracts = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.contractsYear);
   appState.datasets.availableYears.emergencyContracts = collectYears(appState.datasets.regionalByYear, entry => entry.metadata.emergencyContractsYear);
-  contratosPorAno = buildContratosPorAno(d, extras);
+  contratosPorAno = buildContratosPorAno(d);
 }
 
 // Chamado quando o usuário troca o ano no seletor — reconstrói malhaKm/malhaLiqKm,
@@ -2680,24 +2674,21 @@ function onAnoMalhaChange(anoStr){
 
 if (window.STANDALONE_DATA && window.STANDALONE_DATA.der_precomputed) {
   const d      = window.STANDALONE_DATA.der_precomputed;
-  const extras = window.STANDALONE_DATA.dados_extras || {};
   tmdaPorSr = d.tmda_por_sr || {};
-  prepareTemporalDatasets(d, extras);
+  prepareTemporalDatasets(d);
   setupMalhaPorAno();
   initDashboard(d);
 } else {
   Promise.all([
-    loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json'),
-    loadJsonData('dados_extras', `${DATA_PATH.ROOT}dados_extras.json`, 'dados_extras.json')
-  ]).then(([d, extras])=>{
+    loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json')
+  ]).then(([d])=>{
     tmdaPorSr = d.tmda_por_sr || {};
-    prepareTemporalDatasets(d, extras);
+    prepareTemporalDatasets(d);
     setupMalhaPorAno();
     initDashboard(d);
   }).catch(err=>{
     const fonteProvavel =
       /der_precomputed/i.test(err.message) ? 'der_precomputed.json' :
-      /dados_extras/i.test(err.message)    ? 'dados_extras.json'    :
       'não identificada pela mensagem de erro';
     console.error('Erro ao carregar dados do painel. Fonte provável:', fonteProvavel, '— erro completo:', err);
     document.querySelector('.tab-content').innerHTML =

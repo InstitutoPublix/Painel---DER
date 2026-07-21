@@ -29,7 +29,6 @@ $dataScript = @"
 <script>
 window.STANDALONE_DATA = {
   "der_precomputed": $(Read-JsonLiteral 'data\der_precomputed.json'),
-  "dados_extras": $(Read-JsonLiteral 'data\dados_extras.json'),
   "benchmark_nacional": $(Read-JsonLiteral 'dashboard\data\benchmark_nacional.json'),
   "rodovias_pr": $(Read-JsonLiteral 'dashboard\data\rodovias_pr.geojson')
 };
