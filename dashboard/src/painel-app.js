@@ -269,6 +269,52 @@ let chScatter        = null;
 let chScatterFilter  = '';
 let chFig6           = null;
 let chQuadrantes     = null;
+let chKmCriticos     = null;
+
+// ── Estado dos pills de filtro por condição (cond-pill) ──
+// Série isolada em cada gráfico (dataset.label) ou null = mostrar todas.
+// Guardado fora das funções de render porque makeChart() destrói e recria
+// o chart a cada chamada (inclusive na troca de #filtroAnoMalha), o que
+// apagaria o estado de isolamento se ele vivesse só no chart instance.
+let serieIsoladaKmCriticos = null;
+let serieIsoladaFig6       = null;
+
+// Aplica o isolamento de série guardado em serieIsolada a um chart: oculta
+// todos os datasets exceto o de label === serieIsolada (ou mostra todos se
+// serieIsolada for null). Datasets do tipo 'line' (ex.: Investimento/km em
+// chartFig6) ficam sempre visíveis, pois não têm pill correspondente.
+function reaplicarIsolamento(chart, serieIsolada){
+  if(!chart) return;
+  chart.data.datasets.forEach((ds, i) => {
+    const meta = chart.getDatasetMeta(i);
+    meta.hidden = ds.type === 'line' ? false : (serieIsolada ? ds.label !== serieIsolada : false);
+  });
+  chart.update();
+}
+
+// Liga os cond-pill de uma barra de filtro (#filtroKmCriticos ou
+// #filtroCondicaoInvest) ao respectivo chart, isolando a série clicada e
+// persistindo a escolha em setState (ex: v => serieIsoladaKmCriticos = v).
+function wireCondPillBar(barId, getChart, setState){
+  const bar = document.getElementById(barId);
+  if(!bar) return;
+  bar.querySelectorAll('.cond-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const serie = pill.dataset.serie;
+      setState(serie);
+      bar.querySelectorAll('.cond-pill').forEach(p => p.classList.toggle('active', p === pill));
+      reaplicarIsolamento(getChart(), serie);
+    });
+  });
+  const clearBtn = bar.querySelector('.cond-pill-clear');
+  if(clearBtn){
+    clearBtn.addEventListener('click', () => {
+      setState(null);
+      bar.querySelectorAll('.cond-pill').forEach(p => p.classList.remove('active'));
+      reaplicarIsolamento(getChart(), null);
+    });
+  }
+}
 
 // =======================================================
 // UTILITÁRIOS
@@ -437,6 +483,7 @@ function renderFig6(){
       }
     }
   });
+  reaplicarIsolamento(chFig6, serieIsoladaFig6);
 }
 
 function renderRelacaoRegional(sr=''){
@@ -592,46 +639,21 @@ function renderScatter(sr=''){
 // =======================================================
 
 function renderMalha(){
-  // Gráfico de extensão absoluta em km
-  if(malhaKm.length > 0){
-    const kmSorted = [...malhaKm].sort((a,b)=>(a.ruim_km+a.pessimo_km)-(b.ruim_km+b.pessimo_km));
-    makeChart(document.getElementById('chartMalhaKm'),{
-      type:'bar',
-      data:{
-        labels: kmSorted.map(r=>r.sr.replace('SR ','')),
-        datasets:[
-          { label:'Péssimo',   data:kmSorted.map(r=>r.pessimo_km),  backgroundColor:COND_COLORS.pessimo   },
-          { label:'Ruim',      data:kmSorted.map(r=>r.ruim_km),     backgroundColor:COND_COLORS.ruim      },
-          { label:'Regular',   data:kmSorted.map(r=>r.regular_km),  backgroundColor:COND_COLORS.regular   },
-          { label:'Boa',       data:kmSorted.map(r=>r.boa_km),      backgroundColor:COND_COLORS.bom       },
-          { label:'Muito Boa', data:kmSorted.map(r=>r.muito_boa_km),backgroundColor:COND_COLORS.muito_bom }
-        ]
-      },
-      options:{
-        indexAxis:'y',
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{
-          legend:{position:'bottom',labels:{font:{size:11},padding:12}},
-          tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)} km`}}
-        },
-        scales:{
-          x:{stacked:true,ticks:{callback:v=>fmtNum(v)+' km'},grid:{color:'#F0F0F0'}},
-          y:{stacked:true,grid:{display:false}}
-        }
-      }
-    });
-
-    const critSorted = [...malhaKm]
-      .map(r=>({sr:r.sr, crit:(r.ruim_km||0)+(r.pessimo_km||0), ruim:r.ruim_km||0, pessimo:r.pessimo_km||0}))
-      .sort((a,b)=>b.crit-a.crit);
-    makeChart(document.getElementById('chartKmCriticos'),{
+  // Ranking de criticidade (Ruim+Péssimo) em % da extensão de cada SR — evita que
+  // regionais com malhas de tamanhos muito diferentes distorçam a leitura visual
+  // (uma SR pequena com poucos km ruins pode parecer melhor do que é, proporcionalmente).
+  if(malhaLiqKm.length > 0){
+    const critSorted = [...malhaLiqKm]
+      .map(r=>({sr:r.sr, ruimPessimo:(r.pct_ruim_pessimo||0)*100, regular:(r.pct_regular||0)*100, bom:(r.pct_bom||0)*100}))
+      .sort((a,b)=>b.ruimPessimo-a.ruimPessimo);
+    chKmCriticos = makeChart(document.getElementById('chartKmCriticos'),{
       type:'bar',
       data:{
         labels: critSorted.map(r=>r.sr.replace('SR ','')),
         datasets:[
-          { label:'Ruim', data:critSorted.map(r=>r.ruim), backgroundColor:'#C00000', borderRadius:3 },
-          { label:'Péssimo', data:critSorted.map(r=>r.pessimo), backgroundColor:'#E07B00', borderRadius:3 }
+          { label:'Ruim + Péssimo', data:critSorted.map(r=>+r.ruimPessimo.toFixed(1)), backgroundColor:COND_COLORS.pessimo, borderRadius:3 },
+          { label:'Regular',        data:critSorted.map(r=>+r.regular.toFixed(1)),     backgroundColor:COND_COLORS.regular,  borderRadius:3 },
+          { label:'Bom + Muito Bom',data:critSorted.map(r=>+r.bom.toFixed(1)),         backgroundColor:COND_COLORS.bom,      borderRadius:3 }
         ]
       },
       options:{
@@ -640,19 +662,18 @@ function renderMalha(){
         maintainAspectRatio:false,
         plugins:{
           legend:{position:'bottom',labels:{font:{size:11},padding:12}},
-          tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)} km`}}
+          tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.x,1)}%`}}
         },
         scales:{
-          x:{stacked:true,ticks:{callback:v=>fmtNum(v)+' km'},grid:{color:'#F0F0F0'}},
+          x:{stacked:true,min:0,max:100,ticks:{callback:v=>v+'%'},grid:{color:'#F0F0F0'}},
           y:{stacked:true,grid:{display:false}}
         }
       }
     });
+    reaplicarIsolamento(chKmCriticos, serieIsoladaKmCriticos);
   }
 
-  // Composição da malha por condição, em % — mesmo padrão visual do gráfico de
-  // km acima (barras empilhadas por SR, cores COND_COLORS), mas com as 5 faixas
-  // completas em percentual (não só o agregado Bom+Muito Bom da seção Evolução).
+  // Composição da malha por condição, em %
   if(malhaLiqKm.length > 0){
     const pctSorted = [...malhaLiqKm].sort((a,b)=>a.pct_ruim_pessimo-b.pct_ruim_pessimo);
     makeChart(document.getElementById('chartMalhaPct'),{
@@ -2355,6 +2376,9 @@ document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>
 document.getElementById('filtroSR').addEventListener('change', e=>{
   renderRelacaoRegional(e.target.value);
 });
+
+wireCondPillBar('filtroKmCriticos', () => chKmCriticos, v => { serieIsoladaKmCriticos = v; });
+wireCondPillBar('filtroCondicaoInvest', () => chFig6, v => { serieIsoladaFig6 = v; });
 
 // Inicialização via fetch — ver initDashboard() abaixo
 
