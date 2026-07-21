@@ -3896,7 +3896,7 @@ window.STANDALONE_DATA = {
     <div class="section-header">Diagnóstico da Malha <span class="periodo-badge" data-periodo-malha="SAM {ano}">SAM 2025</span></div>
     <p class="section-intro">Fotografia técnica da condição da malha avaliada, antes da leitura financeira ou dos cruzamentos interpretativos.</p>
 
-    <div class="note mb-24" style="background:#f0f4ff;border-left:4px solid var(--cor-azul-hover);padding:14px 18px;">
+    <div class="note warn mb-24">
       Esta seção apresenta a <strong>condição observada da malha</strong>. Os dados financeiros aparecem nas seções seguintes e não devem ser usados, neste primeiro momento, para explicar diretamente a condição da malha. Informações sobre execução financeira, contratos e pressão operacional são tratadas nas abas <em>Pressão e Execução</em> e <em>Leitura Integrada</em>.
     </div>
 
@@ -3946,8 +3946,8 @@ window.STANDALONE_DATA = {
 
     <div class="section-sep"><span>Evolução da Malha — anos mais recentes disponíveis <span class="periodo-badge" data-periodo-malha="SAM: anos disponíveis">SAM: anos disponíveis</span></span></div>
 
-    <div class="note mb-24" style="background:#f0f4ff;border-left:4px solid var(--cor-azul-hover);padding:14px 18px;">
-      <strong>Nota metodológica — corte temporal:</strong> esta comparação cobre dois retratos pontuais da malha (2024 e 2025), não uma série histórica contínua. A condição observada em cada ano reflete decisões de investimento acumuladas ao longo de anos anteriores, não apenas o exercício corrente — ver ressalva complementar abaixo do gráfico.
+    <div class="note warn mb-24">
+      <strong>Nota metodológica — corte temporal</strong> <button type="button" class="nota-info-trigger" data-nota-id="evolucao-malha-corte-temporal" aria-expanded="false" aria-label="Ver nota completa sobre o corte temporal 2024-2025">ⓘ</button>
     </div>
 
     <div class="chart-container mb-24">
@@ -3993,12 +3993,12 @@ window.STANDALONE_DATA = {
       <div id="map-rodovias" class="leaflet-map" role="img" aria-label="Mapa esquemático das rodovias estaduais do Paraná, colorido pela condição média de conservação de cada Superintendência Regional"></div>
     </div>
 
-    <div class="note">
-      <strong>Nota metodológica:</strong> As linhas mostram o traçado real das rodovias estaduais do Paraná (fonte: OpenStreetMap). A cor de cada trecho reflete a condição média da Superintendência Regional onde ele está localizado (dados SAM agregados por SR, ano de referência 2025) — não existe, na base disponível, uma nota de condição por trecho individual.
+    <div class="note warn">
+      <strong>Nota metodológica</strong> <button type="button" class="nota-info-trigger" data-nota-id="mapa-condicao-por-sr" aria-expanded="false" aria-label="Ver nota completa sobre condição por trecho no mapa">ⓘ</button>
     </div>
 
     <div class="note gray">
-      <strong>Fonte geométrica:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="link-blue">OpenStreetMap contributors</a> — dados obtidos via Overpass API. Para regenerar o arquivo de geometria execute: <code>python scripts/fetch_rodovias_pr.py</code>
+      <strong>Fonte geométrica:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="link-blue">OpenStreetMap contributors</a>. <button type="button" class="nota-info-trigger" data-nota-id="mapa-fonte-osm" aria-expanded="false" aria-label="Ver detalhes técnicos da fonte geométrica">ⓘ</button>
     </div>
 
     <div class="chart-container">
@@ -4059,12 +4059,12 @@ window.STANDALONE_DATA = {
 
     <div class="section-header">Pressão e Execução <span class="periodo-badge" data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 {ano}</span></div>
 
-    <div class="note mb-24" style="background:#fff8e8;border-left:4px solid #b8860b;padding:14px 18px;">
+    <div class="note gray mb-24">
       Esta aba está organizada em dois blocos sequenciais: primeiro a <strong>pressão operacional</strong> (SPC e perfil de conservação por regional), depois a <strong>execução financeira</strong> (contratos, empenhado, liquidado e distribuição por tipo). Para os cruzamentos entre condição e financeiro, veja a aba <em>Sinais para Investigação</em>.
     </div>
 
     <div class="sub-section-header amber">1 — Pressão Operacional</div>
-    <div class="note note-compact">Pressão operacional indica combinação de fatores que podem exigir atenção técnica. Ela não representa, isoladamente, insuficiência ou excesso de investimento.</div>
+    <div class="note warn note-compact">Pressão operacional indica combinação de fatores que podem exigir atenção técnica. <button type="button" class="nota-info-trigger" data-nota-id="pressao-isolada" aria-expanded="false" aria-label="Ver nota completa sobre pressão operacional isolada">ⓘ</button></div>
 
     <div class="section-sep"><span>Sinalizador de Pressão de Conservação por SR <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
 
@@ -4090,14 +4090,14 @@ window.STANDALONE_DATA = {
       <strong>Fórmula:</strong> SPC = 1/3 × norm(% Regular) + 1/3 × norm(% Ruim+Péssimo) + 1/3 × norm(% Emergenciais). A normalização usa valor / máximo observado entre as 5 SRs, com escala relativa ao conjunto exibido. Valores ausentes entram como zero e são sinalizados em tooltip.<br><br>
       <strong>Importante:</strong> o SPC é um corte transversal relativo às cinco SRs. Não antecipa resultado futuro, não mede efeito do gasto e não classifica desempenho. Valores de Liquidado/km são exibidos como referência, mas não entram na fórmula.</p>
     </details>
-    <div id="pressao-sensibilidade" class="note mt-8" style="font-size:12.5px;color:#555"></div>
+    <div id="pressao-sensibilidade" class="note gray mt-8" style="font-size:12.5px;color:#555"></div>
 
     <div class="hl-grid" id="hl-grid"></div>
 
 
     <!-- SEÇÃO: EXECUÇÃO FINANCEIRA OBSERVADA -->
     <div class="sub-section-header">2 — Execução Financeira Observada</div>
-    <div class="note note-compact">Os valores financeiros representam execução observada no período. Eles não indicam, isoladamente, necessidade total de investimento, suficiência da alocação ou efeito direto sobre a condição atual da malha.</div>
+    <div class="note warn note-compact">Os valores financeiros representam execução observada no período. <button type="button" class="nota-info-trigger" data-nota-id="execucao-financeira-isolada" aria-expanded="false" aria-label="Ver nota completa sobre execução financeira isolada">ⓘ</button></div>
 
     <div class="section-sep"><span>Contratos DOPSR1 <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
 
@@ -4221,7 +4221,7 @@ window.STANDALONE_DATA = {
 
     <div class="section-header">Leitura Integrada por Regional <span class="periodo-badge" data-periodo-combinado="SAM {sam} · Contratos DOPSR1 {financeiro}">SAM 2025 · Contratos DOPSR1 2025</span></div>
 
-    <div class="note mb-24" style="background:#f4f8f4;border-left:4px solid #4a8a4a;padding:14px 18px;">
+    <div class="note gray mb-24">
       Esta aba combina condição da malha e execução financeira por regional, com a síntese executiva de indicadores e achados analíticos consolidados. Para os cruzamentos e sinais de investigação, veja a aba seguinte.
     </div>
 
@@ -4358,7 +4358,7 @@ window.STANDALONE_DATA = {
     <div class="section-header">Sinais para Investigação Técnica Complementar <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></div>
     <p class="section-intro">Os cruzamentos desta seção ajudam a identificar pontos para aprofundamento técnico. Eles não indicam, isoladamente, suficiéncia, excesso ou inadequação do investimento.</p>
 
-    <div class="note mb-24" style="background:#f5f5f5;border-left:4px solid #888;padding:14px 18px;">
+    <div class="note warn mb-24">
       <strong>Como ler esta seção:</strong> os cruzamentos mostram combinaçóes relativas entre condição da malha, pressão operacional e execução financeira observada. A posição de uma regional pode refletir passivo acumulado, tipo de intervenção, complexidade das obras, contratos vigentes, restriçóes operacionais, extensão administrada ou planejamento plurianual. Por isso, <strong>os gráficos devem orientar perguntas, não produzir conclusóes automáticas sobre alocação</strong>.<br><br>
       As análises a seguir cruzam dados de condição e execução financeira para identificar padróes que merecem investigação técnica complementar. Os indicadores <strong>não permitem concluir, isoladamente, sobre adequação ou inadequação na aplicação dos recursos</strong>. Cada análise formula perguntas orientadoras — não diagnósticos definitivos.
     </div>
@@ -4369,7 +4369,7 @@ window.STANDALONE_DATA = {
 
     <div class="section-header">Relação Observada entre Condição Favorável e Liquidado no Período <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
 
-    <div class="note">Esta análise cruza condição SAM com liquidado DOPSR1 do mesmo ano. Condição é estoque acumulado da malha; liquidado é fluxo anual. A relação é apenas descritiva, não mede produtividade, efeito do gasto ou qualidade da alocação.</div>
+    <div class="note warn">Esta análise cruza condição SAM com liquidado DOPSR1 do mesmo ano. <button type="button" class="nota-info-trigger" data-nota-id="estoque-fluxo" aria-expanded="false" aria-label="Ver nota completa sobre estoque e fluxo">ⓘ</button></div>
 
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -4471,7 +4471,7 @@ window.STANDALONE_DATA = {
     <div class="chart-container mt-24">
       <div class="chart-title">Sinais para investigação técnica complementar <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} Â· Financeiro {financeiro}">Dados 2025</span></div>
       <p style="font-size:12px;color:#555;line-height:1.6;margin-bottom:14px">Os quadrantes cruzam criticidade da malha e execução financeira observada para orientar perguntas de análise. Eles não indicam, isoladamente, suficiência, excesso ou inadequação do investimento.</p>
-      <div class="note" style="margin-bottom:14px;font-size:12px"><strong>Como ler esta matriz:</strong> os quadrantes mostram combinações relativas entre condição da malha e liquidado/km no ano selecionado. A posição de uma regional deve ser interpretada como ponto de investigação técnica, não como conclusão sobre suficiência do investimento. A avaliação completa depende de informações complementares sobre tipo de intervenção, passivo acumulado, contratos vigentes, extensão administrada, complexidade das obras e planejamento plurianual.</div>
+      <div class="note warn" style="margin-bottom:14px;font-size:12px"><strong>Como ler esta matriz</strong> <button type="button" class="nota-info-trigger" data-nota-id="quadrantes-leitura" aria-expanded="false" aria-label="Ver nota completa sobre como ler a matriz de quadrantes">ⓘ</button></div>
       <div class="chart-h-300"><canvas id="chartQuadrantes" role="img" aria-label="Gráfico de quadrantes: cruzamento entre criticidade da malha e execução financeira por Superintendência Regional"></canvas></div>
       <div id="quadrantesResumo"></div>
       <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="SAM {sam} e Contratos DOPSR1 {financeiro}">SAM 2025 e Contratos DOPSR1 {ano}</span>. <button type="button" class="nota-info-trigger" data-nota-id="quadrantes-linhas-corte" aria-expanded="false" aria-label="Ver nota sobre linhas de corte">ⓘ</button></p>
@@ -4498,7 +4498,7 @@ window.STANDALONE_DATA = {
 
     <div class="section-header">Posicionamento Estadual <span class="periodo-badge">DER-PR × Brasil · 2025</span></div>
 
-    <div class="note mb-20">
+    <div class="note gray mb-20">
       Esta aba situa o Paraná no contexto nacional da Pesquisa CNT de Rodovias e conecta esse posicionamento aos achados internos das Superintendências Regionais. Os dados internos (<span data-periodo-malha="SAM {ano}">SAM 2025</span>, Contratos DOPSR1) referem-se exclusivamente à malha estadual administrada pelo DER-PR — fração do universo avaliado pela CNT.
     </div>
 
@@ -4520,10 +4520,10 @@ window.STANDALONE_DATA = {
       </div>
     </div>
 
-    <div class="note gray mb-32" id="bench-ponte-narrativa" style="line-height:1.7"></div>
+    <div class="note mb-32" id="bench-ponte-narrativa" style="line-height:1.7"></div>
 
-    <div class="note gray mb-24" style="font-size:12.5px">
-      <strong>Nota:</strong> Os dados da Pesquisa CNT de Rodovias referem-se a toda a malha federal e estadual pavimentada avaliada no Paraná — universo mais amplo que a malha administrada pelo DER-PR. O desempenho estadual neste ranking não pode ser atribuído exclusivamente às ações do DER-PR.
+    <div class="note warn mb-24" style="font-size:12.5px">
+      <strong>Nota:</strong> Os dados da Pesquisa CNT de Rodovias referem-se a toda a malha federal e estadual pavimentada avaliada no Paraná — universo mais amplo que a malha administrada pelo DER-PR. <button type="button" class="nota-info-trigger" data-nota-id="benchmark-universo-cnt" aria-expanded="false" aria-label="Ver nota completa sobre atribuição de desempenho no ranking CNT">ⓘ</button>
     </div>
 
     <div class="section-sep"><span>Benchmark Nacional — Pesquisa CNT de Rodovias <span class="periodo-badge">Série 2015–2025</span></span></div>
@@ -4531,7 +4531,7 @@ window.STANDALONE_DATA = {
     <div id="bench-error"></div>
 
     <div class="note gray mb-20">
-      <strong>Fonte:</strong> Pesquisa CNT de Rodovias &nbsp;·&nbsp; Série 2015–2025 &nbsp;·&nbsp; <strong>Sem levantamento em 2020 e 2023</strong> — esses anos não constam na série e não foram interpolados.
+      <strong>Fonte:</strong> Pesquisa CNT de Rodovias &nbsp;·&nbsp; Série 2015–2025. <button type="button" class="nota-info-trigger" data-nota-id="benchmark-fonte-cnt" aria-expanded="false" aria-label="Ver nota completa sobre cobertura da série CNT">ⓘ</button>
     </div>
 
     <div class="bench-controls">
@@ -5125,7 +5125,16 @@ const NOTAS_METODOLOGICAS = {
   'fig6-investimento-km': 'Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> (fluxo anual) dividido pela quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> — o mesmo denominador (SAM-km) usado pelos demais indicadores de R$/km/ano do painel, portanto consistente com eles, e não um indicador à parte.',
   'quadrantes-linhas-corte': 'Linhas de corte = medianas das 5 SRs, calculadas dinamicamente.',
   'denominador-liquidado-km-fig6': 'Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.',
-  'scatter-tendencia': 'Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.'
+  'scatter-tendencia': 'Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.',
+  'evolucao-malha-corte-temporal': 'esta comparação cobre dois retratos pontuais da malha (2024 e 2025), não uma série histórica contínua. A condição observada em cada ano reflete decisões de investimento acumuladas ao longo de anos anteriores, não apenas o exercício corrente — ver ressalva complementar abaixo do gráfico.',
+  'mapa-condicao-por-sr': 'As linhas mostram o traçado real das rodovias estaduais do Paraná (fonte: OpenStreetMap). A cor de cada trecho reflete a condição média da Superintendência Regional onde ele está localizado (dados SAM agregados por SR, ano de referência 2025) — não existe, na base disponível, uma nota de condição por trecho individual.',
+  'mapa-fonte-osm': 'Dados obtidos via Overpass API. Para regenerar o arquivo de geometria execute: <code>python scripts/fetch_rodovias_pr.py</code>',
+  'pressao-isolada': 'Ela não representa, isoladamente, insuficiência ou excesso de investimento.',
+  'execucao-financeira-isolada': 'Eles não indicam, isoladamente, necessidade total de investimento, suficiência da alocação ou efeito direto sobre a condição atual da malha.',
+  'estoque-fluxo': 'Condição é estoque acumulado da malha; liquidado é fluxo anual. A relação é apenas descritiva, não mede produtividade, efeito do gasto ou qualidade da alocação.',
+  'quadrantes-leitura': 'os quadrantes mostram combinações relativas entre condição da malha e liquidado/km no ano selecionado. A posição de uma regional deve ser interpretada como ponto de investigação técnica, não como conclusão sobre suficiência do investimento. A avaliação completa depende de informações complementares sobre tipo de intervenção, passivo acumulado, contratos vigentes, extensão administrada, complexidade das obras e planejamento plurianual.',
+  'benchmark-universo-cnt': 'O desempenho estadual neste ranking não pode ser atribuído exclusivamente às ações do DER-PR.',
+  'benchmark-fonte-cnt': '<strong>Sem levantamento em 2020 e 2023</strong> — esses anos não constam na série e não foram interpolados.'
 };
 
 let notaPopoverEl = null;

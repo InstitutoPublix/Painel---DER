@@ -329,7 +329,16 @@ const NOTAS_METODOLOGICAS = {
   'fig6-investimento-km': 'Indicador calculado como valor liquidado em <span data-periodo-malha="{ano}">2025</span> (fluxo anual) dividido pela quilometragem avaliada pelo <span data-periodo-malha="SAM {ano}">SAM 2025</span> — o mesmo denominador (SAM-km) usado pelos demais indicadores de R$/km/ano do painel, portanto consistente com eles, e não um indicador à parte.',
   'quadrantes-linhas-corte': 'Linhas de corte = medianas das 5 SRs, calculadas dinamicamente.',
   'denominador-liquidado-km-fig6': 'Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.',
-  'scatter-tendencia': 'Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.'
+  'scatter-tendencia': 'Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.',
+  'evolucao-malha-corte-temporal': 'esta comparação cobre dois retratos pontuais da malha (2024 e 2025), não uma série histórica contínua. A condição observada em cada ano reflete decisões de investimento acumuladas ao longo de anos anteriores, não apenas o exercício corrente — ver ressalva complementar abaixo do gráfico.',
+  'mapa-condicao-por-sr': 'As linhas mostram o traçado real das rodovias estaduais do Paraná (fonte: OpenStreetMap). A cor de cada trecho reflete a condição média da Superintendência Regional onde ele está localizado (dados SAM agregados por SR, ano de referência 2025) — não existe, na base disponível, uma nota de condição por trecho individual.',
+  'mapa-fonte-osm': 'Dados obtidos via Overpass API. Para regenerar o arquivo de geometria execute: <code>python scripts/fetch_rodovias_pr.py</code>',
+  'pressao-isolada': 'Ela não representa, isoladamente, insuficiência ou excesso de investimento.',
+  'execucao-financeira-isolada': 'Eles não indicam, isoladamente, necessidade total de investimento, suficiência da alocação ou efeito direto sobre a condição atual da malha.',
+  'estoque-fluxo': 'Condição é estoque acumulado da malha; liquidado é fluxo anual. A relação é apenas descritiva, não mede produtividade, efeito do gasto ou qualidade da alocação.',
+  'quadrantes-leitura': 'os quadrantes mostram combinações relativas entre condição da malha e liquidado/km no ano selecionado. A posição de uma regional deve ser interpretada como ponto de investigação técnica, não como conclusão sobre suficiência do investimento. A avaliação completa depende de informações complementares sobre tipo de intervenção, passivo acumulado, contratos vigentes, extensão administrada, complexidade das obras e planejamento plurianual.',
+  'benchmark-universo-cnt': 'O desempenho estadual neste ranking não pode ser atribuído exclusivamente às ações do DER-PR.',
+  'benchmark-fonte-cnt': '<strong>Sem levantamento em 2020 e 2023</strong> — esses anos não constam na série e não foram interpolados.'
 };
 
 let notaPopoverEl = null;
