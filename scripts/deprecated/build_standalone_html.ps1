@@ -1,3 +1,15 @@
+# Descontinuado em 2026-07-22 — dashboard/painel_der.html deixou de ser o
+# arquivo autossuficiente (a arquitetura migrou para "HTML leve + fetch em
+# runtime", com data/der_precomputed.json e os demais JSONs carregados via
+# loadJsonData()). Este script sobrescreve dashboard\painel_der.html IN-PLACE
+# por padrão ($OutputPath) — se rodado sobre o template leve atual, reembute
+# os 3 datasets nele e destrói a versão leve (o mesmo tipo de acidente que já
+# descontinuou scripts/deprecated/build_standalone.py em 2026-07-17). O
+# substituto ativo é scripts/build_standalone.py, que nunca escreve em
+# painel_der.html — só gera dashboard/painel_der_standalone.html. Não rode
+# este script sem antes ajustar $OutputPath e revalidar a lógica de
+# substituição de blocos contra o HTML atual.
+
 param(
   [string]$OutputPath = "dashboard\painel_der.html"
 )

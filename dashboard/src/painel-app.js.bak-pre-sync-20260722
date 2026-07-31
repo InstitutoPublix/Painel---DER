@@ -1,4 +1,4 @@
-/* painel.js - fonte do painel; HTML leve (window.STANDALONE_DATA = null), dados carregados via loadJsonData() em runtime */
+/* painel.js - fonte do painel; embutido pelo build_standalone_html.ps1 */
 // =======================================================
 // DADOS — AÇÃO 8398 DER-PR
 // =======================================================
@@ -269,7 +269,6 @@ let chScatter        = null;
 let chScatterFilter  = '';
 let chFig6           = null;
 let chQuadrantes     = null;
-let chDonutsSR       = {};
 let chKmCriticos     = null;
 
 // ── Estado dos pills de filtro por condição (cond-pill) ──
@@ -590,19 +589,10 @@ function renderEvolucaoLiquidadoRegional(){
   const anoA = anosSerie[anosSerie.length - 2];
   const anoB = anosSerie[anosSerie.length - 1];
 
-  // chartEvolucaoLiquidadoValor acompanha o ano selecionado em #filtroAnoMalha
-  // (diferente de anoA/anoB acima, que são fixos nos dois exercícios mais
-  // recentes só para o cálculo de variação de condição).
-  const anoValorSelecionado = (typeof anoSelecionadoMalha !== 'undefined' && anosSerie.includes(anoSelecionadoMalha))
-    ? anoSelecionadoMalha
-    : anoB;
-
   const periodoEl = document.getElementById('evolucaoLiquidadoPeriodo');
   if(periodoEl) periodoEl.textContent = anoA + '→' + anoB;
   const anoRefEl = document.getElementById('evolucaoLiquidadoAnoRef');
-  if(anoRefEl) anoRefEl.textContent = anoValorSelecionado;
-  const fonteRefEl = document.getElementById('evolucaoLiquidadoFonteRef');
-  if(fonteRefEl) fonteRefEl.innerHTML = '<strong>Fonte:</strong> Contratos DOPSR1 por Regional.xlsx (' + anoValorSelecionado + ').';
+  if(anoRefEl) anoRefEl.textContent = anoB;
 
   const linhas = SR_ORDER.map(sr => {
     const porAno = appState.datasets.regionalByYear[sr] || {};
@@ -611,7 +601,7 @@ function renderEvolucaoLiquidadoRegional(){
     if(!dA || !dB) return null;
     const pctA = (dA.condition.pct.bom_muito_bom || 0) * 100;
     const pctB = (dB.condition.pct.bom_muito_bom || 0) * 100;
-    return { sr, delta: pctB - pctA, lkm: porAno[anoValorSelecionado]?.financial?.liquidado_por_km ?? null };
+    return { sr, delta: pctB - pctA, lkm: dB.financial?.liquidado_por_km ?? null };
   }).filter(Boolean);
   if(!linhas.length) return;
 
@@ -662,7 +652,7 @@ function renderEvolucaoLiquidadoRegional(){
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` R$ ${fmtNum(ctx.raw)}/km/ano (${anoValorSelecionado})` } }
+        tooltip: { callbacks: { label: ctx => ` R$ ${fmtNum(ctx.raw)}/km/ano (${anoB})` } }
       },
       scales: {
         x: { grid: { color: '#F0F0F0' }, ticks: { callback: v => v >= 1000 ? fmtNum(v / 1000, 0) + 'k' : v } },
@@ -670,122 +660,6 @@ function renderEvolucaoLiquidadoRegional(){
       }
     }
   });
-}
-
-// Compara, por SR, a variação da condição SAM entre os dois anos SAM mais
-// recentes (2024→2025) com o total empenhado no ano anterior à medição mais
-// recente — o ano em que o esforço de manutenção que antecede 2025 foi
-// contratado. Único intervalo disponível (n=5 SRs); não calcula correlação
-// (ver nota metodológica no HTML — fragilidade estatística com 5 pontos).
-// Dois gráficos de barras horizontais lado a lado (mesma ordem de SR em
-// ambos, sem eixo combinado) em vez de eixo duplo, para não sugerir relação
-// funcional entre variação de condição (p.p.) e empenhado (R$) — mesmo
-// padrão de renderEvolucaoLiquidadoRegional.
-function renderDeltaCondicaoEmpenho(){
-  const canvasDelta = document.getElementById('chartDeltaCondicao');
-  const canvasEmp   = document.getElementById('chartEmpenhado2024');
-  if(!canvasDelta || !canvasEmp) return;
-  const anosSerie = anosDisponiveisMalha();
-  if(anosSerie.length < 2) return;
-  const anoA = anosSerie[anosSerie.length - 2];
-  const anoB = anosSerie[anosSerie.length - 1];
-
-  const periodoEl = document.getElementById('deltaCondicaoEmpenhoPeriodo');
-  if(periodoEl) periodoEl.textContent = anoA + '→' + anoB;
-  const periodoEl2 = document.getElementById('deltaCondicaoEmpenhoPeriodo2');
-  if(periodoEl2) periodoEl2.textContent = anoA + '→' + anoB;
-  const anoRefEl = document.getElementById('deltaCondicaoEmpenhoAnoRef');
-  if(anoRefEl) anoRefEl.textContent = anoA;
-
-  const linhas = SR_ORDER.map(sr => {
-    const porAno = appState.datasets.regionalByYear[sr] || {};
-    const dA = porAno[anoA];
-    const dB = porAno[anoB];
-    if(!dA || !dB) return null;
-    const pctA = (dA.condition.pct.bom_muito_bom || 0) * 100;
-    const pctB = (dB.condition.pct.bom_muito_bom || 0) * 100;
-    return { sr, delta: pctB - pctA, empenhado: dA.financial?.empenhado ?? null };
-  }).filter(Boolean);
-  if(!linhas.length) return;
-
-  // Ordenado da maior melhora para a maior piora; o segundo gráfico usa a
-  // mesma ordem (não reordena por empenhado), para permitir leitura lado a
-  // lado SR-a-SR sem forçar um eixo combinado.
-  const sorted = [...linhas].sort((a, b) => b.delta - a.delta);
-  const labels = sorted.map(r => r.sr.replace('SR ', ''));
-
-  makeChart(canvasDelta, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        data: sorted.map(r => +r.delta.toFixed(1)),
-        backgroundColor: sorted.map(r => r.delta >= 0 ? '#4a8a4a' : '#C00000'),
-        borderRadius: 3
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.raw >= 0 ? '+' : ''}${fmtNum(ctx.raw, 1)} p.p. (${anoA}→${anoB})` } }
-      },
-      scales: {
-        x: { grid: { color: '#F0F0F0' }, ticks: { callback: v => (v >= 0 ? '+' : '') + v + ' p.p.' } },
-        y: { grid: { display: false } }
-      }
-    }
-  });
-
-  makeChart(canvasEmp, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        data: sorted.map(r => r.empenhado != null ? Math.round(r.empenhado) : 0),
-        backgroundColor: sorted.map(r => SR_COLORS[r.sr] || '#888'),
-        borderRadius: 3
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` R$ ${fmtNum(ctx.raw)} (${anoA})` } }
-      },
-      scales: {
-        x: { grid: { color: '#F0F0F0' }, ticks: { callback: v => v >= 1e6 ? fmtNum(v / 1e6, 0) + 'M' : fmtNum(v) } },
-        y: { grid: { display: false } }
-      }
-    }
-  });
-
-  renderDeltaCondicaoEmpenhoNarrativa(sorted, anoA, anoB);
-}
-
-function renderDeltaCondicaoEmpenhoNarrativa(linhas, anoA, anoB){
-  const el = document.getElementById('delta-narrativa');
-  if(!el || !linhas.length) return;
-
-  const empenhoMediana = median(linhas.filter(r => r.empenhado != null).map(r => r.empenhado));
-  const posRelativa = v => v == null ? 'sem dado' : (v >= empenhoMediana ? 'acima da mediana' : 'abaixo da mediana');
-
-  const srMelhora = linhas.reduce((a, b) => b.delta > a.delta ? b : a, linhas[0]);
-  const srPiora   = linhas.reduce((a, b) => b.delta < a.delta ? b : a, linhas[0]);
-
-  el.innerHTML =
-    `A <strong>${esc(srMelhora.sr)}</strong> apresenta a maior variação positiva de condição no período ` +
-    `(${srMelhora.delta >= 0 ? '+' : ''}${fmtNum(srMelhora.delta, 1)} p.p., ${anoA}→${anoB}), com empenhado ${anoA} ` +
-    `de ${fmtR(srMelhora.empenhado)} (${posRelativa(srMelhora.empenhado)} entre as 5 SRs). ` +
-    `A <strong>${esc(srPiora.sr)}</strong> registra a variação menos favorável no mesmo intervalo ` +
-    `(${srPiora.delta >= 0 ? '+' : ''}${fmtNum(srPiora.delta, 1)} p.p.), com empenhado ${anoA} ` +
-    `de ${fmtR(srPiora.empenhado)} (${posRelativa(srPiora.empenhado)}). ` +
-    `Com apenas dois anos de dados e 5 SRs, este padrão é descritivo — não estatisticamente robusto e não permite ` +
-    `inferir relação de causa e efeito entre empenho e variação de condição observada.`;
 }
 
 function renderRelacaoRegional(sr=''){
@@ -933,6 +807,7 @@ function renderScatter(sr=''){
       }
     }
   });
+  renderMatrizRecomendacao();
 }
 
 // =======================================================
@@ -1008,61 +883,6 @@ function renderMalha(){
   renderMapaRodovias();
   renderTmdaCondicao();
   renderEvolucaoMalha();
-  renderMalhaDonutsPorSR();
-}
-
-// Pequenos múltiplos: um gráfico de rosca por SR, mostrando a composição
-// completa da malha (5 faixas de condição) daquela regional isoladamente.
-// Complementa o chartMalhaPct (barras empilhadas comparando as 5 SRs lado a
-// lado) — aqui o objetivo é ler o detalhe exato de uma SR sem a barra
-// combinada "espremer" as faixas menores. Fonte: mesmo malhaLiqKm (nenhum
-// dado novo, nenhuma chamada ao pipeline Python).
-function renderMalhaDonutsPorSR(){
-  const container = document.getElementById('grid-malha-donuts-sr');
-  if(!container || !malhaLiqKm.length) return;
-
-  Object.values(chDonutsSR).forEach(ch => ch && ch.destroy());
-  chDonutsSR = {};
-
-  container.innerHTML = malhaLiqKm.map(r => `
-    <div class="donut-sr-card">
-      <div class="donut-sr-title">${esc(r.sr.replace('SR ',''))}</div>
-      <canvas id="donutSR-${esc(r.sr.replace(/\s+/g,''))}" role="img" aria-label="Gráfico de rosca: composição da malha por condição na Superintendência Regional ${esc(r.sr)}"></canvas>
-    </div>
-  `).join('');
-
-  malhaLiqKm.forEach(r => {
-    const canvasId = `donutSR-${r.sr.replace(/\s+/g,'')}`;
-    const canvas = document.getElementById(canvasId);
-    if(!canvas) return;
-    chDonutsSR[r.sr] = makeChart(canvas, {
-      type:'doughnut',
-      data:{
-        labels:['Péssimo','Ruim','Regular','Boa','Muito Boa'],
-        datasets:[{
-          data:[
-            +((r.pct_pessimo||0)*100).toFixed(1),
-            +((r.pct_ruim||0)*100).toFixed(1),
-            +((r.pct_regular||0)*100).toFixed(1),
-            +((r.pct_boa||0)*100).toFixed(1),
-            +((r.pct_otima||0)*100).toFixed(1)
-          ],
-          backgroundColor:[COND_COLORS.pessimo, COND_COLORS.ruim, COND_COLORS.regular, COND_COLORS.bom, COND_COLORS.muito_bom],
-          borderWidth:1,
-          borderColor:'#fff'
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        cutout:'55%',
-        plugins:{
-          legend:{display:false},
-          tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${fmtNum(ctx.parsed,1)}%`}}
-        }
-      }
-    });
-  });
 }
 
 // Bloco "Evolução da Malha — 2024 → 2025": gráfico de barras agrupadas,
@@ -1590,128 +1410,6 @@ function renderTblContratos(data){
   }).join('');
 }
 
-// Composição do gasto liquidado por tipo de intervenção contratual, por SR,
-// cruzada com condição SAM (malhaLiqKm.pct_bom) — mesmo padrão visual do
-// chartFig6 (barras empilhadas + linha em eixo secundário). Leitura de
-// "esforço" distinta de investimento/km: descreve que tipo de trabalho está
-// sendo feito, não quanto custa por km. Ver ressalva de causalidade reversa
-// no HTML — SR com mais CREMEP/COP pode refletir necessidade estrutural
-// pré-existente, não maior dedicação de recursos.
-function renderTipoCondicao(){
-  const canvas = document.getElementById('chartTipoCondicao');
-  if(!canvas || !contratos.length || !malhaLiqKm.length) return;
-
-  const TIPOS_INTERVENCAO_PROFUNDA = ['CREMEP', 'COP'];
-  const TIPOS_INTERVENCAO_LEVE = ['PROCONSERVA'];
-  const tipos = Object.keys(TIPO_COLORS);
-  const tipoLabel = {PROCONSERVA:'PROCONSERVA', COP:'COP', INTEGRA:'INTEGRA', CREMEP:'CREMEP', EMERGENCIAL:'Emergencial'};
-
-  const linhas = malhaLiqKm.map(m => {
-    const contratosSR = contratos.filter(c => (SR_DISPLAY[c.sr] || c.sr) === m.sr);
-    const liquidadoTotalSR = contratosSR.reduce((a, c) => a + c.liquidado, 0);
-    const porTipo = {};
-    tipos.forEach(t => {
-      porTipo[t] = contratosSR.filter(c => c.tipo === t).reduce((a, c) => a + c.liquidado, 0);
-    });
-    const liquidadoProfundoSR     = TIPOS_INTERVENCAO_PROFUNDA.reduce((a, t) => a + porTipo[t], 0);
-    const liquidadoLeveSR         = TIPOS_INTERVENCAO_LEVE.reduce((a, t) => a + porTipo[t], 0);
-    const liquidadoEmergencialSR  = porTipo['EMERGENCIAL'] || 0;
-    const liquidadoIntegraSR      = porTipo['INTEGRA'] || 0;
-    const pctProfundoSR    = liquidadoTotalSR > 0 ? liquidadoProfundoSR / liquidadoTotalSR * 100 : 0;
-    const pctEmergencialSR = liquidadoTotalSR > 0 ? liquidadoEmergencialSR / liquidadoTotalSR * 100 : 0;
-    const pctPorTipo = {};
-    tipos.forEach(t => { pctPorTipo[t] = liquidadoTotalSR > 0 ? porTipo[t] / liquidadoTotalSR * 100 : 0; });
-    return {
-      sr: m.sr, pct_bom: m.pct_bom, liquidadoTotalSR,
-      liquidadoProfundoSR, liquidadoLeveSR, liquidadoEmergencialSR, liquidadoIntegraSR,
-      pctProfundoSR, pctEmergencialSR, pctPorTipo
-    };
-  }).filter(r => r.liquidadoTotalSR > 0);
-
-  if(!linhas.length) return;
-
-  const sorted = [...linhas].sort((a, b) => b.pct_bom - a.pct_bom);
-  const labels = sorted.map(r => r.sr.replace('SR ', ''));
-
-  makeChart(canvas, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        ...tipos.map(t => ({
-          label: tipoLabel[t] || t,
-          data: sorted.map(r => +r.pctPorTipo[t].toFixed(1)),
-          backgroundColor: TIPO_COLORS[t],
-          stack: 'tipo', yAxisID: 'y', order: 1
-        })),
-        {
-          type: 'line', label: 'Condição SAM (% Bom+Muito Bom)',
-          data: sorted.map(r => +(r.pct_bom * 100).toFixed(1)),
-          borderColor: '#1F4E79', backgroundColor: 'rgba(31,78,121,0.12)',
-          borderWidth: 2.5, pointRadius: 6, pointBackgroundColor: '#1F4E79',
-          pointBorderColor: 'white', pointBorderWidth: 2,
-          yAxisID: 'y1', tension: 0, fill: false, order: 0
-        }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } },
-        datalabels: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              if(ctx.dataset.yAxisID === 'y1')
-                return ` Condição SAM: ${fmtNum(ctx.raw, 1)}% Bom+Muito Bom`;
-              return ` ${ctx.dataset.label}: ${fmtNum(ctx.parsed.y, 1)}% do liquidado da SR`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: { stacked: true, grid: { display: false } },
-        y: {
-          stacked: true, max: 100,
-          ticks: { callback: v => v + '%' },
-          title: { display: true, text: '% do liquidado', font: { size: 11 } },
-          grid: { color: '#F0F0F0' }
-        },
-        y1: {
-          position: 'right', max: 100,
-          title: { display: true, text: '% Bom+Muito Bom', font: { size: 11 }, color: '#1F4E79' },
-          grid: { display: false },
-          ticks: { color: '#1F4E79', callback: v => v + '%' }
-        }
-      }
-    }
-  });
-
-  const narrEl = document.getElementById('esforco-narrativa');
-  if(narrEl){
-    const mediaBom = linhas.reduce((a, r) => a + r.pct_bom, 0) / linhas.length * 100;
-    const srMaiorProfundo = [...linhas].sort((a, b) => b.pctProfundoSR - a.pctProfundoSR)[0];
-    const srMaiorEmergencial = [...linhas].sort((a, b) => b.pctEmergencialSR - a.pctEmergencialSR)[0];
-    const bomProfundo = srMaiorProfundo.pct_bom * 100;
-    const diffProfundo = bomProfundo - mediaBom;
-    const posicaoProfundo = Math.abs(diffProfundo) < 1
-      ? 'próxima da média estadual'
-      : diffProfundo < 0 ? 'abaixo da média estadual' : 'acima da média estadual';
-    const fraseEmergencial = srMaiorEmergencial.pctEmergencialSR > 0
-      ? `A <strong>${esc(srMaiorEmergencial.sr)}</strong> apresenta a maior participação de contratos emergenciais no liquidado ` +
-        `(${fmtNum(srMaiorEmergencial.pctEmergencialSR, 1)}%), com ${fmtPctCond(srMaiorEmergencial.pct_bom, 0)} Bom+Muito Bom. `
-      : `Nenhuma SR registrou contratos emergenciais em ${esc(anoSelecionadoMalha)}. `;
-    narrEl.innerHTML =
-      `A <strong>${esc(srMaiorProfundo.sr)}</strong> apresenta a maior participação de intervenção profunda (CREMEP+COP) no liquidado ` +
-      `(${fmtNum(srMaiorProfundo.pctProfundoSR, 1)}% do total), com condição SAM ${posicaoProfundo} ` +
-      `(${fmtPctCond(srMaiorProfundo.pct_bom, 0)} Bom+Muito Bom frente a ${fmtNum(mediaBom, 0)}% de média entre as SRs). ` +
-      fraseEmergencial +
-      `<strong>Atenção à causalidade reversa:</strong> maior participação de intervenção profunda ou emergencial pode refletir necessidade estrutural pré-existente da malha, ` +
-      `não necessariamente maior esforço de manutenção — este indicador descreve a composição do gasto, sem estabelecer relação de causa e efeito.`;
-  }
-}
-
 // =======================================================
 // ABA 4 - DIAGNOSTICO E ALINHAMENTO REGIONAL
 // =======================================================
@@ -1723,7 +1421,7 @@ function renderAnalitica(){
       const el = document.getElementById(id);
       if(el) el.innerHTML = `<tr><td colspan="6">${notaNaoComparavelHTML(compat)}</td></tr>`;
     });
-    ['quadrantesResumo'].forEach(id => {
+    ['quadrantesResumo','matrizRecomendacaoTabela'].forEach(id => {
       const el = document.getElementById(id);
       if(el) el.innerHTML = notaNaoComparavelHTML(compat);
     });
@@ -1806,9 +1504,7 @@ function renderAnalitica(){
 
   renderRegionalAlignmentCharts();
   renderFig6();
-  renderTipoCondicao();
   renderEvolucaoLiquidadoRegional();
-  renderDeltaCondicaoEmpenho();
 
   // ── Alinhamento por Regional ─────────────────────────────
   renderRelacaoRegional('');
@@ -2200,6 +1896,125 @@ function renderSinalizadorPressaoConservacao() {
       elSub2.textContent = 'SPC ' + fmtNum(srMaiorSinal.score, 3) + ' - sinal ' + nivel2;
     }
   }
+}
+
+// =======================================================
+// MATRIZ DE ENCAMINHAMENTO POR SR
+// =======================================================
+
+function renderMatrizRecomendacao() {
+  const container = document.getElementById('matrizRecomendacaoTabela');
+  console.log('[Matriz] container:', !!container, '| regionais:', regionais.length, '| malhaLiqKm:', malhaLiqKm.length);
+  if (!container || !regionais.length || !malhaLiqKm.length) { console.warn('[Matriz] guard ativado — abortando'); return; }
+
+  const spcDados   = calcularSinalizadorPressaoConservacaoPainel(regionais);
+  const quadDados  = calcularQuadrantesNecessidadeInvestimento(regionais);
+  const benchDados = calcularBenchmarkInterno(regionais);
+  const samLookup  = Object.fromEntries(malhaLiqKm.map(m => [m.sr, m]));
+  const spcMap     = Object.fromEntries(spcDados.map(r  => [r.sr, r]));
+  const quadMap    = Object.fromEntries(quadDados.map(r  => [r.sr, r]));
+  const benchMap   = Object.fromEntries(benchDados.map(r => [r.sr, r]));
+
+  function classificarSituacao(sr) {
+    const spc   = spcMap[sr]   || {};
+    const quad  = quadMap[sr]  || {};
+    const bench = benchMap[sr] || {};
+    const sam   = samLookup[sr] || {};
+    const spcMedio   = (spc.score || 0) >= LIMIAR_PRESSAO_MEDIA;
+    const altaCrit   = quad.quadrante && (quad.quadrante.startsWith('O esforço') || quad.quadrante.startsWith('Há demanda'));
+    const altaInv    = quad.quadrante && (quad.quadrante.startsWith('O esforço') || quad.quadrante.startsWith('O gasto'));
+    const custoAlto  = bench.classificacao === 'Maior custo relativo observado';
+    const custoBaixo = bench.classificacao === 'Menor custo relativo observado';
+    const pctBom     = normalizePctFraction(sam.pct_bom);
+    if (custoAlto && altaInv && pctBom < 0.70)         return 'pressao-custo';
+    if (altaCrit && !altaInv)                          return 'crit-estrutural';
+    if (custoBaixo && pctBom >= 0.60)                  return 'condicao-favoravel';
+    if (spcMedio && (spc.nEmg || 0) > 0.5)            return 'emergencial';
+    return 'atencao';
+  }
+
+  function gerarCard(sr) {
+    const spc   = spcMap[sr]   || {};
+    const quad  = quadMap[sr]  || {};
+    const bench = benchMap[sr] || {};
+    const sam   = samLookup[sr] || {};
+    const reg   = regionais.find(r => r.sr === sr) || {};
+    const sit   = classificarSituacao(sr);
+    const cor   = SR_COLORS[sr] || '#1F4E79';
+
+    const nomeCurto  = sr.replace('SR ', '');
+    const lkmFmt     = 'R$ ' + fmtNum(reg.lkm || 0);
+    const pctBomFmt  = fmtPctCond(sam.pct_bom, 0);
+    const pctCritFmt = fmtPctCond(sam.pct_ruim_pessimo, 0);
+    const spcFmt     = fmtNum(spc.score || 0, 3);
+    const pctEmgFmt  = fmtNum(spc.pctEmg || 0, 0) + '%';
+    const desvioSinal = (bench.desvio || 0) >= 0 ? '+' : '';
+    const desvioFmt  = desvioSinal + fmtNum((bench.desvio || 0) * 100, 1) + '%';
+    const quadLabel  = esc(quad.quadrante || '—');
+
+    const T = {
+      'pressao-custo': {
+        badge: 'matriz-sit-pressao-custo', situacao: 'Maior liquidado/km/ano com condição intermediária',
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctCritFmt} de malha crítica · sinal: ${quadLabel}`,
+        interpretacao: `Maior esforço financeiro observado com condição SAM de ${pctBomFmt} Bom+Muito Bom — diferença relativa observada que pode refletir tipo de intervenção, porte da malha ou contratos de recuperação profunda`,
+        acao: 'Investigar mix contratual',
+        encaminhamento: `Verificar proporção preventivo vs. corretivo na carteira ativa de ${nomeCurto} e avaliar se os contratos vigentes estão alocados nos trechos de maior criticidade técnica (SAM)`
+      },
+      'crit-estrutural': {
+        badge: 'matriz-sit-crit-estrutural', situacao: 'Alta criticidade, menor liquidado/km/ano observado',
+        evidencia: `${pctCritFmt} de malha Ruim+Péssimo (SAM ${anoSelecionadoMalha}) · menor liquidado/km/ano observado: ${lkmFmt} · sinal: ${quadLabel}`,
+        interpretacao: `Combinação de criticidade acima da mediana com menor esforço financeiro observado — sinal para investigação técnica sobre demanda reprimida, restrições contratuais, passivo acumulado ou intervenções previstas fora do recorte analisado`,
+        acao: 'Investigar carteira e programação',
+        encaminhamento: `Verificar se há demanda reprimida, contratos em fase de licitação ou intervenções estruturais previstas para ${nomeCurto}; avaliar passivo acumulado e extensão da malha antes de concluir sobre adequação alocativa`
+      },
+      'condicao-favoravel': {
+        badge: 'matriz-sit-condicao-favoravel', situacao: 'Ponto de atenção analítica - condição favorável',
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} (${desvioFmt} da mediana) · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt}`,
+        interpretacao: `Menor liquidado/km/ano observado junto a boa condição SAM - combinação descritiva que merece investigação sobre tipo de intervenção, histórico de manutenção e extensão da malha administrada`,
+        acao: 'Investigar e documentar contexto',
+        encaminhamento: `Registrar perfil de intervenções em ${nomeCurto} para compreender os fatores associados à condição observada; acompanhar o SPC (atual ${spcFmt}) em novos ciclos SAM`
+      },
+      'emergencial': {
+        badge: 'matriz-sit-emergencial', situacao: 'Pressão de demanda corretiva',
+        evidencia: `${pctEmgFmt} de contratos emergenciais · SPC ${spcFmt} · ${pctCritFmt} de malha crítica (SAM ${anoSelecionadoMalha})`,
+        interpretacao: `Concentração de contratos emergenciais indica ciclo reativo — parte do esforço financeiro observado pode estar associada a intervenções de urgência em vez de manutenção programada`,
+        acao: 'Investigar tipologia de intervenção',
+        encaminhamento: `Investigar causas da concentração emergencial em ${nomeCurto}; avaliar se o liquidado/km/ano de ${lkmFmt} é influenciado por mobilizações de menor rendimento por km atendido`
+      },
+      'atencao': {
+        badge: 'matriz-sit-atencao', situacao: 'Perfil para acompanhamento',
+        evidencia: `Liquidado/km/ano observado: ${lkmFmt} · ${pctBomFmt} Bom+Muito Bom (SAM ${anoSelecionadoMalha}) · SPC ${spcFmt} · sinal: ${quadLabel}`,
+        interpretacao: `Perfil sem sinal de alerta agudo no período analisado — acompanhamento dos indicadores de condição no próximo ciclo SAM é suficiente no curto prazo`,
+        acao: 'Monitoramento contínuo',
+        encaminhamento: `Manter programação vigente em ${nomeCurto} e acompanhar indicadores de condição no próximo ciclo SAM`
+      }
+    };
+
+    const t = T[sit] || T['atencao'];
+
+    return `<div class="matriz-sr-card">
+      <div>
+        <div class="matriz-sr-name" style="color:${cor}">${esc(sr)}</div>
+        <span class="matriz-sit-badge ${t.badge}">${esc(t.situacao)}</span>
+      </div>
+      <div>
+        <div class="matriz-col-label">Evidência</div>
+        <div class="matriz-col-body">${t.evidencia}</div>
+      </div>
+      <div>
+        <div class="matriz-col-label">Interpretação</div>
+        <div class="matriz-col-body">${esc(t.interpretacao)}</div>
+      </div>
+      <div>
+        <div class="matriz-col-label">Encaminhamento</div>
+        <div class="matriz-enc-acao">${esc(t.acao)}</div>
+        <div class="matriz-col-body">${esc(t.encaminhamento)}</div>
+      </div>
+    </div>`;
+  }
+
+  const SR_ORDER_M = ['SR Leste','SR Campos Gerais','SR Norte','SR Noroeste','SR Oeste'];
+  container.innerHTML = SR_ORDER_M.map(gerarCard).join('');
 }
 
 // =======================================================
@@ -2970,14 +2785,7 @@ function applyTemporalSelection(samYear){
   window.DER_TEMPORAL_STATE = appState;
 }
 
-function hideLoadingOverlay(){
-  const overlay = document.getElementById('loading-overlay');
-  if(overlay) overlay.remove();
-}
-
 function initDashboard(d) {
-  hideLoadingOverlay();
-
   // Data de extração no cabeçalho
   const hdrDataRef = document.getElementById('hdr-data-ref');
   if(hdrDataRef && d.generated){
@@ -3100,9 +2908,8 @@ if (window.STANDALONE_DATA && window.STANDALONE_DATA.der_precomputed) {
       /der_precomputed/i.test(err.message) ? 'der_precomputed.json' :
       'não identificada pela mensagem de erro';
     console.error('Erro ao carregar dados do painel. Fonte provável:', fonteProvavel, '— erro completo:', err);
-    hideLoadingOverlay();
     document.querySelector('.tab-content').innerHTML =
-      `<div class="error-panel"><h2>Não foi possível carregar os dados</h2><p>Se você abriu este arquivo com duplo clique (file://), o navegador bloqueia o carregamento dos dados por segurança. Rode um servidor local na pasta do painel — por exemplo: <code>python -m http.server</code> — e acesse via <code>http://localhost:8000/painel_der.html</code>.</p><p class="error-detail">Detalhe técnico: ${esc(err.message)} (fonte provável: ${esc(fonteProvavel)})</p><p class="error-help">Verifique o console do navegador (F12) para mais detalhes.</p></div>`;
+      `<div class="error-panel"><h2>Erro ao carregar dados</h2><p>Não foi possível carregar os arquivos de dados.</p><p class="error-detail">Detalhe: ${esc(err.message)}</p><p class="error-help">Abra o painel a partir de um servidor local (ex: <code>python -m http.server</code> na raiz do projeto).</p><p class="error-help">Verifique o console do navegador (F12) para detalhes técnicos.</p></div>`;
   });
 }
 

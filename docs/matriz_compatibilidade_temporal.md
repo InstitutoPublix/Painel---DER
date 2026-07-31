@@ -7,7 +7,7 @@ Regra geral: nenhum componente pode combinar condição SAM, financeiro ou contr
 | KPIs de diagnóstico da malha | `data/der_precomputed.json` (`regionais[*].malha_por_ano`) | Ano SAM selecionado | Não usa | Não usa | Sim | Usa apenas condição e km do ano selecionado. |
 | Gráficos de malha em km e percentual | `Condição da malha.xlsx` via `malha_por_ano` | Ano SAM selecionado | Não usa | Não usa | Sim | Não mistura dado financeiro. |
 | Evolução da malha | `malha_por_ano` | Dois anos mais recentes disponíveis | Não usa | Não usa | Não depende do seletor | Se houver menos de dois anos, exibe estado informativo. |
-| Mapa de rodovias por SR | `dashboard/data/rodovias_pr.geojson` + `malha_por_ano` | Ano SAM selecionado | Não usa | Não usa | Sim | Geometria fixa; cor/tooltip usam condição SAM selecionada. |
+| Mapa da malha por trecho | `dashboard/data/rodovias_pr_condicao.geojson` | Fixa em 2024 (SAM 2024) | Não usa | Não usa | Não | Geometria oficial do shapefile SAM DER-PR; cor/tooltip usam a nota de condição do próprio trecho (escala 1–5), independente do seletor de ano da aba. |
 | TMDA x condição | `tmda_por_sr` + `malha_por_ano` | Ano SAM selecionado | Não usa | Não usa | Parcial | TMDA não tem série anual; é exibido como referência fixa. |
 | Contratos DOPSR1 | `Contratos DOPSR1 por Regional.xlsx` via `contratos_dopsr1_por_ano` | Não usa | Ano financeiro selecionado | Ano financeiro selecionado | Sim, se existir o mesmo ano | Tabela, KPIs e gráficos mostram o ano dos contratos. |
 | Leitura integrada por regional | `malha_por_ano` + financeiro por SR/ano | Ano SAM selecionado | Mesmo ano, quando disponível | Mesmo ano, quando disponível | Sim | Se os anos divergirem, campos combinados viram “não comparável”. |
