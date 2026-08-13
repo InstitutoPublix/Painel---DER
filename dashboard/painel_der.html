@@ -998,6 +998,9 @@ svg.responsive{display:block;width:100%}
 .map-rod-leg-item{display:flex;align-items:center;gap:8px;margin:2px 0;font-size:11px;color:#333}
 .map-rod-leg-swatch{height:4px;border-radius:2px;flex-shrink:0;width:28px}
 .map-rod-separator{border:none;border-top:1px solid #eee;margin:7px 0}
+.map-rod-resumo{background:#fff;border-radius:6px;padding:10px 14px;font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:12.5px;box-shadow:0 2px 6px rgba(0,0,0,.18);line-height:1.6;color:#333;max-width:230px}
+.map-rod-resumo strong{color:var(--cor-navy);font-size:15px}
+.map-rod-resumo-sub{display:block;margin-top:3px;font-size:11px;color:#777}
 .map-rod-toggle-wrap{margin-bottom:10px}
 .map-rod-toggle-label{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--cor-navy);cursor:pointer;user-select:none}
 .map-rod-toggle-label input[type="checkbox"]{width:15px;height:15px;accent-color:var(--cor-azul-hover);cursor:pointer;margin:0}
@@ -1406,7 +1409,7 @@ window.STANDALONE_DATA = null;
       <strong>Nota sobre extensão por SR:</strong> parte da quilometragem administrada por cada Regional pode incluir segmentos contados mais de uma vez, quando contratos emergenciais cobriram trechos que já estavam computados em contratos anteriores encerrados. Ressalva técnica do próprio consórcio (Relatório 001/2026).</p>
     </details>
 
-    <div class="section-sep"><span>Mapa da Malha por Trecho <span class="periodo-badge">Geometria e condição: SAM DER-PR · 2024</span></span></div>
+    <div class="section-sep"><span>Mapa da Malha por Trecho <span class="periodo-badge">Geometria e condição: SAM DER-PR &middot; 2024</span></span></div>
 
     <div id="mapa-rod-error"></div>
 
@@ -1418,18 +1421,18 @@ window.STANDALONE_DATA = null;
     </div>
 
     <div class="leaflet-map-wrap">
-      <div id="map-rodovias" class="leaflet-map" role="img" aria-label="Mapa da malha rodoviária estadual do Paraná, colorido pela nota de condição de cada trecho (escala 1 a 5, SAM 2024)"></div>
+      <div id="map-rodovias" class="leaflet-map" role="img" aria-label="Mapa da malha rodoviária estadual do Paraná, colorido pela condição do pavimento por km percorrido (escala de nota 1 a 5, SAM 2024)"></div>
     </div>
 
     <div class="note">
-      <strong>Nota metodológica</strong> <button type="button" class="nota-info-trigger" data-nota-id="mapa-condicao-por-sr" aria-expanded="false" aria-label="Ver nota completa sobre condição por trecho no mapa">ⓘ</button>
+      <strong>Nota metodológica</strong> <button type="button" class="nota-info-trigger" data-nota-id="mapa-condicao-por-sr" aria-expanded="false" aria-label="Ver nota completa sobre condição do pavimento por km no mapa">ⓘ</button>
     </div>
 
 
     <div class="chart-container">
       <div class="chart-title">TMDA Médio × Condição da Malha (SAM) por Superintendência Regional <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></div>
       <div class="chart-h-280"><canvas id="chartTmdaCondicao" role="img" aria-label="Gráfico de dispersão relacionando tráfego médio diário e condição da malha por Superintendência Regional"></canvas></div>
-      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span> (condição) · TMDA médio por SR — planilha "Dados Estatísticos por Área de Gestão". Cor de cada bolha segue a mesma escala de condição do mapa acima. <button type="button" class="nota-info-trigger" data-nota-id="tmda-cobertura" aria-expanded="false" aria-label="Ver nota completa sobre cobertura do dado de TMDA">ⓘ</button></p>
+      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano}">SAM 2025</span> (condição) &middot; TMDA médio por SR — planilha "Dados Estatísticos por Área de Gestão". Cor de cada bolha segue a mesma escala de condição do mapa acima. <button type="button" class="nota-info-trigger" data-nota-id="tmda-cobertura" aria-expanded="false" aria-label="Ver nota completa sobre cobertura do dado de TMDA">ⓘ</button></p>
       <p class="chart-source" style="margin-top:6px"><strong>Nota metodológica</strong> <button type="button" class="nota-info-trigger" data-nota-id="tmda-metodologia" aria-expanded="false" aria-label="Ver nota metodológica completa sobre TMDA">ⓘ</button></p>
     </div>
 
@@ -1494,7 +1497,7 @@ window.STANDALONE_DATA = null;
     <div class="sub-section-header amber">1 — Pressão Operacional</div>
     <div class="note warn note-compact">Pressão operacional indica combinação de fatores que podem exigir atenção técnica. <button type="button" class="nota-info-trigger" data-nota-id="pressao-isolada" aria-expanded="false" aria-label="Ver nota completa sobre pressão operacional isolada">ⓘ</button></div>
 
-    <div class="section-sep"><span>Sinalizador de Pressão de Conservação por SR <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
+    <div class="section-sep"><span>Sinalizador de Pressão de Conservação por SR <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></span></div>
 
     <div class="table-wrap">
       <table>
@@ -1527,7 +1530,7 @@ window.STANDALONE_DATA = null;
     <div class="sub-section-header">2 — Execução Financeira Observada</div>
     <div class="note warn note-compact">Os valores financeiros representam execução observada no período. <button type="button" class="nota-info-trigger" data-nota-id="execucao-financeira-isolada" aria-expanded="false" aria-label="Ver nota completa sobre execução financeira isolada">ⓘ</button></div>
 
-    <div class="section-sep"><span>Contratos DOPSR1 <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
+    <div class="section-sep"><span>Contratos DOPSR1 <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></span></div>
 
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -1581,7 +1584,7 @@ window.STANDALONE_DATA = null;
 
     <div class="grid-2 mt-24">
       <div class="chart-container mb-0">
-        <div class="chart-title">Empenhado / Liquidado / Pago por SR (R$) <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></div>
+        <div class="chart-title">Empenhado / Liquidado / Pago por SR (R$) <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></div>
         <div class="chart-h-260"><canvas id="chartContSR" role="img" aria-label="Gráfico de barras: valores empenhado, liquidado e pago em reais, por Superintendência Regional"></canvas></div>
         <div style="text-align:right;margin-top:6px">
           <button type="button" id="btnMostrarTodasContSR" class="contract-filter-clear" style="font-size:11px;padding:4px 10px;min-height:0">Mostrar todas</button>
@@ -1589,7 +1592,7 @@ window.STANDALONE_DATA = null;
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 2025</span>.</p>
       </div>
       <div class="chart-container mb-0">
-        <div class="chart-title">Liquidado por Tipo de Contrato (R$) <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></div>
+        <div class="chart-title">Liquidado por Tipo de Contrato (R$) <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></div>
         <div class="chart-h-260"><canvas id="chartContTipo" role="img" aria-label="Gráfico de valor liquidado em reais por tipo de contrato"></canvas></div>
         <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-contratos="Contratos DOPSR1 {ano}">Contratos DOPSR1 2025</span>.</p>
       </div>
@@ -1636,7 +1639,7 @@ window.STANDALONE_DATA = null;
   <!-- ABA 3: LEITURA INTEGRADA POR REGIONAL -->
   <div id="tab-leitura-regional" class="tab-pane" role="tabpanel">
 
-    <div class="section-header">Leitura Integrada por Regional <span class="periodo-badge" data-periodo-combinado="SAM {sam} · Contratos DOPSR1 {financeiro}">SAM 2025 · Contratos DOPSR1 2025</span></div>
+    <div class="section-header">Leitura Integrada por Regional <span class="periodo-badge" data-periodo-combinado="SAM {sam} &middot; Contratos DOPSR1 {financeiro}">SAM 2025 &middot; Contratos DOPSR1 2025</span></div>
 
     <div class="note gray mb-24">
       Esta aba combina condição da malha e execução financeira por regional, com a síntese executiva de indicadores e achados analíticos consolidados. Para os cruzamentos e sinais de investigação, veja a aba seguinte.
@@ -1704,7 +1707,7 @@ window.STANDALONE_DATA = null;
         <tbody id="tbodyReg"></tbody>
       </table>
     </div>
-    <div class="section-sep"><span>Síntese Executiva <span class="periodo-badge"><span data-periodo-malha="SAM {ano}">SAM 2025</span> · Relatório 001/2026</span></span></div>
+    <div class="section-sep"><span>Síntese Executiva <span class="periodo-badge"><span data-periodo-malha="SAM {ano}">SAM 2025</span> &middot; Relatório 001/2026</span></span></div>
 
     <div class="kpi-grid">
       <div class="kpi-card">
@@ -1732,7 +1735,7 @@ window.STANDALONE_DATA = null;
     <div class="note mt-16" id="sint-narrativa"></div>
 
 
-    <div class="section-sep"><span>Achados Analíticos <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></span></div>
+    <div class="section-sep"><span>Achados Analíticos <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></span></div>
 
     <div class="insights-grid">
 
@@ -1768,12 +1771,12 @@ window.STANDALONE_DATA = null;
   <!-- ABA 4: SINAIS PARA INVESTIGAÇÃO TÉCNICA COMPLEMENTAR -->
   <div id="tab-sinais" class="tab-pane" role="tabpanel">
 
-    <div class="section-header">Sinais para Investigação Técnica Complementar <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} · Financeiro {financeiro}">Dados 2025</span></div>
-    <p class="section-intro">Os cruzamentos desta seção ajudam a identificar pontos para aprofundamento técnico. Eles não indicam, isoladamente, suficiéncia, excesso ou inadequação do investimento.</p>
+    <div class="section-header">Sinais para Investigação Técnica Complementar <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></div>
+    <p class="section-intro">Os cruzamentos desta seção ajudam a identificar pontos para aprofundamento técnico. Eles não indicam, isoladamente, suficiência, excesso ou inadequação do investimento.</p>
 
     <div class="note warn mb-24">
-      <strong>Como ler esta seção:</strong> os cruzamentos mostram combinaçóes relativas entre condição da malha, pressão operacional e execução financeira observada. A posição de uma regional pode refletir passivo acumulado, tipo de intervenção, complexidade das obras, contratos vigentes, restriçóes operacionais, extensão administrada ou planejamento plurianual. Por isso, <strong>os gráficos devem orientar perguntas, não produzir conclusóes automáticas sobre alocação</strong>.<br><br>
-      As análises a seguir cruzam dados de condição e execução financeira para identificar padróes que merecem investigação técnica complementar. Os indicadores <strong>não permitem concluir, isoladamente, sobre adequação ou inadequação na aplicação dos recursos</strong>. Cada análise formula perguntas orientadoras — não diagnósticos definitivos.
+      <strong>Como ler esta seção:</strong> os cruzamentos mostram combinações relativas entre condição da malha, pressão operacional e execução financeira observada. A posição de uma regional pode refletir passivo acumulado, tipo de intervenção, complexidade das obras, contratos vigentes, restrições operacionais, extensão administrada ou planejamento plurianual. Por isso, <strong>os gráficos devem orientar perguntas, não produzir conclusões automáticas sobre alocação</strong>.<br><br>
+      As análises a seguir cruzam dados de condição e execução financeira para identificar padrões que merecem investigação técnica complementar. Os indicadores <strong>não permitem concluir, isoladamente, sobre adequação ou inadequação na aplicação dos recursos</strong>. Cada análise formula perguntas orientadoras — não diagnósticos definitivos.
     </div>
 
     <div class="section-sep"><span>Relação observada entre condição favorável e liquidado <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></span></div>
@@ -1821,7 +1824,7 @@ window.STANDALONE_DATA = null;
       <div class="chart-container mb-0">
         <div class="chart-title">Liquidado/km/ano de Rede Total (R$/km/ano) <span class="fn" style="font-style:normal;color:#888;font-weight:400">denom.: todos os km gerenciados</span> <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></div>
         <div class="chart-h-240"><canvas id="chartCustoKm" role="img" aria-label="Gráfico de barras: valor liquidado por quilômetro por ano da rede total administrada, por Superintendência Regional"></canvas></div>
-        <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano} · Contratos DOP {ano}">SAM 2025 · Contratos DOPSR1 {ano}</span></p>
+        <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-malha="SAM {ano} &middot; Contratos DOP {ano}">SAM 2025 &middot; Contratos DOPSR1 {ano}</span></p>
       </div>
     </div>
 
@@ -1838,7 +1841,7 @@ window.STANDALONE_DATA = null;
     <div class="chart-container">
       <div class="chart-title">Composição do Gasto por Tipo de Intervenção e Condição SAM por SR <span class="periodo-badge" data-periodo-combinado="Dados SAM {sam} &middot; Financeiro {financeiro}">Dados 2025</span></div>
       <div class="chart-h-320"><canvas id="chartTipoCondicao" role="img" aria-label="Gráfico combinando composição do gasto por tipo de intervenção contratual e condição da malha por Superintendência Regional"></canvas></div>
-      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="Contratos DOPSR1 {financeiro} &middot; SAM {sam}">Contratos DOPSR1 2025 · SAM 2025</span></p>
+      <p class="chart-source"><strong>Fonte:</strong> <span data-periodo-combinado="Contratos DOPSR1 {financeiro} &middot; SAM {sam}">Contratos DOPSR1 2025 &middot; SAM 2025</span></p>
     </div>
 
     <div id="esforco-narrativa-wrap" class="chart-container mt-24">
@@ -1985,7 +1988,7 @@ window.STANDALONE_DATA = null;
       </div>
     </div>
 
-    <div class="section-header">Posicionamento Estadual <span class="periodo-badge">DER-PR × Brasil · 2025</span></div>
+    <div class="section-header">Posicionamento Estadual <span class="periodo-badge">DER-PR × Brasil &middot; 2025</span></div>
 
     <div class="note gray mb-20">
       Esta aba situa o Paraná no contexto nacional da Pesquisa CNT de Rodovias e conecta esse posicionamento aos achados internos das Superintendências Regionais. Os dados internos (<span data-periodo-malha="SAM {ano}">SAM 2025</span>, Contratos DOPSR1) referem-se exclusivamente à malha estadual administrada pelo DER-PR — fração do universo avaliado pela CNT.
@@ -2020,7 +2023,7 @@ window.STANDALONE_DATA = null;
     <div id="bench-error"></div>
 
     <div class="note gray mb-20">
-      <strong>Fonte:</strong> Pesquisa CNT de Rodovias &nbsp;·&nbsp; Série 2015–2025. <button type="button" class="nota-info-trigger" data-nota-id="benchmark-fonte-cnt" aria-expanded="false" aria-label="Ver nota completa sobre cobertura da série CNT">ⓘ</button>
+      <strong>Fonte:</strong> Pesquisa CNT de Rodovias &nbsp;&middot;&nbsp; Série 2015–2025. <button type="button" class="nota-info-trigger" data-nota-id="benchmark-fonte-cnt" aria-expanded="false" aria-label="Ver nota completa sobre cobertura da série CNT">ⓘ</button>
     </div>
 
     <div class="bench-controls">
@@ -2032,7 +2035,7 @@ window.STANDALONE_DATA = null;
 
     <div class="kpi-grid kpi-grid-3">
       <div class="kpi-card">
-        <div class="kpi-label">Paraná &nbsp;·&nbsp; % Boa ou Ótima <span class="periodo-badge" id="benchBadgePR">2025</span></div>
+        <div class="kpi-label">Paraná &nbsp;&middot;&nbsp; % Boa ou Ótima <span class="periodo-badge" id="benchBadgePR">2025</span></div>
         <div class="kpi-value" id="benchKpiPR">—</div>
         <div class="kpi-sub">Pesquisa CNT de Rodovias</div>
       </div>
@@ -2283,7 +2286,6 @@ window.STANDALONE_DATA = null;
 </script>
 <script>
 /* painel.js - embutido de dashboard/src/painel-app.js */
-/* painel.js - fonte do painel; embutido pelo build_standalone_html.ps1 */
 // =======================================================
 // DADOS — AÇÃO 8398 DER-PR
 // =======================================================
@@ -2617,7 +2619,7 @@ const NOTAS_METODOLOGICAS = {
   'denominador-liquidado-km-fig6': 'Este indicador utiliza como denominador a quilometragem avaliada pelo SAM no ano selecionado (R$/km/ano) — o mesmo denominador usado pelo indicador Investimento/km/ano da Figura 6 (Leitura Regional); ambos são consistentes entre si.',
   'scatter-tendencia': 'Linha de tendência ilustrativa — 5 observações (uma por SR), sem validação estatística de correlação.',
   'evolucao-malha-corte-temporal': 'esta comparação cobre dois retratos pontuais da malha (2024 e 2025), não uma série histórica contínua. A condição observada em cada ano reflete decisões de investimento acumuladas ao longo de anos anteriores, não apenas o exercício corrente — ver ressalva complementar abaixo do gráfico.',
-  'mapa-condicao-por-sr': 'As linhas mostram o traçado oficial dos trechos rodoviários levantados pelo SAM (Sistema de Avaliação da Malha) do DER-PR em 2024. A cor de cada trecho reflete a nota de condição do próprio trecho (escala 1–5, sendo 1 = pior e 5 = melhor), não mais uma média por Superintendência Regional. Segmentos consecutivos do mesmo trecho com a mesma nota foram agrupados para leitura mais clara do mapa. Dado disponível apenas para 2024 por enquanto — o mapa não varia com o seletor de ano da aba, diferente dos demais gráficos.',
+  'mapa-condicao-por-sr': 'As linhas mostram o traçado oficial dos trechos rodoviários levantados pelo SAM (Sistema de Avaliação da Malha) do DER-PR em 2024. A cor de cada trecho reflete a nota de condição do próprio trecho (escala 1–5, sendo 1 = pior e 5 = melhor), não mais uma média por Superintendência Regional. Como a geometria de cada trecho é fiel à extensão real da rodovia, a leitura visual do mapa é por km percorrido — um trecho de 40 km ruim ocupa proporcionalmente mais espaço no mapa que um de 10 km ruim, não uma unidade discreta "por trecho". Segmentos consecutivos do mesmo trecho com a mesma nota foram agrupados para leitura mais clara do mapa. Dado disponível apenas para 2024 por enquanto — o mapa não varia com o seletor de ano da aba, diferente dos demais gráficos.',
   'pressao-isolada': 'Ela não representa, isoladamente, insuficiência ou excesso de investimento.',
   'execucao-financeira-isolada': 'Eles não indicam, isoladamente, necessidade total de investimento, suficiência da alocação ou efeito direto sobre a condição atual da malha.',
   'estoque-fluxo': 'Condição é estoque acumulado da malha; liquidado é fluxo anual. A relação é apenas descritiva, não mede produtividade, efeito do gasto ou qualidade da alocação.',
@@ -4736,14 +4738,14 @@ function _mapaRodColor(pct){
 
 // Paleta por nota de condição do trecho (1 = pior, 5 = melhor — confirmado com DER-PR em 31/07/2026)
 function _notaColor(nota){
-  const cores = {1:'#8B0000', 2:'#C00000', 3:'#E07B00', 4:'#A9D18E', 5:'#70AD47'};
+  const cores = {1:'#9E4B4B', 2:'#C1785F', 3:'#D9A441', 4:'#9DC183', 5:'#5B8C5A'};
   return cores[nota] || '#999999';
 }
 
 const _NOTA_LABEL = {1:'Péssimo', 2:'Ruim', 3:'Regular', 4:'Bom', 5:'Ótimo'};
 
 function _mapaRodLegendHtml(){
-  return '<b>Condição do pavimento (SAM 2024, por trecho)</b>' +
+  return '<b>Condição do pavimento por km (SAM 2024)</b>' +
     [5,4,3,2,1].map(n =>
       `<div class="map-rod-leg-item">` +
       `<div class="map-rod-leg-swatch" style="background:${_notaColor(n)}"></div>${n} — ${_NOTA_LABEL[n]}` +
@@ -4835,6 +4837,33 @@ function _initLeafletMap(){
         }
       }).addTo(map);
       mapaRodLayer = geoLayer;
+
+      // % km-ponderado de Ruim+Péssimo, ano fixo 2024 (mesmo ano do geojson do mapa),
+      // não de malhaKm/malhaLiqKm, que seguem o seletor de ano e podem divergir.
+      // Não soma ext_trecho_km por feature do geojson: cada trecho pode estar fatiado em
+      // vários fragmentos de nota diferente, e cada fragmento repete o km TOTAL do trecho
+      // (ver build_malha_condicao_geojson.py, merge_same_nota_runs) — somar por feature
+      // conta o mesmo trecho várias vezes. Usa regionaisRaw, já carregado e agregado
+      // corretamente por pipeline/assemble_der.py a partir da planilha-fonte.
+      let kmTotalMapa = 0, kmRuimPessimoMapa = 0;
+      Object.values(regionaisRaw).forEach(sr => {
+        const ano2024 = (sr.malha_por_ano || {})['2024'];
+        if (!ano2024) return;
+        kmTotalMapa += ano2024.km.total || 0;
+        kmRuimPessimoMapa += ano2024.km.ruim_pessimo || 0;
+      });
+      const pctRuimPessimoMapa = kmTotalMapa > 0 ? (kmRuimPessimoMapa / kmTotalMapa) : 0;
+
+      const resumo = L.control({position:'topleft'});
+      resumo.onAdd = () => {
+        const div = L.DomUtil.create('div','map-rod-resumo');
+        div.innerHTML =
+          `<strong>${fmtNum(pctRuimPessimoMapa * 100, 1)}%</strong> da malha (km) ` +
+          `em condição Ruim ou Péssima<br>` +
+          `<span class="map-rod-resumo-sub">SAM 2024 &middot; ${fmtNum(kmTotalMapa, 0)} km avaliados</span>`;
+        return div;
+      };
+      resumo.addTo(map);
 
       if(toggleCriticos){
         toggleCriticos.addEventListener('change', () => {
