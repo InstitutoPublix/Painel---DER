@@ -154,6 +154,60 @@ for (sr, ano), v in sorted(reg_ano_acc.items()):
     print(f"   {sr} / {ano}: liq={v['liquidado']:,.0f} n={v['n_contratos']}")
 
 # -------------------------------------------------------
+# SEÇÃO 1B — GLOSSÁRIO DOPSR1 CONSOLIDADO POR SR (fonte independente,
+# alimenta só o quadro "Glossário dos tipos de contrato DOPSR1" — não tem
+# relação com contratos_dopsr1_por_ano/data_con acima, nem com
+# rp_reconciliado.json, gerado por outro script)
+# -------------------------------------------------------
+print("▶ Seção 1B: Glossário DOPSR1 por SR (planilha de Pagamentos com RPs)…")
+
+F_GLOSSARIO = os.path.join(BASE, "Pagamentos com RPs 2024 - 2025 - atualizada.xlsx")
+
+
+def ler_glossario_dopsr1(path):
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    ws = wb["Planilha1"]
+    rows = list(ws.iter_rows(min_row=3, values_only=True))  # pula linha 1 (rótulo ano) e linha 2 (header)
+
+    sr_atual, tipo_atual = None, None
+    por_sr_ano = defaultdict(lambda: defaultdict(lambda: {"contratos": [], "empenhado_rp": 0.0, "liquidado": 0.0, "pago": 0.0}))
+
+    for r in rows:
+        regional, tipo, contrato = r[0], r[1], r[2]
+        if regional is not None:
+            sr_atual = norm_sr(str(regional).strip())
+        if tipo is not None:
+            tipo_atual = str(tipo).strip().upper()
+        if contrato is None:
+            continue  # linha de subtotal por SR ou "Total Geral"
+
+        for ano, col_emp, col_liq, col_pago in [("2024", 3, 4, 5), ("2025", 7, 8, 9)]:
+            emp, liq, pago = r[col_emp], r[col_liq], r[col_pago]
+            if emp is None and liq is None and pago is None:
+                continue
+            registro = {
+                "contrato": str(contrato).strip(),
+                "tipo": tipo_atual,
+                "empenhado_rp": safe_float(emp),
+                "liquidado": safe_float(liq),
+                "pago": safe_float(pago),
+            }
+            acc = por_sr_ano[sr_atual][ano]
+            acc["contratos"].append(registro)
+            acc["empenhado_rp"] += registro["empenhado_rp"]
+            acc["liquidado"]    += registro["liquidado"]
+            acc["pago"]         += registro["pago"]
+
+    wb.close()
+    return {sr: dict(anos) for sr, anos in por_sr_ano.items()}
+
+
+glossario_dopsr1_por_sr = ler_glossario_dopsr1(F_GLOSSARIO)
+for sr, anos in sorted(glossario_dopsr1_por_sr.items()):
+    for ano, v in sorted(anos.items()):
+        print(f"   {sr} / {ano}: empenhado_rp={v['empenhado_rp']:,.0f} liquidado={v['liquidado']:,.0f} n={len(v['contratos'])}")
+
+# -------------------------------------------------------
 # SEÇÃO 2 — CONDIÇÃO DA MALHA (por SR + Ano)
 # -------------------------------------------------------
 print("▶ Seção 2: Condição da malha…")
@@ -502,6 +556,10 @@ output = {
         ano: contratos
         for ano, contratos in sorted(contratos_por_ano.items())
     },
+    # Fonte independente de contratos_dopsr1_por_ano (planilha e leitura
+    # próprias, ver ler_glossario_dopsr1 acima) — alimenta só o Glossário
+    # DOPSR1 consolidado por SR, não deve ser cruzada com a chave acima.
+    "glossario_dopsr1_por_sr": glossario_dopsr1_por_sr,
     # Sempre regerado por este script (não preservado de secoes_preexistentes),
     # mesmo padrão de "regionais": substitui por completo a cada execução.
     "tmda_por_sr": tmda_por_sr,

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-20T17:20:21",
+  "generated": "2026-09-17T11:29:32",
   "kpis": {
     "liquidado_total": 2650713890.0,
     "empenhado_total": 2852333839.0,
@@ -393,867 +393,6 @@
     "SR Norte": 2183,
     "SR Noroeste": 1744,
     "SR Oeste": 1916
-  },
-  "regionais": {
-    "SR Campos Gerais": {
-      "liquidado": 319370229.41,
-      "empenhado": 341034740.62,
-      "n_contratos": 14,
-      "emergencial": 0,
-      "tipos_contrato": [
-        "INTEGRA",
-        "PROCONSERVA"
-      ],
-      "ano_referencia_malha": 2025,
-      "km_ruim": 74.5,
-      "km_pessimo": 2.299999999999999,
-      "km_regular": 424.4199999999998,
-      "km_boa": 1154.85,
-      "km_muito_boa": 1.0,
-      "km_total": 1657.07,
-      "pct_ruim_pessimo": 4.63,
-      "pct_regular": 25.61,
-      "pct_bom_muito_bom": 69.75,
-      "liquidado_por_km": 97787.84,
-      "malha_por_ano": {
-        "2024": {
-          "km": {
-            "pessimo": 3.220000000000001,
-            "ruim": 97.46,
-            "regular": 558.1300000000001,
-            "boa": 1169.47,
-            "otima": 21.64,
-            "total": 1849.92,
-            "ruim_pessimo": 100.68,
-            "bom_muito_bom": 1191.11
-          },
-          "pct": {
-            "pessimo": 0.001740615810413423,
-            "ruim": 0.05268335928040131,
-            "regular": 0.3017049385919391,
-            "boa": 0.6321732831690018,
-            "otima": 0.01169780314824425,
-            "ruim_pessimo": 0.054424,
-            "bom_muito_bom": 0.643871
-          },
-          "liquidado": 157328935.38,
-          "empenhado": 162391517.8,
-          "pago": 157328935.38,
-          "n_contratos": 6,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "INTEGRA",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 85046.35,
-          "financial": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 162391517.8,
-            "liquidado": 157328935.38,
-            "pago": 157328935.38
-          },
-          "contracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 6,
-            "tipos_contrato": [
-              "INTEGRA",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2024",
-            "financial_year": "2024",
-            "contracts_year": "2024",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        },
-        "2025": {
-          "km": {
-            "pessimo": 2.299999999999999,
-            "ruim": 74.5,
-            "regular": 424.4199999999998,
-            "boa": 1154.85,
-            "otima": 1.0,
-            "total": 1657.07,
-            "ruim_pessimo": 76.8,
-            "bom_muito_bom": 1155.85
-          },
-          "pct": {
-            "pessimo": 0.001387992058271527,
-            "ruim": 0.04495887319183862,
-            "regular": 0.2561267779876529,
-            "boa": 0.6969228819542929,
-            "otima": 0.0006034748079441426,
-            "ruim_pessimo": 0.046347,
-            "bom_muito_bom": 0.697526
-          },
-          "liquidado": 162041294.03,
-          "empenhado": 178643222.82,
-          "pago": 162041294.03,
-          "n_contratos": 8,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "INTEGRA",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 97787.84,
-          "financial": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 178643222.82,
-            "liquidado": 162041294.03,
-            "pago": 162041294.03
-          },
-          "contracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 8,
-            "tipos_contrato": [
-              "INTEGRA",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2025",
-            "financial_year": "2025",
-            "contracts_year": "2025",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        }
-      },
-      "malha_agregada_por_ano": {
-        "2024": {
-          "km": {
-            "ruim_pessimo": 100.67999999999999,
-            "regular": 558.1300000000001,
-            "bom_muito_bom": 1191.1100000000001
-          },
-          "pct": {
-            "ruim_pessimo": 0.05442397509081473,
-            "regular": 0.30170493859193914,
-            "bom_muito_bom": 0.643871086317246
-          }
-        },
-        "2025": {
-          "km": {
-            "ruim_pessimo": 76.8,
-            "regular": 424.41999999999985,
-            "bom_muito_bom": 1155.8499999999997
-          },
-          "pct": {
-            "ruim_pessimo": 0.04634686525011014,
-            "regular": 0.2561267779876529,
-            "bom_muito_bom": 0.697526356762237
-          }
-        }
-      }
-    },
-    "SR Leste": {
-      "liquidado": 78249856.14,
-      "empenhado": 83657924.84,
-      "n_contratos": 9,
-      "emergencial": 0,
-      "tipos_contrato": [
-        "INTEGRA",
-        "PROCONSERVA"
-      ],
-      "ano_referencia_malha": 2025,
-      "km_ruim": 24.36,
-      "km_pessimo": 6.0,
-      "km_regular": 313.55,
-      "km_boa": 442.59,
-      "km_muito_boa": 0.0,
-      "km_total": 786.5,
-      "pct_ruim_pessimo": 3.86,
-      "pct_regular": 39.87,
-      "pct_bom_muito_bom": 56.27,
-      "liquidado_por_km": 63115.51,
-      "malha_por_ano": {
-        "2024": {
-          "km": {
-            "pessimo": 10.25,
-            "ruim": 39.78,
-            "regular": 251.46,
-            "boa": 727.5699999999999,
-            "otima": 5.0,
-            "total": 1034.06,
-            "ruim_pessimo": 50.03,
-            "bom_muito_bom": 732.57
-          },
-          "pct": {
-            "pessimo": 0.009912384194340755,
-            "ruim": 0.03846972129276831,
-            "regular": 0.2431773784886757,
-            "boa": 0.7036052066611221,
-            "otima": 0.004835309363093051,
-            "ruim_pessimo": 0.048382,
-            "bom_muito_bom": 0.708441
-          },
-          "liquidado": 28609506.94,
-          "empenhado": 32841698.17,
-          "pago": 28609506.94,
-          "n_contratos": 5,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "INTEGRA",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 27667.16,
-          "financial": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 32841698.17,
-            "liquidado": 28609506.94,
-            "pago": 28609506.94
-          },
-          "contracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 5,
-            "tipos_contrato": [
-              "INTEGRA",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2024",
-            "financial_year": "2024",
-            "contracts_year": "2024",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        },
-        "2025": {
-          "km": {
-            "pessimo": 6.0,
-            "ruim": 24.36,
-            "regular": 313.55,
-            "boa": 442.59,
-            "otima": 0.0,
-            "total": 786.5,
-            "ruim_pessimo": 30.36,
-            "bom_muito_bom": 442.59
-          },
-          "pct": {
-            "pessimo": 0.007628734901462174,
-            "ruim": 0.03097266369993643,
-            "regular": 0.3986649713922442,
-            "boa": 0.5627336300063572,
-            "otima": 0.0,
-            "ruim_pessimo": 0.038601,
-            "bom_muito_bom": 0.562734
-          },
-          "liquidado": 49640349.2,
-          "empenhado": 50816226.67,
-          "pago": 49640349.2,
-          "n_contratos": 4,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 63115.51,
-          "financial": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 50816226.67,
-            "liquidado": 49640349.2,
-            "pago": 49640349.2
-          },
-          "contracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 4,
-            "tipos_contrato": [
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2025",
-            "financial_year": "2025",
-            "contracts_year": "2025",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        }
-      },
-      "malha_agregada_por_ano": {
-        "2024": {
-          "km": {
-            "ruim_pessimo": 50.03,
-            "regular": 251.46,
-            "bom_muito_bom": 732.5699999999999
-          },
-          "pct": {
-            "ruim_pessimo": 0.04838210548710907,
-            "regular": 0.24317737848867574,
-            "bom_muito_bom": 0.7084405160242152
-          }
-        },
-        "2025": {
-          "km": {
-            "ruim_pessimo": 30.36,
-            "regular": 313.55,
-            "bom_muito_bom": 442.59
-          },
-          "pct": {
-            "ruim_pessimo": 0.0386013986013986,
-            "regular": 0.39866497139224416,
-            "bom_muito_bom": 0.5627336300063572
-          }
-        }
-      }
-    },
-    "SR Noroeste": {
-      "liquidado": 334105054.85,
-      "empenhado": 353116081.24,
-      "n_contratos": 25,
-      "emergencial": 2,
-      "tipos_contrato": [
-        "COP",
-        "CREMEP",
-        "EMERGENCIAL",
-        "PROCONSERVA"
-      ],
-      "ano_referencia_malha": 2025,
-      "km_ruim": 79.13,
-      "km_pessimo": 15.14,
-      "km_regular": 823.6799999999998,
-      "km_boa": 2616.76,
-      "km_muito_boa": 12.27,
-      "km_total": 3546.98,
-      "pct_ruim_pessimo": 2.66,
-      "pct_regular": 23.22,
-      "pct_bom_muito_bom": 74.12,
-      "liquidado_por_km": 56194.76,
-      "malha_por_ano": {
-        "2024": {
-          "km": {
-            "pessimo": 14.6,
-            "ruim": 83.28999999999999,
-            "regular": 861.18,
-            "boa": 2544.73,
-            "otima": 6.0,
-            "total": 3509.8,
-            "ruim_pessimo": 97.89,
-            "bom_muito_bom": 2550.73
-          },
-          "pct": {
-            "pessimo": 0.004159781184113056,
-            "ruim": 0.0237306969058066,
-            "regular": 0.2453644082283891,
-            "boa": 0.7250356145649325,
-            "otima": 0.00170949911675879,
-            "ruim_pessimo": 0.02789,
-            "bom_muito_bom": 0.726745
-          },
-          "liquidado": 134783351.18,
-          "empenhado": 143193404.14,
-          "pago": 134783351.18,
-          "n_contratos": 13,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "COP",
-            "CREMEP",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 38402.0,
-          "financial": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 143193404.14,
-            "liquidado": 134783351.18,
-            "pago": 134783351.18
-          },
-          "contracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 13,
-            "tipos_contrato": [
-              "COP",
-              "CREMEP",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2024",
-            "financial_year": "2024",
-            "contracts_year": "2024",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        },
-        "2025": {
-          "km": {
-            "pessimo": 15.14,
-            "ruim": 79.13,
-            "regular": 823.6799999999998,
-            "boa": 2616.76,
-            "otima": 12.27,
-            "total": 3546.98,
-            "ruim_pessimo": 94.27,
-            "bom_muito_bom": 2629.03
-          },
-          "pct": {
-            "pessimo": 0.00426841989523482,
-            "ruim": 0.02230911930712888,
-            "regular": 0.2322200858194859,
-            "boa": 0.737743094125143,
-            "otima": 0.003459280853007347,
-            "ruim_pessimo": 0.026578,
-            "bom_muito_bom": 0.741202
-          },
-          "liquidado": 199321703.67,
-          "empenhado": 209922677.1,
-          "pago": 199321703.67,
-          "n_contratos": 12,
-          "emergencial": 2,
-          "tipos_contrato": [
-            "COP",
-            "CREMEP",
-            "EMERGENCIAL",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 56194.76,
-          "financial": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 209922677.1,
-            "liquidado": 199321703.67,
-            "pago": 199321703.67
-          },
-          "contracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 12,
-            "tipos_contrato": [
-              "COP",
-              "CREMEP",
-              "EMERGENCIAL",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 2
-          },
-          "metadata": {
-            "condition_year": "2025",
-            "financial_year": "2025",
-            "contracts_year": "2025",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        }
-      },
-      "malha_agregada_por_ano": {
-        "2024": {
-          "km": {
-            "ruim_pessimo": 97.88999999999999,
-            "regular": 861.18,
-            "bom_muito_bom": 2550.7299999999996
-          },
-          "pct": {
-            "ruim_pessimo": 0.02789047808991966,
-            "regular": 0.24536440822838912,
-            "bom_muito_bom": 0.7267451136816913
-          }
-        },
-        "2025": {
-          "km": {
-            "ruim_pessimo": 94.27,
-            "regular": 823.6799999999998,
-            "bom_muito_bom": 2629.0299999999997
-          },
-          "pct": {
-            "ruim_pessimo": 0.026577539202363703,
-            "regular": 0.23222008581948586,
-            "bom_muito_bom": 0.7412023749781504
-          }
-        }
-      }
-    },
-    "SR Norte": {
-      "liquidado": 381906142.36,
-      "empenhado": 395618435.32,
-      "n_contratos": 18,
-      "emergencial": 0,
-      "tipos_contrato": [
-        "COP",
-        "INTEGRA",
-        "PROCONSERVA"
-      ],
-      "ano_referencia_malha": 2025,
-      "km_ruim": 71.53,
-      "km_pessimo": 3.0,
-      "km_regular": 707.54,
-      "km_boa": 1580.6,
-      "km_muito_boa": 13.17,
-      "km_total": 2375.84,
-      "pct_ruim_pessimo": 3.14,
-      "pct_regular": 29.78,
-      "pct_bom_muito_bom": 67.08,
-      "liquidado_por_km": 92255.5,
-      "malha_por_ano": {
-        "2024": {
-          "km": {
-            "pessimo": 1.18,
-            "ruim": 140.27,
-            "regular": 762.4100000000002,
-            "boa": 1597.960000000001,
-            "otima": 0.0,
-            "total": 2501.82,
-            "ruim_pessimo": 141.45,
-            "bom_muito_bom": 1597.96
-          },
-          "pct": {
-            "pessimo": 0.0004716566339704694,
-            "ruim": 0.05606718309070995,
-            "regular": 0.3047421477164624,
-            "boa": 0.6387190125588572,
-            "otima": 0.0,
-            "ruim_pessimo": 0.056539,
-            "bom_muito_bom": 0.638719
-          },
-          "liquidado": 162721842.7,
-          "empenhado": 171246554.57,
-          "pago": 162721842.7,
-          "n_contratos": 10,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "COP",
-            "INTEGRA",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 65041.39,
-          "financial": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 171246554.57,
-            "liquidado": 162721842.7,
-            "pago": 162721842.7
-          },
-          "contracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 10,
-            "tipos_contrato": [
-              "COP",
-              "INTEGRA",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2024",
-            "financial_year": "2024",
-            "contracts_year": "2024",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        },
-        "2025": {
-          "km": {
-            "pessimo": 3.0,
-            "ruim": 71.53,
-            "regular": 707.54,
-            "boa": 1580.6,
-            "otima": 13.17,
-            "total": 2375.84,
-            "ruim_pessimo": 74.53,
-            "bom_muito_bom": 1593.77
-          },
-          "pct": {
-            "pessimo": 0.001262711293689811,
-            "ruim": 0.03010724627921072,
-            "regular": 0.2978062495790962,
-            "boa": 0.665280490268705,
-            "otima": 0.00554330257929827,
-            "ruim_pessimo": 0.03137,
-            "bom_muito_bom": 0.670824
-          },
-          "liquidado": 219184299.66,
-          "empenhado": 224371880.75,
-          "pago": 219184299.66,
-          "n_contratos": 8,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "COP",
-            "INTEGRA",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 92255.5,
-          "financial": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 224371880.75,
-            "liquidado": 219184299.66,
-            "pago": 219184299.66
-          },
-          "contracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 8,
-            "tipos_contrato": [
-              "COP",
-              "INTEGRA",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2025",
-            "financial_year": "2025",
-            "contracts_year": "2025",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        }
-      },
-      "malha_agregada_por_ano": {
-        "2024": {
-          "km": {
-            "ruim_pessimo": 141.45000000000002,
-            "regular": 762.4100000000002,
-            "bom_muito_bom": 1597.960000000001
-          },
-          "pct": {
-            "ruim_pessimo": 0.05653883972468041,
-            "regular": 0.30474214771646235,
-            "bom_muito_bom": 0.6387190125588572
-          }
-        },
-        "2025": {
-          "km": {
-            "ruim_pessimo": 74.53,
-            "regular": 707.54,
-            "bom_muito_bom": 1593.7699999999998
-          },
-          "pct": {
-            "ruim_pessimo": 0.031369957572900536,
-            "regular": 0.29780624957909624,
-            "bom_muito_bom": 0.6708237928480032
-          }
-        }
-      }
-    },
-    "SR Oeste": {
-      "liquidado": 444444148.65,
-      "empenhado": 476525636.03,
-      "n_contratos": 26,
-      "emergencial": 0,
-      "tipos_contrato": [
-        "COP",
-        "INTEGRA",
-        "PROCONSERVA"
-      ],
-      "ano_referencia_malha": 2025,
-      "km_ruim": 80.25999999999999,
-      "km_pessimo": 1.0,
-      "km_regular": 568.5300000000002,
-      "km_boa": 1724.16,
-      "km_muito_boa": 65.38,
-      "km_total": 2439.33,
-      "pct_ruim_pessimo": 3.33,
-      "pct_regular": 23.31,
-      "pct_bom_muito_bom": 73.36,
-      "liquidado_por_km": 98121.22,
-      "malha_por_ano": {
-        "2024": {
-          "km": {
-            "pessimo": 2.92,
-            "ruim": 95.23000000000002,
-            "regular": 747.3300000000003,
-            "boa": 1627.12,
-            "otima": 13.37,
-            "total": 2485.97,
-            "ruim_pessimo": 98.15,
-            "bom_muito_bom": 1640.49
-          },
-          "pct": {
-            "pessimo": 0.001174591809233418,
-            "ruim": 0.03830697876482822,
-            "regular": 0.3006190742446611,
-            "boa": 0.6545211728218763,
-            "otima": 0.005378182359400958,
-            "ruim_pessimo": 0.039482,
-            "bom_muito_bom": 0.659899
-          },
-          "liquidado": 205094118.24,
-          "empenhado": 219222621.8,
-          "pago": 205094118.24,
-          "n_contratos": 12,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "COP",
-            "INTEGRA",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 82500.64,
-          "financial": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 219222621.8,
-            "liquidado": 205094118.24,
-            "pago": 205094118.24
-          },
-          "contracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 12,
-            "tipos_contrato": [
-              "COP",
-              "INTEGRA",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2024",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2024",
-            "financial_year": "2024",
-            "contracts_year": "2024",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        },
-        "2025": {
-          "km": {
-            "pessimo": 1.0,
-            "ruim": 80.25999999999999,
-            "regular": 568.5300000000002,
-            "boa": 1724.16,
-            "otima": 65.38,
-            "total": 2439.33,
-            "ruim_pessimo": 81.26,
-            "bom_muito_bom": 1789.54
-          },
-          "pct": {
-            "pessimo": 0.0004099486334362304,
-            "ruim": 0.03290247731959185,
-            "regular": 0.2330680965675002,
-            "boa": 0.7068170358254109,
-            "otima": 0.02680244165406075,
-            "ruim_pessimo": 0.033312,
-            "bom_muito_bom": 0.733619
-          },
-          "liquidado": 239350030.41,
-          "empenhado": 257303014.23,
-          "pago": 239350030.41,
-          "n_contratos": 14,
-          "emergencial": 0,
-          "tipos_contrato": [
-            "INTEGRA",
-            "PROCONSERVA"
-          ],
-          "liquidado_por_km": 98121.22,
-          "financial": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "empenhado": 257303014.23,
-            "liquidado": 239350030.41,
-            "pago": 239350030.41
-          },
-          "contracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 14,
-            "tipos_contrato": [
-              "INTEGRA",
-              "PROCONSERVA"
-            ]
-          },
-          "emergencyContracts": {
-            "year": "2025",
-            "source": "Contratos DOPSR1 por Regional.xlsx",
-            "n_contratos": 0
-          },
-          "metadata": {
-            "condition_year": "2025",
-            "financial_year": "2025",
-            "contracts_year": "2025",
-            "condition_source": "Condição da malha.xlsx",
-            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
-            "compatible": true
-          }
-        }
-      },
-      "malha_agregada_por_ano": {
-        "2024": {
-          "km": {
-            "ruim_pessimo": 98.15000000000002,
-            "regular": 747.3300000000003,
-            "bom_muito_bom": 1640.4899999999998
-          },
-          "pct": {
-            "ruim_pessimo": 0.03948157057406164,
-            "regular": 0.3006190742446611,
-            "bom_muito_bom": 0.6598993551812772
-          }
-        },
-        "2025": {
-          "km": {
-            "ruim_pessimo": 81.25999999999999,
-            "regular": 568.5300000000002,
-            "bom_muito_bom": 1789.5399999999995
-          },
-          "pct": {
-            "ruim_pessimo": 0.03331242595302808,
-            "regular": 0.2330680965675002,
-            "bom_muito_bom": 0.7336194774794716
-          }
-        }
-      }
-    }
   },
   "contratos_dopsr1_por_ano": {
     "2024": [
@@ -2180,5 +1319,1627 @@
         "fonte": "Contratos DOPSR1 por Regional.xlsx"
       }
     ]
+  },
+  "regionais": {
+    "SR Campos Gerais": {
+      "liquidado": 319370229.41,
+      "empenhado": 341034740.62,
+      "n_contratos": 14,
+      "emergencial": 0,
+      "tipos_contrato": [
+        "INTEGRA",
+        "PROCONSERVA"
+      ],
+      "ano_referencia_malha": 2025,
+      "km_ruim": 74.5,
+      "km_pessimo": 2.299999999999999,
+      "km_regular": 424.4199999999998,
+      "km_boa": 1154.85,
+      "km_muito_boa": 1.0,
+      "km_total": 1657.07,
+      "pct_ruim_pessimo": 4.63,
+      "pct_regular": 25.61,
+      "pct_bom_muito_bom": 69.75,
+      "liquidado_por_km": 97787.84,
+      "malha_por_ano": {
+        "2024": {
+          "km": {
+            "pessimo": 3.220000000000001,
+            "ruim": 97.46,
+            "regular": 558.1300000000001,
+            "boa": 1169.47,
+            "otima": 21.64,
+            "total": 1849.92,
+            "ruim_pessimo": 100.68,
+            "bom_muito_bom": 1191.11
+          },
+          "pct": {
+            "pessimo": 0.001740615810413423,
+            "ruim": 0.05268335928040131,
+            "regular": 0.3017049385919391,
+            "boa": 0.6321732831690018,
+            "otima": 0.01169780314824425,
+            "ruim_pessimo": 0.054424,
+            "bom_muito_bom": 0.643871
+          },
+          "liquidado": 157328935.38,
+          "empenhado": 162391517.8,
+          "pago": 157328935.38,
+          "n_contratos": 6,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "INTEGRA",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 85046.35,
+          "financial": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 162391517.8,
+            "liquidado": 157328935.38,
+            "pago": 157328935.38
+          },
+          "contracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 6,
+            "tipos_contrato": [
+              "INTEGRA",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2024",
+            "financial_year": "2024",
+            "contracts_year": "2024",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        },
+        "2025": {
+          "km": {
+            "pessimo": 2.299999999999999,
+            "ruim": 74.5,
+            "regular": 424.4199999999998,
+            "boa": 1154.85,
+            "otima": 1.0,
+            "total": 1657.07,
+            "ruim_pessimo": 76.8,
+            "bom_muito_bom": 1155.85
+          },
+          "pct": {
+            "pessimo": 0.001387992058271527,
+            "ruim": 0.04495887319183862,
+            "regular": 0.2561267779876529,
+            "boa": 0.6969228819542929,
+            "otima": 0.0006034748079441426,
+            "ruim_pessimo": 0.046347,
+            "bom_muito_bom": 0.697526
+          },
+          "liquidado": 162041294.03,
+          "empenhado": 178643222.82,
+          "pago": 162041294.03,
+          "n_contratos": 8,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "INTEGRA",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 97787.84,
+          "financial": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 178643222.82,
+            "liquidado": 162041294.03,
+            "pago": 162041294.03
+          },
+          "contracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 8,
+            "tipos_contrato": [
+              "INTEGRA",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2025",
+            "financial_year": "2025",
+            "contracts_year": "2025",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        }
+      },
+      "malha_agregada_por_ano": {
+        "2024": {
+          "km": {
+            "ruim_pessimo": 100.67999999999999,
+            "regular": 558.1300000000001,
+            "bom_muito_bom": 1191.1100000000001
+          },
+          "pct": {
+            "ruim_pessimo": 0.05442397509081473,
+            "regular": 0.30170493859193914,
+            "bom_muito_bom": 0.643871086317246
+          }
+        },
+        "2025": {
+          "km": {
+            "ruim_pessimo": 76.8,
+            "regular": 424.41999999999985,
+            "bom_muito_bom": 1155.8499999999997
+          },
+          "pct": {
+            "ruim_pessimo": 0.04634686525011014,
+            "regular": 0.2561267779876529,
+            "bom_muito_bom": 0.697526356762237
+          }
+        }
+      }
+    },
+    "SR Leste": {
+      "liquidado": 78249856.14,
+      "empenhado": 83657924.84,
+      "n_contratos": 9,
+      "emergencial": 0,
+      "tipos_contrato": [
+        "INTEGRA",
+        "PROCONSERVA"
+      ],
+      "ano_referencia_malha": 2025,
+      "km_ruim": 24.36,
+      "km_pessimo": 6.0,
+      "km_regular": 313.55,
+      "km_boa": 442.59,
+      "km_muito_boa": 0.0,
+      "km_total": 786.5,
+      "pct_ruim_pessimo": 3.86,
+      "pct_regular": 39.87,
+      "pct_bom_muito_bom": 56.27,
+      "liquidado_por_km": 63115.51,
+      "malha_por_ano": {
+        "2024": {
+          "km": {
+            "pessimo": 10.25,
+            "ruim": 39.78,
+            "regular": 251.46,
+            "boa": 727.5699999999999,
+            "otima": 5.0,
+            "total": 1034.06,
+            "ruim_pessimo": 50.03,
+            "bom_muito_bom": 732.57
+          },
+          "pct": {
+            "pessimo": 0.009912384194340755,
+            "ruim": 0.03846972129276831,
+            "regular": 0.2431773784886757,
+            "boa": 0.7036052066611221,
+            "otima": 0.004835309363093051,
+            "ruim_pessimo": 0.048382,
+            "bom_muito_bom": 0.708441
+          },
+          "liquidado": 28609506.94,
+          "empenhado": 32841698.17,
+          "pago": 28609506.94,
+          "n_contratos": 5,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "INTEGRA",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 27667.16,
+          "financial": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 32841698.17,
+            "liquidado": 28609506.94,
+            "pago": 28609506.94
+          },
+          "contracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 5,
+            "tipos_contrato": [
+              "INTEGRA",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2024",
+            "financial_year": "2024",
+            "contracts_year": "2024",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        },
+        "2025": {
+          "km": {
+            "pessimo": 6.0,
+            "ruim": 24.36,
+            "regular": 313.55,
+            "boa": 442.59,
+            "otima": 0.0,
+            "total": 786.5,
+            "ruim_pessimo": 30.36,
+            "bom_muito_bom": 442.59
+          },
+          "pct": {
+            "pessimo": 0.007628734901462174,
+            "ruim": 0.03097266369993643,
+            "regular": 0.3986649713922442,
+            "boa": 0.5627336300063572,
+            "otima": 0.0,
+            "ruim_pessimo": 0.038601,
+            "bom_muito_bom": 0.562734
+          },
+          "liquidado": 49640349.2,
+          "empenhado": 50816226.67,
+          "pago": 49640349.2,
+          "n_contratos": 4,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 63115.51,
+          "financial": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 50816226.67,
+            "liquidado": 49640349.2,
+            "pago": 49640349.2
+          },
+          "contracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 4,
+            "tipos_contrato": [
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2025",
+            "financial_year": "2025",
+            "contracts_year": "2025",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        }
+      },
+      "malha_agregada_por_ano": {
+        "2024": {
+          "km": {
+            "ruim_pessimo": 50.03,
+            "regular": 251.46,
+            "bom_muito_bom": 732.5699999999999
+          },
+          "pct": {
+            "ruim_pessimo": 0.04838210548710907,
+            "regular": 0.24317737848867574,
+            "bom_muito_bom": 0.7084405160242152
+          }
+        },
+        "2025": {
+          "km": {
+            "ruim_pessimo": 30.36,
+            "regular": 313.55,
+            "bom_muito_bom": 442.59
+          },
+          "pct": {
+            "ruim_pessimo": 0.0386013986013986,
+            "regular": 0.39866497139224416,
+            "bom_muito_bom": 0.5627336300063572
+          }
+        }
+      }
+    },
+    "SR Noroeste": {
+      "liquidado": 334105054.85,
+      "empenhado": 353116081.24,
+      "n_contratos": 25,
+      "emergencial": 2,
+      "tipos_contrato": [
+        "COP",
+        "CREMEP",
+        "EMERGENCIAL",
+        "PROCONSERVA"
+      ],
+      "ano_referencia_malha": 2025,
+      "km_ruim": 79.13,
+      "km_pessimo": 15.14,
+      "km_regular": 823.6799999999998,
+      "km_boa": 2616.76,
+      "km_muito_boa": 12.27,
+      "km_total": 3546.98,
+      "pct_ruim_pessimo": 2.66,
+      "pct_regular": 23.22,
+      "pct_bom_muito_bom": 74.12,
+      "liquidado_por_km": 56194.76,
+      "malha_por_ano": {
+        "2024": {
+          "km": {
+            "pessimo": 14.6,
+            "ruim": 83.28999999999999,
+            "regular": 861.18,
+            "boa": 2544.73,
+            "otima": 6.0,
+            "total": 3509.8,
+            "ruim_pessimo": 97.89,
+            "bom_muito_bom": 2550.73
+          },
+          "pct": {
+            "pessimo": 0.004159781184113056,
+            "ruim": 0.0237306969058066,
+            "regular": 0.2453644082283891,
+            "boa": 0.7250356145649325,
+            "otima": 0.00170949911675879,
+            "ruim_pessimo": 0.02789,
+            "bom_muito_bom": 0.726745
+          },
+          "liquidado": 134783351.18,
+          "empenhado": 143193404.14,
+          "pago": 134783351.18,
+          "n_contratos": 13,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "COP",
+            "CREMEP",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 38402.0,
+          "financial": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 143193404.14,
+            "liquidado": 134783351.18,
+            "pago": 134783351.18
+          },
+          "contracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 13,
+            "tipos_contrato": [
+              "COP",
+              "CREMEP",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2024",
+            "financial_year": "2024",
+            "contracts_year": "2024",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        },
+        "2025": {
+          "km": {
+            "pessimo": 15.14,
+            "ruim": 79.13,
+            "regular": 823.6799999999998,
+            "boa": 2616.76,
+            "otima": 12.27,
+            "total": 3546.98,
+            "ruim_pessimo": 94.27,
+            "bom_muito_bom": 2629.03
+          },
+          "pct": {
+            "pessimo": 0.00426841989523482,
+            "ruim": 0.02230911930712888,
+            "regular": 0.2322200858194859,
+            "boa": 0.737743094125143,
+            "otima": 0.003459280853007347,
+            "ruim_pessimo": 0.026578,
+            "bom_muito_bom": 0.741202
+          },
+          "liquidado": 199321703.67,
+          "empenhado": 209922677.1,
+          "pago": 199321703.67,
+          "n_contratos": 12,
+          "emergencial": 2,
+          "tipos_contrato": [
+            "COP",
+            "CREMEP",
+            "EMERGENCIAL",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 56194.76,
+          "financial": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 209922677.1,
+            "liquidado": 199321703.67,
+            "pago": 199321703.67
+          },
+          "contracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 12,
+            "tipos_contrato": [
+              "COP",
+              "CREMEP",
+              "EMERGENCIAL",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 2
+          },
+          "metadata": {
+            "condition_year": "2025",
+            "financial_year": "2025",
+            "contracts_year": "2025",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        }
+      },
+      "malha_agregada_por_ano": {
+        "2024": {
+          "km": {
+            "ruim_pessimo": 97.88999999999999,
+            "regular": 861.18,
+            "bom_muito_bom": 2550.7299999999996
+          },
+          "pct": {
+            "ruim_pessimo": 0.02789047808991966,
+            "regular": 0.24536440822838912,
+            "bom_muito_bom": 0.7267451136816913
+          }
+        },
+        "2025": {
+          "km": {
+            "ruim_pessimo": 94.27,
+            "regular": 823.6799999999998,
+            "bom_muito_bom": 2629.0299999999997
+          },
+          "pct": {
+            "ruim_pessimo": 0.026577539202363703,
+            "regular": 0.23222008581948586,
+            "bom_muito_bom": 0.7412023749781504
+          }
+        }
+      }
+    },
+    "SR Norte": {
+      "liquidado": 381906142.36,
+      "empenhado": 395618435.32,
+      "n_contratos": 18,
+      "emergencial": 0,
+      "tipos_contrato": [
+        "COP",
+        "INTEGRA",
+        "PROCONSERVA"
+      ],
+      "ano_referencia_malha": 2025,
+      "km_ruim": 71.53,
+      "km_pessimo": 3.0,
+      "km_regular": 707.54,
+      "km_boa": 1580.6,
+      "km_muito_boa": 13.17,
+      "km_total": 2375.84,
+      "pct_ruim_pessimo": 3.14,
+      "pct_regular": 29.78,
+      "pct_bom_muito_bom": 67.08,
+      "liquidado_por_km": 92255.5,
+      "malha_por_ano": {
+        "2024": {
+          "km": {
+            "pessimo": 1.18,
+            "ruim": 140.27,
+            "regular": 762.4100000000002,
+            "boa": 1597.960000000001,
+            "otima": 0.0,
+            "total": 2501.82,
+            "ruim_pessimo": 141.45,
+            "bom_muito_bom": 1597.96
+          },
+          "pct": {
+            "pessimo": 0.0004716566339704694,
+            "ruim": 0.05606718309070995,
+            "regular": 0.3047421477164624,
+            "boa": 0.6387190125588572,
+            "otima": 0.0,
+            "ruim_pessimo": 0.056539,
+            "bom_muito_bom": 0.638719
+          },
+          "liquidado": 162721842.7,
+          "empenhado": 171246554.57,
+          "pago": 162721842.7,
+          "n_contratos": 10,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "COP",
+            "INTEGRA",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 65041.39,
+          "financial": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 171246554.57,
+            "liquidado": 162721842.7,
+            "pago": 162721842.7
+          },
+          "contracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 10,
+            "tipos_contrato": [
+              "COP",
+              "INTEGRA",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2024",
+            "financial_year": "2024",
+            "contracts_year": "2024",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        },
+        "2025": {
+          "km": {
+            "pessimo": 3.0,
+            "ruim": 71.53,
+            "regular": 707.54,
+            "boa": 1580.6,
+            "otima": 13.17,
+            "total": 2375.84,
+            "ruim_pessimo": 74.53,
+            "bom_muito_bom": 1593.77
+          },
+          "pct": {
+            "pessimo": 0.001262711293689811,
+            "ruim": 0.03010724627921072,
+            "regular": 0.2978062495790962,
+            "boa": 0.665280490268705,
+            "otima": 0.00554330257929827,
+            "ruim_pessimo": 0.03137,
+            "bom_muito_bom": 0.670824
+          },
+          "liquidado": 219184299.66,
+          "empenhado": 224371880.75,
+          "pago": 219184299.66,
+          "n_contratos": 8,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "COP",
+            "INTEGRA",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 92255.5,
+          "financial": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 224371880.75,
+            "liquidado": 219184299.66,
+            "pago": 219184299.66
+          },
+          "contracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 8,
+            "tipos_contrato": [
+              "COP",
+              "INTEGRA",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2025",
+            "financial_year": "2025",
+            "contracts_year": "2025",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        }
+      },
+      "malha_agregada_por_ano": {
+        "2024": {
+          "km": {
+            "ruim_pessimo": 141.45000000000002,
+            "regular": 762.4100000000002,
+            "bom_muito_bom": 1597.960000000001
+          },
+          "pct": {
+            "ruim_pessimo": 0.05653883972468041,
+            "regular": 0.30474214771646235,
+            "bom_muito_bom": 0.6387190125588572
+          }
+        },
+        "2025": {
+          "km": {
+            "ruim_pessimo": 74.53,
+            "regular": 707.54,
+            "bom_muito_bom": 1593.7699999999998
+          },
+          "pct": {
+            "ruim_pessimo": 0.031369957572900536,
+            "regular": 0.29780624957909624,
+            "bom_muito_bom": 0.6708237928480032
+          }
+        }
+      }
+    },
+    "SR Oeste": {
+      "liquidado": 444444148.65,
+      "empenhado": 476525636.03,
+      "n_contratos": 26,
+      "emergencial": 0,
+      "tipos_contrato": [
+        "COP",
+        "INTEGRA",
+        "PROCONSERVA"
+      ],
+      "ano_referencia_malha": 2025,
+      "km_ruim": 80.25999999999999,
+      "km_pessimo": 1.0,
+      "km_regular": 568.5300000000002,
+      "km_boa": 1724.16,
+      "km_muito_boa": 65.38,
+      "km_total": 2439.33,
+      "pct_ruim_pessimo": 3.33,
+      "pct_regular": 23.31,
+      "pct_bom_muito_bom": 73.36,
+      "liquidado_por_km": 98121.22,
+      "malha_por_ano": {
+        "2024": {
+          "km": {
+            "pessimo": 2.92,
+            "ruim": 95.23000000000002,
+            "regular": 747.3300000000003,
+            "boa": 1627.12,
+            "otima": 13.37,
+            "total": 2485.97,
+            "ruim_pessimo": 98.15,
+            "bom_muito_bom": 1640.49
+          },
+          "pct": {
+            "pessimo": 0.001174591809233418,
+            "ruim": 0.03830697876482822,
+            "regular": 0.3006190742446611,
+            "boa": 0.6545211728218763,
+            "otima": 0.005378182359400958,
+            "ruim_pessimo": 0.039482,
+            "bom_muito_bom": 0.659899
+          },
+          "liquidado": 205094118.24,
+          "empenhado": 219222621.8,
+          "pago": 205094118.24,
+          "n_contratos": 12,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "COP",
+            "INTEGRA",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 82500.64,
+          "financial": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 219222621.8,
+            "liquidado": 205094118.24,
+            "pago": 205094118.24
+          },
+          "contracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 12,
+            "tipos_contrato": [
+              "COP",
+              "INTEGRA",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2024",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2024",
+            "financial_year": "2024",
+            "contracts_year": "2024",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        },
+        "2025": {
+          "km": {
+            "pessimo": 1.0,
+            "ruim": 80.25999999999999,
+            "regular": 568.5300000000002,
+            "boa": 1724.16,
+            "otima": 65.38,
+            "total": 2439.33,
+            "ruim_pessimo": 81.26,
+            "bom_muito_bom": 1789.54
+          },
+          "pct": {
+            "pessimo": 0.0004099486334362304,
+            "ruim": 0.03290247731959185,
+            "regular": 0.2330680965675002,
+            "boa": 0.7068170358254109,
+            "otima": 0.02680244165406075,
+            "ruim_pessimo": 0.033312,
+            "bom_muito_bom": 0.733619
+          },
+          "liquidado": 239350030.41,
+          "empenhado": 257303014.23,
+          "pago": 239350030.41,
+          "n_contratos": 14,
+          "emergencial": 0,
+          "tipos_contrato": [
+            "INTEGRA",
+            "PROCONSERVA"
+          ],
+          "liquidado_por_km": 98121.22,
+          "financial": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "empenhado": 257303014.23,
+            "liquidado": 239350030.41,
+            "pago": 239350030.41
+          },
+          "contracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 14,
+            "tipos_contrato": [
+              "INTEGRA",
+              "PROCONSERVA"
+            ]
+          },
+          "emergencyContracts": {
+            "year": "2025",
+            "source": "Contratos DOPSR1 por Regional.xlsx",
+            "n_contratos": 0
+          },
+          "metadata": {
+            "condition_year": "2025",
+            "financial_year": "2025",
+            "contracts_year": "2025",
+            "condition_source": "Condição da malha.xlsx",
+            "financial_source": "Contratos DOPSR1 por Regional.xlsx",
+            "compatible": true
+          }
+        }
+      },
+      "malha_agregada_por_ano": {
+        "2024": {
+          "km": {
+            "ruim_pessimo": 98.15000000000002,
+            "regular": 747.3300000000003,
+            "bom_muito_bom": 1640.4899999999998
+          },
+          "pct": {
+            "ruim_pessimo": 0.03948157057406164,
+            "regular": 0.3006190742446611,
+            "bom_muito_bom": 0.6598993551812772
+          }
+        },
+        "2025": {
+          "km": {
+            "ruim_pessimo": 81.25999999999999,
+            "regular": 568.5300000000002,
+            "bom_muito_bom": 1789.5399999999995
+          },
+          "pct": {
+            "ruim_pessimo": 0.03331242595302808,
+            "regular": 0.2330680965675002,
+            "bom_muito_bom": 0.7336194774794716
+          }
+        }
+      }
+    }
+  },
+  "glossario_dopsr1_por_sr": {
+    "SR Campos Gerais": {
+      "2024": {
+        "contratos": [
+          {
+            "contrato": "CO128/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 13360173.06,
+            "liquidado": 12997590.64,
+            "pago": 12997590.64
+          },
+          {
+            "contrato": "CO016/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 38172431.68999999,
+            "liquidado": 36872431.69,
+            "pago": 36872431.69
+          },
+          {
+            "contrato": "CO016/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 32489339.02,
+            "liquidado": 31689339.02,
+            "pago": 31689339.02
+          },
+          {
+            "contrato": "CO024/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 31954292.619999997,
+            "liquidado": 31154292.619999997,
+            "pago": 31154292.619999997
+          },
+          {
+            "contrato": "CO091/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 16328848.08,
+            "liquidado": 15828848.08,
+            "pago": 15828848.08
+          },
+          {
+            "contrato": "CO169/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 30253604.520000003,
+            "liquidado": 28953604.520000003,
+            "pago": 28953604.520000003
+          }
+        ],
+        "empenhado_rp": 162558688.98999998,
+        "liquidado": 157496106.57,
+        "pago": 157496106.57
+      },
+      "2025": {
+        "contratos": [
+          {
+            "contrato": "CO128/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 8186838.260000002,
+            "liquidado": 7636838.49,
+            "pago": 7636838.49
+          },
+          {
+            "contrato": "CO016/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 38114568.79,
+            "liquidado": 35814568.79000001,
+            "pago": 35814568.79000001
+          },
+          {
+            "contrato": "CO016/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 33900500.86999999,
+            "liquidado": 31264839.95,
+            "pago": 31264839.95
+          },
+          {
+            "contrato": "CO024/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 41356195.38,
+            "liquidado": 38934193.08,
+            "pago": 38934193.08
+          },
+          {
+            "contrato": "CO091/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 11623724.71,
+            "liquidado": 11623724.71,
+            "pago": 11623724.71
+          },
+          {
+            "contrato": "CO169/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 28748798.0,
+            "liquidado": 28748798.0,
+            "pago": 28748798.0
+          },
+          {
+            "contrato": "CO173/2025DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 14088945.270000001,
+            "liquidado": 8088945.270000001,
+            "pago": 8088945.270000001
+          },
+          {
+            "contrato": "CO175/2025DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 6875286.92,
+            "liquidado": 4181021.12,
+            "pago": 4181021.12
+          }
+        ],
+        "empenhado_rp": 182894858.2,
+        "liquidado": 166292929.41000003,
+        "pago": 166292929.41000003
+      }
+    },
+    "SR Leste": {
+      "2024": {
+        "contratos": [
+          {
+            "contrato": "CO068/2018DOP",
+            "tipo": "COP",
+            "empenhado_rp": 385615.19,
+            "liquidado": 385615.19,
+            "pago": 0.0
+          },
+          {
+            "contrato": "CO132/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 2378377.61,
+            "liquidado": 2378377.61,
+            "pago": 2378377.61
+          },
+          {
+            "contrato": "CO056/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 5706167.79,
+            "liquidado": 3733976.5600000005,
+            "pago": 3733976.5600000005
+          },
+          {
+            "contrato": "CO057/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 9448231.26,
+            "liquidado": 8648231.26,
+            "pago": 8648231.26
+          },
+          {
+            "contrato": "CO058/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 12000367.27,
+            "liquidado": 11340367.27,
+            "pago": 11340367.27
+          },
+          {
+            "contrato": "CO059/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 5892825.85,
+            "liquidado": 5092825.85,
+            "pago": 5092825.85
+          }
+        ],
+        "empenhado_rp": 35811584.97,
+        "liquidado": 31579393.740000002,
+        "pago": 31193778.549999997
+      },
+      "2025": {
+        "contratos": [
+          {
+            "contrato": "CO056/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 5550854.209999999,
+            "liquidado": 4936854.21,
+            "pago": 4936854.21
+          },
+          {
+            "contrato": "CO057/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 16524968.87,
+            "liquidado": 16424968.87,
+            "pago": 16424968.87
+          },
+          {
+            "contrato": "CO058/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 13047922.420000004,
+            "liquidado": 12747922.420000004,
+            "pago": 12747922.420000004
+          },
+          {
+            "contrato": "CO059/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 16324407.690000001,
+            "liquidado": 16162530.219999999,
+            "pago": 16162530.219999999
+          }
+        ],
+        "empenhado_rp": 51448153.19,
+        "liquidado": 50272275.72,
+        "pago": 50272275.72
+      }
+    },
+    "SR Noroeste": {
+      "2024": {
+        "contratos": [
+          {
+            "contrato": "CO004/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 14785872.429999998,
+            "liquidado": 14285872.429999998,
+            "pago": 14285872.429999998
+          },
+          {
+            "contrato": "CO005/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 10714286.2,
+            "liquidado": 10214286.2,
+            "pago": 10214286.2
+          },
+          {
+            "contrato": "CO009/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 13313728.249999998,
+            "liquidado": 12713728.249999998,
+            "pago": 12713728.249999998
+          },
+          {
+            "contrato": "CO026/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 177123.24,
+            "liquidado": 177123.24,
+            "pago": 177123.24
+          },
+          {
+            "contrato": "CO257/2012DOP",
+            "tipo": "COP",
+            "empenhado_rp": 1374893.17,
+            "liquidado": 1374893.17,
+            "pago": 1374893.17
+          },
+          {
+            "contrato": "CO025/2019DT-DOP",
+            "tipo": "CREMEP",
+            "empenhado_rp": 23598445.13,
+            "liquidado": 23098445.13,
+            "pago": 23098445.13
+          },
+          {
+            "contrato": "CO093/2018DT-DOP",
+            "tipo": "CREMEP",
+            "empenhado_rp": 6158717.529999999,
+            "liquidado": 5757152.5600000005,
+            "pago": 5757152.5600000005
+          },
+          {
+            "contrato": "CO142/2018DT-DOP",
+            "tipo": "CREMEP",
+            "empenhado_rp": 11877496.82,
+            "liquidado": 10984856.8,
+            "pago": 10984856.8
+          },
+          {
+            "contrato": "CO215/2012DOP",
+            "tipo": "CREMEP",
+            "empenhado_rp": 1600063.62,
+            "liquidado": 1600063.62,
+            "pago": 1600063.62
+          },
+          {
+            "contrato": "CO133/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 13128614.770000001,
+            "liquidado": 12228614.770000001,
+            "pago": 12228614.770000001
+          },
+          {
+            "contrato": "CO015/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 23967454.07,
+            "liquidado": 19751606.1,
+            "pago": 19751606.1
+          },
+          {
+            "contrato": "CO069/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 5132361.63,
+            "liquidado": 5132361.63,
+            "pago": 5132361.63
+          },
+          {
+            "contrato": "CO072/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 6439301.82,
+            "liquidado": 6439301.82,
+            "pago": 6439301.82
+          },
+          {
+            "contrato": "CO123/2021DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 26733915.189999998,
+            "liquidado": 25933915.189999998,
+            "pago": 25933915.189999998
+          }
+        ],
+        "empenhado_rp": 159002273.87,
+        "liquidado": 149692220.91,
+        "pago": 149692220.91
+      },
+      "2025": {
+        "contratos": [
+          {
+            "contrato": "CO004/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 39931335.779999994,
+            "liquidado": 39631335.779999994,
+            "pago": 39631335.779999994
+          },
+          {
+            "contrato": "CO005/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 4767004.2299999995,
+            "liquidado": 4767004.2299999995,
+            "pago": 4767004.2299999995
+          },
+          {
+            "contrato": "CO009/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 35528349.989999995,
+            "liquidado": 35004476.34,
+            "pago": 35004476.34
+          },
+          {
+            "contrato": "CO025/2019DT-DOP",
+            "tipo": "CREMEP",
+            "empenhado_rp": 5067926.090000001,
+            "liquidado": 5067926.090000001,
+            "pago": 5067926.090000001
+          },
+          {
+            "contrato": "CO093/2018DT-DOP",
+            "tipo": "CREMEP",
+            "empenhado_rp": 554929.9099999999,
+            "liquidado": 554929.9099999999,
+            "pago": 554929.9099999999
+          },
+          {
+            "contrato": "CO142/2018DT-DOP",
+            "tipo": "CREMEP",
+            "empenhado_rp": 2557601.6999999997,
+            "liquidado": 2557601.6999999997,
+            "pago": 2557601.6999999997
+          },
+          {
+            "contrato": "CO133/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 11247287.33,
+            "liquidado": 9890706.24,
+            "pago": 9890706.24
+          },
+          {
+            "contrato": "CO015/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 81582998.82000001,
+            "liquidado": 73002118.82000001,
+            "pago": 73002118.82000001
+          },
+          {
+            "contrato": "CO069/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 81522.77,
+            "liquidado": 81522.77,
+            "pago": 81522.77
+          },
+          {
+            "contrato": "CO072/2022DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 172207.6,
+            "liquidado": 172207.6,
+            "pago": 172207.6
+          },
+          {
+            "contrato": "CO123/2021DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 39785737.70999999,
+            "liquidado": 39165737.70999999,
+            "pago": 39165737.70999999
+          },
+          {
+            "contrato": "CO137/2025DOP",
+            "tipo": "EMERGENCIAL - CONSERVA",
+            "empenhado_rp": 3500072.62,
+            "liquidado": 3173852.84,
+            "pago": 3173852.84
+          },
+          {
+            "contrato": "CO152/2025DOP",
+            "tipo": "EMERGENCIAL - CONSERVA",
+            "empenhado_rp": 1173632.3599999999,
+            "liquidado": 923632.36,
+            "pago": 923632.36
+          }
+        ],
+        "empenhado_rp": 225950606.91000003,
+        "liquidado": 213993052.39000002,
+        "pago": 213993052.39000002
+      }
+    },
+    "SR Norte": {
+      "2024": {
+        "contratos": [
+          {
+            "contrato": "CO006/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 18980639.13,
+            "liquidado": 18480639.13,
+            "pago": 18480639.13
+          },
+          {
+            "contrato": "CO007/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 12633453.049999999,
+            "liquidado": 12133453.049999999,
+            "pago": 12133453.049999999
+          },
+          {
+            "contrato": "CO089/2024DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 29994505.95,
+            "liquidado": 28994505.95,
+            "pago": 28994505.95
+          },
+          {
+            "contrato": "CO129/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 1271695.46,
+            "liquidado": 1271695.46,
+            "pago": 1271695.46
+          },
+          {
+            "contrato": "CO001/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 0.0,
+            "liquidado": 0.0,
+            "pago": 0.0
+          },
+          {
+            "contrato": "CO002/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 248441.37,
+            "liquidado": 248441.37,
+            "pago": 248441.37
+          },
+          {
+            "contrato": "CO023/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 44732135.53,
+            "liquidado": 42007423.660000004,
+            "pago": 42007423.660000004
+          },
+          {
+            "contrato": "CO035/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 1174159.17,
+            "liquidado": 374159.17,
+            "pago": 374159.17
+          },
+          {
+            "contrato": "CO036/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 28242511.17,
+            "liquidado": 27442511.17,
+            "pago": 27442511.17
+          },
+          {
+            "contrato": "CO045/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 22389234.08,
+            "liquidado": 21089234.08,
+            "pago": 21089234.08
+          },
+          {
+            "contrato": "CO051/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 7308.22,
+            "liquidado": 7308.22,
+            "pago": 7308.22
+          }
+        ],
+        "empenhado_rp": 159674083.12999997,
+        "liquidado": 152049371.26000002,
+        "pago": 152049371.26000002
+      },
+      "2025": {
+        "contratos": [
+          {
+            "contrato": "CO006/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 32268826.769999996,
+            "liquidado": 32168826.769999996,
+            "pago": 32168826.769999996
+          },
+          {
+            "contrato": "CO007/2020DOP",
+            "tipo": "COP",
+            "empenhado_rp": 20451500.2,
+            "liquidado": 20351500.2,
+            "pago": 20351500.2
+          },
+          {
+            "contrato": "CO089/2024DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 24350268.37,
+            "liquidado": 24350268.37,
+            "pago": 24350268.37
+          },
+          {
+            "contrato": "CO023/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 46904250.19,
+            "liquidado": 46834250.19,
+            "pago": 46834250.19
+          },
+          {
+            "contrato": "CO035/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 10090603.21,
+            "liquidado": 10090603.21,
+            "pago": 10090603.21
+          },
+          {
+            "contrato": "CO036/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 60911673.34000001,
+            "liquidado": 57411673.34,
+            "pago": 57411673.34
+          },
+          {
+            "contrato": "CO045/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 24583734.32,
+            "liquidado": 24522734.32,
+            "pago": 24522734.32
+          }
+        ],
+        "empenhado_rp": 219560856.4,
+        "liquidado": 215729856.4,
+        "pago": 215729856.4
+      }
+    },
+    "SR Oeste": {
+      "2024": {
+        "contratos": [
+          {
+            "contrato": "CO066/2018DOP",
+            "tipo": "COP",
+            "empenhado_rp": 445521.88,
+            "liquidado": 445521.88,
+            "pago": 0.0
+          },
+          {
+            "contrato": "CO069/2018DOP",
+            "tipo": "COP",
+            "empenhado_rp": 22984.8,
+            "liquidado": 22984.8,
+            "pago": 0.0
+          },
+          {
+            "contrato": "CO167/2012DOP",
+            "tipo": "COP",
+            "empenhado_rp": 558148.82,
+            "liquidado": 558148.82,
+            "pago": 558148.82
+          },
+          {
+            "contrato": "CO131/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 3177556.0799999996,
+            "liquidado": 2669311.9,
+            "pago": 2669311.9
+          },
+          {
+            "contrato": "CO006/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 19773722.79,
+            "liquidado": 18973722.79,
+            "pago": 18973722.79
+          },
+          {
+            "contrato": "CO007/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 11140244.639999999,
+            "liquidado": 10340244.639999999,
+            "pago": 10340244.639999999
+          },
+          {
+            "contrato": "CO017/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 20854107.93,
+            "liquidado": 20054107.93,
+            "pago": 20054107.93
+          },
+          {
+            "contrato": "CO018/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 14085342.790000001,
+            "liquidado": 13351979.81,
+            "pago": 13351979.81
+          },
+          {
+            "contrato": "CO019/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 28185227.91,
+            "liquidado": 26786342.939999998,
+            "pago": 26786342.939999998
+          },
+          {
+            "contrato": "CO026/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 43613777.94,
+            "liquidado": 42313777.94,
+            "pago": 42313777.94
+          },
+          {
+            "contrato": "CO028/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 16638916.969999999,
+            "liquidado": 15321856.8,
+            "pago": 15321856.8
+          },
+          {
+            "contrato": "CO071/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 38465528.37,
+            "liquidado": 37104577.11,
+            "pago": 37104577.11
+          },
+          {
+            "contrato": "CO124/2021DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 25293107.12,
+            "liquidado": 24493107.12,
+            "pago": 24493107.12
+          },
+          {
+            "contrato": "CO124/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 4310000.0,
+            "liquidado": 0.0,
+            "pago": 0.0
+          }
+        ],
+        "empenhado_rp": 226564188.04,
+        "liquidado": 212435684.48000002,
+        "pago": 211967177.8
+      },
+      "2025": {
+        "contratos": [
+          {
+            "contrato": "CO131/2021DOP",
+            "tipo": "INTEGRA",
+            "empenhado_rp": 1230287.0499999998,
+            "liquidado": 1230287.0499999998,
+            "pago": 1230287.0499999998
+          },
+          {
+            "contrato": "CO006/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 30166861.929999996,
+            "liquidado": 27666861.929999996,
+            "pago": 27666861.929999996
+          },
+          {
+            "contrato": "CO007/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 9210678.31,
+            "liquidado": 9210678.31,
+            "pago": 9210678.31
+          },
+          {
+            "contrato": "CO017/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 17732355.76,
+            "liquidado": 16548303.049999999,
+            "pago": 16548303.049999999
+          },
+          {
+            "contrato": "CO018/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 193539.39,
+            "liquidado": 193539.39,
+            "pago": 193539.39
+          },
+          {
+            "contrato": "CO019/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 38482291.29,
+            "liquidado": 37355360.2,
+            "pago": 37355360.2
+          },
+          {
+            "contrato": "CO026/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 39519756.39,
+            "liquidado": 35719756.39,
+            "pago": 35719756.39
+          },
+          {
+            "contrato": "CO028/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 1764475.64,
+            "liquidado": 1764475.64,
+            "pago": 1764475.64
+          },
+          {
+            "contrato": "CO071/2023DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 34982626.37,
+            "liquidado": 33222626.369999997,
+            "pago": 33222626.369999997
+          },
+          {
+            "contrato": "CO072/2025DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 9463922.37,
+            "liquidado": 8642922.37,
+            "pago": 8642922.37
+          },
+          {
+            "contrato": "CO092/2025DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 23567371.47,
+            "liquidado": 21807371.47,
+            "pago": 21807371.47
+          },
+          {
+            "contrato": "CO121/2025DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 18027376.41,
+            "liquidado": 13026376.41,
+            "pago": 13026376.41
+          },
+          {
+            "contrato": "CO124/2021DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 10043976.0,
+            "liquidado": 10043976.0,
+            "pago": 10043976.0
+          },
+          {
+            "contrato": "CO124/2024DOP",
+            "tipo": "PROCONSERVA",
+            "empenhado_rp": 35751685.17,
+            "liquidado": 35751685.150000006,
+            "pago": 35751685.150000006
+          }
+        ],
+        "empenhado_rp": 270137203.55,
+        "liquidado": 252184219.73000002,
+        "pago": 252184219.73000002
+      }
+    }
   }
 }

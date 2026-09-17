@@ -5,11 +5,12 @@ Gera dashboard/painel_der_standalone.html a partir do template leve
 dashboard/painel_der.html (dados carregados via fetch em runtime).
 
 NÃO sobrescreve dashboard/painel_der.html — esse é o arquivo-fonte, editável,
-e continua sendo o único que se edita diretamente. Este script só lê os 3
+e continua sendo o único que se edita diretamente. Este script só lê os 4
 JSONs de dados (data/der_precomputed.json, dashboard/data/benchmark_nacional.json,
-dashboard/data/rodovias_pr_condicao.geojson), monta o bloco window.STANDALONE_DATA
-com os três embutidos inline, e grava o resultado em painel_der_standalone.html —
-uma cópia autossuficiente que abre via duplo clique (file://), sem servidor.
+dashboard/data/rodovias_pr_condicao.geojson, dashboard/data/rp_reconciliado.json),
+monta o bloco window.STANDALONE_DATA com os quatro embutidos inline, e grava o
+resultado em painel_der_standalone.html — uma cópia autossuficiente que abre
+via duplo clique (file://), sem servidor.
 
 Uso:
     python scripts/build_standalone.py
@@ -28,6 +29,7 @@ OUTPUT_PATH = os.path.join(DASH, 'painel_der_standalone.html')
 F_DER_PRECOMPUTED = os.path.join(DATA, 'der_precomputed.json')
 F_BENCHMARK = os.path.join(DASH, 'data', 'benchmark_nacional.json')
 F_RODOVIAS_CONDICAO = os.path.join(DASH, 'data', 'rodovias_pr_condicao.geojson')
+F_RP_RECONCILIADO = os.path.join(DASH, 'data', 'rp_reconciliado.json')
 
 MARKER = 'window.STANDALONE_DATA = null;'
 
@@ -60,19 +62,22 @@ def main():
         raise SystemExit("Não foi possível localizar o bloco <script> do STANDALONE_DATA.")
     script_end += len('</script>')
 
-    print('[1/3] Lendo data/der_precomputed.json...')
+    print('[1/4] Lendo data/der_precomputed.json...')
     der_precomputed = read_json_literal(F_DER_PRECOMPUTED)
-    print('[2/3] Lendo dashboard/data/benchmark_nacional.json...')
+    print('[2/4] Lendo dashboard/data/benchmark_nacional.json...')
     benchmark_nacional = read_json_literal(F_BENCHMARK)
-    print('[3/3] Lendo dashboard/data/rodovias_pr_condicao.geojson...')
+    print('[3/4] Lendo dashboard/data/rodovias_pr_condicao.geojson...')
     rodovias_pr_condicao = read_json_literal(F_RODOVIAS_CONDICAO)
+    print('[4/4] Lendo dashboard/data/rp_reconciliado.json...')
+    rp_reconciliado = read_json_literal(F_RP_RECONCILIADO)
 
     data_script = (
         '<script>\r\n'
         'window.STANDALONE_DATA = {\r\n'
         f'  "der_precomputed": {der_precomputed},\r\n'
         f'  "benchmark_nacional": {benchmark_nacional},\r\n'
-        f'  "rodovias_pr_condicao": {rodovias_pr_condicao}\r\n'
+        f'  "rodovias_pr_condicao": {rodovias_pr_condicao},\r\n'
+        f'  "rp_reconciliado": {rp_reconciliado}\r\n'
         '};\r\n'
         '</script>'
     )

@@ -79,6 +79,10 @@ let regionais    = [];
 // Dados de DATA_PATH.ROOT
 let contratos  = [];
 let contratosPorAno = {};
+// RP / Exercício Anterior — ver attachRpAContratos() e o _meta de rp_reconciliado.json
+let rpReconciliado = { contratos: [], regionais: [], _meta: null };
+let rpIndex = new Map();
+let rpSemContratoBase = [];
 let malhaKm    = [];
 let malhaLiqKm = [];
 
@@ -432,6 +436,14 @@ function fmtR(v){
   if(v>=1e9) return 'R$&nbsp;'+fmtNum(v/1e9,2)+'&nbsp;bi';
   if(v>=1e6) return 'R$&nbsp;'+fmtNum(v/1e6,1)+'&nbsp;mi';
   return 'R$&nbsp;'+fmtNum(v);
+}
+// Igual a fmtR, mas com espaço normal (não &nbsp;) — usado em contexto Chart.js
+// (tooltip/eixo), onde a string vai direto pro canvas, não pro DOM.
+function fmtCur(v){
+  if(v==null) return '—';
+  if(v>=1e9) return 'R$ '+fmtNum(v/1e9,2)+' bi';
+  if(v>=1e6) return 'R$ '+fmtNum(v/1e6,1)+' mi';
+  return 'R$ '+fmtNum(v);
 }
 function fmtRF(v){ return v==null?'—':'R$&nbsp;'+fmtNum(Math.round(v)); }
 function fmtP(v){ return v==null?'—':fmtNum(v,1)+' %'; }
@@ -1281,8 +1293,37 @@ const TIPO_COLORS = {
   'CREMEP':'#FFC000','EMERGENCIAL':'#C00000'
 };
 
-let chContSR = null, chContTipo = null;
+// Rampa sequencial de um hue só (mesmo magenta do segmento RP, #e87ba4) para o
+// ranking de concentração de RP (Fase 5) — claro→escuro mede intensidade
+// ("quanto"), distinto da cor sólida de identidade ("isso é RP") do gráfico de
+// execução. Endpoints validados com scripts/validate_palette.js do skill de
+// dataviz: o extremo escuro original (derivado só escurecendo #e87ba4) batia
+// ΔE 14,5 contra o vermelho já usado no painel (#C00000 — SR Norte/EMERGENCIAL/
+// sinal alto do SPC), abaixo do piso de 15. #570f2a mantém o mesmo hue
+// (337°) mas escurece mais, e limpa ΔE 23,4 contra #C00000.
+const RP_RANK_RAMP_LIGHT = [249, 220, 231]; // #f9dce7
+const RP_RANK_RAMP_DARK  = [87, 15, 42];    // #570f2a
+// Domínio fixo (não normalizado pelo min/max do que está sendo exibido no
+// momento) — senão a mesma cor passaria a significar níveis de pressão
+// diferentes conforme o usuário troca o filtro de regional/tipo/status. 80%
+// dá folga acima do máximo observado na base (~74,6%).
+const RP_RANK_DOMAIN_MAX = 0.8;
+
+function rpRankRamp(t){
+  const c = Math.max(0, Math.min(1, t));
+  const rgb = RP_RANK_RAMP_LIGHT.map((l, i) => Math.round(l + (RP_RANK_RAMP_DARK[i] - l) * c));
+  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+}
+
+let chContSR = null, chContTipo = null, chRpRanking = null;
 let contratoFiltersReady = false;
+
+// Toggle escopado ao card do chartContSR — 'ano' (padrão, comportamento
+// existente) ou 'comparar' (2024 x 2025 lado a lado). Não interfere com
+// #filtroAnoMalha nem com nenhum outro seletor global: KPIs, ranking, tabela e
+// divergências continuam só no ano do seletor global, sempre.
+let execChartMode = 'ano';
+const SR_LABELS_SHORT = SR_ORDER.map(s => SR_DISPLAY[s].replace('SR ', ''));
 
 function normalizaContrato(c, fallbackYear){
   return {
@@ -1304,6 +1345,80 @@ function buildContratosPorAno(d){
     byYear[String(year)] = (sourceByYear[year] || []).map(c => normalizaContrato(c, year));
   });
   return byYear;
+}
+
+// =======================================================
+// RP / EXERCÍCIO ANTERIOR — cruzamento com rp_reconciliado.json
+// =======================================================
+// rp_reconciliado.contratos usa sr sem prefixo ("Leste"); contratosPorAno usa
+// sr já normalizado pelo SR_DISPLAY ("SR Leste"). Tira o prefixo dos dois
+// lados para a chave bater.
+function normalizaSrParaChaveRp(sr){
+  return String(sr || '').replace(/^SR\s+/i, '').trim();
+}
+
+function chaveRp(contrato, sr, ano){
+  return `${contrato}|${normalizaSrParaChaveRp(sr)}|${ano}`;
+}
+
+// Indexa rp_reconciliado.contratos por contrato+sr+ano. Não dá para indexar só
+// por contrato+ano: o mesmo número de contrato pode aparecer em regionais
+// diferentes com status distinto (ex.: CO257/2012DOP e CO133/2021DOP em 2024 —
+// ver _meta do JSON e nota de divergências).
+function indexarRpReconciliado(data){
+  rpReconciliado = data || { contratos: [], regionais: [], _meta: null };
+  rpIndex = new Map();
+  (rpReconciliado.contratos || []).forEach(r => {
+    rpIndex.set(chaveRp(r.contrato, r.sr, r.ano), r);
+  });
+}
+
+// Cruza contratosPorAno (fonte: Contratos DOPSR1 por Regional.xlsx / Empenhos
+// CGM) com rpReconciliado.contratos (fonte: Painel_DER_Empenho + RP.xlsx) pela
+// chave contrato+sr+ano. Contratos com status 'so_rp' em rp_reconciliado não
+// têm empenhado/pago na base do painel (não existem em
+// contratos_dopsr1_por_ano) e por isso não entram em contratosPorAno mesmo
+// depois do cruzamento — ficam em rpSemContratoBase para a seção de
+// divergências (Fase 6). Idempotente: pode ser chamada de novo sem duplicar
+// nada, já que só atribui campos nos objetos existentes.
+function attachRpAContratos(){
+  const usados = new Set();
+  Object.keys(contratosPorAno).forEach(ano => {
+    (contratosPorAno[ano] || []).forEach(c => {
+      const chave = chaveRp(c.contrato, c.sr, Number(ano));
+      const rp = rpIndex.get(chave);
+      if(rp){
+        usados.add(chave);
+        c.exercicioCorrente = rp.exercicio_corrente;
+        c.rp = rp.rp;
+        c.totalComRp = rp.total_com_rp;
+        c.statusRp = rp.status;
+        c.pctRp = rp.pct;
+      } else {
+        c.exercicioCorrente = null;
+        c.rp = null;
+        c.totalComRp = null;
+        c.statusRp = null; // não encontrado nem em rp_reconciliado — diferente de 'so_base'
+        c.pctRp = null;
+      }
+    });
+  });
+  rpSemContratoBase = (rpReconciliado.contratos || []).filter(r => !usados.has(chaveRp(r.contrato, r.sr, r.ano)));
+
+  console.group('[RP] rp_reconciliado.json cruzado com contratosPorAno');
+  Object.keys(contratosPorAno).sort().forEach(ano => {
+    const lista = contratosPorAno[ano] || [];
+    const casado = lista.filter(c => c.statusRp === 'casado').length;
+    const soBase = lista.filter(c => c.statusRp === 'so_base').length;
+    const semRp  = lista.filter(c => c.statusRp == null).length;
+    // "sem linha em rp_reconciliado.json" = falha do JOIN (chave contrato+sr+ano não
+    // encontrada em rpIndex) — não confundir com so_base, que É uma linha encontrada,
+    // só que marcada upstream (na planilha) como sem RP calculável.
+    console.log(`${ano}: ${lista.length} contratos — ${casado} casado, ${soBase} so_base, ${semRp} sem linha em rp_reconciliado.json (falha de join, chave nao encontrada)`);
+  });
+  console.log('Contratos só na planilha de RP (sem empenhado/pago na base do painel):',
+    rpSemContratoBase.length, rpSemContratoBase.map(r => `${r.contrato} (${r.sr}, ${r.ano})`));
+  console.groupEnd();
 }
 
 function contratoStatusText(c){
@@ -1332,9 +1447,13 @@ function getContratoFilterValues(){
   return appState.filters.contratos;
 }
 
-function getContratosFiltrados(){
-  const f = getContratoFilterValues();
-  return contratos.filter(c=>{
+// Extraído de getContratosFiltrados() para poder aplicar os mesmos critérios
+// de filtro (regiao/tipo/status/busca) a uma lista de outro ano — usado pelo
+// comparativo 2024×2025 no kpi-sub de RP (ver renderContratos), que precisa
+// comparar o mesmo recorte no ano corrente vs. no outro ano, não os totais
+// brutos de cada um.
+function filtrarContratosPorCriterios(lista, f){
+  return lista.filter(c=>{
     const srTxt = SR_DISPLAY[c.sr] || c.sr || '';
     const tipoTxt = c.tipo || '';
     const statusTxt = contratoStatusText(c);
@@ -1343,6 +1462,11 @@ function getContratosFiltrados(){
       (!f.tipo || tipoTxt === f.tipo) &&
       (!f.status || statusTxt === f.status);
   });
+}
+
+function getContratosFiltrados(){
+  const f = getContratoFilterValues();
+  return filtrarContratosPorCriterios(contratos, f);
 }
 
 function fillContratoSelect(select, values, defaultLabel){
@@ -1372,6 +1496,44 @@ function populateContratoFilterOptions(){
   );
 }
 
+// Ordenação da tabela de contratos (clique no th). null/undefined (contratos
+// sem RP calculável) vai sempre para o fim da lista, nas duas direções — não
+// compete por posição com valores reais (inclusive 0, que é um RP calculado
+// e confirmado, diferente de "não sabemos"). Ver rpStatusFlag() para o motivo
+// de pctRp/rp virem null para so_base/so_rp/sem-linha.
+let contratoSort = { key: null, dir: 1 };
+
+const CONTRATO_SORT_TIPO = {
+  contrato: 'text', sr: 'text', tipo: 'text', statusText: 'text',
+  empenhado: 'num', liquidado: 'num', pago: 'num', rp: 'num', pctRp: 'num'
+};
+
+function valorOrdenavelContrato(c, key){
+  return key === 'statusText' ? contratoStatusText(c) : c[key];
+}
+
+function ordenarContratos(data){
+  if(!contratoSort.key) return data;
+  const key = contratoSort.key, dir = contratoSort.dir;
+  const tipo = CONTRATO_SORT_TIPO[key] || 'text';
+  return [...data].sort((a,b)=>{
+    const va = valorOrdenavelContrato(a, key), vb = valorOrdenavelContrato(b, key);
+    const aNull = va == null, bNull = vb == null;
+    if(aNull && bNull) return 0;
+    if(aNull) return 1;  // sempre por último, independente de dir
+    if(bNull) return -1;
+    return tipo === 'text' ? dir * String(va).localeCompare(String(vb), 'pt') : dir * (va - vb);
+  });
+}
+
+function atualizarCabecalhoOrdenacaoContratos(){
+  document.querySelectorAll('#tblContratos thead th[data-key]').forEach(th=>{
+    const arrow = th.querySelector('.sort-arrow');
+    if(!arrow) return;
+    arrow.textContent = th.dataset.key === contratoSort.key ? (contratoSort.dir === 1 ? '▲' : '▼') : '';
+  });
+}
+
 function setupContratoTableFilters(){
   populateContratoFilterOptions();
   if(contratoFiltersReady) return;
@@ -1381,6 +1543,16 @@ function setupContratoTableFilters(){
     if(!el) return;
     el.addEventListener(id === 'filtroContratoBusca' ? 'input' : 'change', ()=>{
       renderContratos(getContratosFiltrados());
+    });
+  });
+
+  document.querySelectorAll('#tblContratos thead th[data-key]').forEach(th=>{
+    th.addEventListener('click', ()=>{
+      const key = th.dataset.key;
+      if(contratoSort.key === key) contratoSort.dir *= -1;
+      else { contratoSort.key = key; contratoSort.dir = 1; }
+      atualizarCabecalhoOrdenacaoContratos();
+      renderTblContratos(getContratosFiltrados());
     });
   });
 
@@ -1410,6 +1582,17 @@ function setupContratoTableFilters(){
     });
   }
 
+  document.querySelectorAll('#execModeToggle button[data-mode]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(btn.dataset.mode === execChartMode) return;
+      execChartMode = btn.dataset.mode;
+      document.querySelectorAll('#execModeToggle button[data-mode]').forEach(b=>{
+        b.classList.toggle('active', b === btn);
+      });
+      renderContratos(getContratosFiltrados());
+    });
+  });
+
   contratoFiltersReady = true;
 }
 
@@ -1420,42 +1603,66 @@ function updateContratoFilterCount(qtd){
   if(empty) empty.hidden = qtd > 0;
 }
 
-function renderContratos(data = contratos){
-  if(!contratos.length) return;
-  setupContratoTableFilters();
-  updatePeriodoBadges();
+// Dispatcher do gráfico Empenhado/Liquidado/Pago por SR — decide entre o modo
+// 'ano' (comportamento original, intacto) e 'comparar' (2024x2025), e ajusta a
+// nota e o botão "Mostrar todas" (que só faz sentido no modo 'ano', onde há
+// legenda clicável — em 'comparar' a legenda fica oculta).
+function renderExecChart(data){
+  const btnTodas = document.getElementById('btnMostrarTodasContSR');
+  const note = document.getElementById('execModeNote');
 
-  const totalEmp  = data.reduce((a,c)=>a+c.empenhado,0);
-  const totalLiq  = data.reduce((a,c)=>a+c.liquidado,0);
-  const pctExec   = totalEmp>0?(totalLiq/totalEmp*100):0;
-  document.getElementById('kpi-cont-total').textContent = data.length;
-  document.getElementById('kpi-cont-emp').innerHTML     = fmtR(totalEmp);
-  document.getElementById('kpi-cont-liq').innerHTML     = fmtR(totalLiq);
-  document.getElementById('kpi-cont-exec').textContent  = fmtNum(pctExec,1)+'%';
-  const execCard = document.getElementById('kpi-cont-exec-card');
-  if(execCard) execCard.classList.toggle('alert', pctExec<70);
+  if(execChartMode === 'comparar'){
+    if(btnTodas) btnTodas.hidden = true;
+    if(note){
+      note.hidden = false;
+      note.innerHTML =
+        'Modo comparação mostra apenas a composição do Liquidado (Exercício Corrente + RP). ' +
+        'Empenhado e Pago voltam ao trocar para "Ano selecionado". ' +
+        'Comparando 2024 x 2025 — <strong>ignora o seletor de ano acima</strong> (mantém os filtros de regional/tipo/status/busca da tabela abaixo). ' +
+        'Em cada par de barras, a da esquerda é 2024 e a da direita é 2025 — passe o mouse para confirmar.';
+    }
+    renderExecChartCompare();
+  } else {
+    if(btnTodas) btnTodas.hidden = false;
+    if(note){ note.hidden = true; note.innerHTML = ''; }
+    renderExecChartAno(data);
+  }
+}
 
-  // Destrói instâncias anteriores antes de recriar
-  if(chContSR)  { chContSR.destroy();  chContSR  = null; }
-  if(chContTipo){ chContTipo.destroy(); chContTipo = null; }
-
-  // Chart 1 — Empenhado / Liquidado / Pago por SR
-  const SR_ORDER_UP=['SR Leste','SR Campos Gerais','SR Norte','SR Noroeste','SR Oeste'];
-  const srLabels = SR_ORDER_UP.map(s=>SR_DISPLAY[s].replace('SR ',''));
-  const empBySR  = SR_ORDER_UP.map(sr=>data.filter(c=>c.sr===sr).reduce((a,c)=>a+c.empenhado,0));
-  const liqBySR  = SR_ORDER_UP.map(sr=>data.filter(c=>c.sr===sr).reduce((a,c)=>a+c.liquidado,0));
-  const pagBySR  = SR_ORDER_UP.map(sr=>data.filter(c=>c.sr===sr).reduce((a,c)=>a+(c.pago||0),0));
-
-  const fmtCur = v => v>=1e9?'R$ '+fmtNum(v/1e9,2)+' bi':v>=1e6?'R$ '+fmtNum(v/1e6,1)+' mi':'R$ '+fmtNum(v);
+// Modo 'ano' — comportamento original da Fase 3, inalterado: Empenhado /
+// Liquidado (Exercício Corrente + RP) / Pago por SR, no ano do seletor global.
+function renderExecChartAno(data){
+  const empBySR  = SR_ORDER.map(sr=>data.filter(c=>c.sr===sr).reduce((a,c)=>a+c.empenhado,0));
+  const liqBySR  = SR_ORDER.map(sr=>data.filter(c=>c.sr===sr).reduce((a,c)=>a+c.liquidado,0));
+  const pagBySR  = SR_ORDER.map(sr=>data.filter(c=>c.sr===sr).reduce((a,c)=>a+(c.pago||0),0));
+  // RP = soma de rp só dos contratos 'casado' (so_base/so_rp não têm RP calculável).
+  // Corrente = liqBySR (o Liquidado já existente na base, inalterado) — RP é
+  // somado POR CIMA, não recortado de dentro dele. RP é dinheiro adicional (restos
+  // a pagar de anos anteriores, liquidados no ano corrente), então o total
+  // empilhado (Corrente+RP) fica maior que liqBySR sozinho quando há RP — nunca
+  // igual. O liquidado de contratos so_base (RP desconhecido) continua dentro do
+  // segmento Corrente — por isso esses contratos precisam aparecer na lista de
+  // divergências (Fase 6).
+  const rpBySR       = SR_ORDER.map(sr=>data.filter(c=>c.sr===sr && c.statusRp==='casado').reduce((a,c)=>a+(c.rp||0),0));
+  const correnteBySR = liqBySR;
+  const totalLiqComRpBySR = correnteBySR.map((liq,i)=>liq + rpBySR[i]);
 
   chContSR = makeChart(document.getElementById('chartContSR'),{
     type:'bar',
     data:{
-      labels: srLabels,
+      labels: SR_LABELS_SHORT,
       datasets:[
-        { label:'Empenhado', data:empBySR, backgroundColor:'#BDD7EE', borderRadius:3 },
-        { label:'Liquidado', data:liqBySR, backgroundColor:'#2E75B6', borderRadius:3 },
-        { label:'Pago',      data:pagBySR, backgroundColor:'#1F4E79', borderRadius:3 }
+        { label:'Empenhado', data:empBySR, backgroundColor:'#BDD7EE', borderRadius:3, stack:'empenhado' },
+        { label:'Exercício Corrente', data:correnteBySR, backgroundColor:'#2E75B6', stack:'liquidado',
+          borderRadius:{topLeft:0,topRight:0,bottomLeft:3,bottomRight:3}, borderSkipped:false,
+          // Gap de 2px na cor da superfície do card (#fff) na costura com RP —
+          // não é um contorno ao redor do segmento (isso seria um traço de dado
+          // falso), é só a borda superior, imitando o espaçador de 2px que separa
+          // segmentos empilhados/barras adjacentes.
+          borderWidth:{top:2,left:0,right:0,bottom:0}, borderColor:'#fff' },
+        { label:'RP', data:rpBySR, backgroundColor:'#e87ba4', stack:'liquidado',
+          borderRadius:{topLeft:3,topRight:3,bottomLeft:0,bottomRight:0}, borderSkipped:false },
+        { label:'Pago',      data:pagBySR, backgroundColor:'#1F4E79', borderRadius:3, stack:'pago' }
       ]
     },
     options:{
@@ -1466,7 +1673,7 @@ function renderContratos(data = contratos){
       // caminho de um usuário trocando o select manualmente).
       onClick(evt, elements){
         if(!elements.length) return;
-        const sr = SR_ORDER_UP[elements[0].index];
+        const sr = SR_ORDER[elements[0].index];
         const select = document.getElementById('filtroContratoRegiao');
         if(!select || !sr) return;
         select.value = sr;
@@ -1481,14 +1688,25 @@ function renderContratos(data = contratos){
           position:'bottom',
           labels:{font:{size:11},padding:12},
           onClick(evt, legendItem, legend){
-            // Toggle independente por série (Empenhado / Liquidado / Pago)
+            // Toggle independente por série
             const idx  = legendItem.datasetIndex;
             const meta = legend.chart.getDatasetMeta(idx);
             meta.hidden = !meta.hidden;
             legend.chart.update();
           }
         },
-        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmtCur(ctx.raw)}`}}
+        tooltip:{callbacks:{
+          label:ctx=>` ${ctx.dataset.label}: ${fmtCur(ctx.raw)}`,
+          // Para os segmentos do Liquidado (Corrente/RP), mostra o total do SR
+          // no rodapé — Corrente+RP, que agora é maior que liqBySR sozinho
+          // quando há RP (RP é somado por cima, não recortado de dentro).
+          footer:items=>{
+            const item = items[0];
+            if(!item || item.dataset.stack !== 'liquidado') return '';
+            const idx = item.dataIndex;
+            return `Total Liquidado: ${fmtCur(totalLiqComRpBySR[idx])}`;
+          }
+        }}
       },
       scales:{
         x:{grid:{display:false}},
@@ -1496,6 +1714,161 @@ function renderContratos(data = contratos){
       }
     }
   });
+}
+
+// Modo 'comparar' — 2024 x 2025 lado a lado, só Exercício Corrente + RP
+// (Empenhado/Pago somem, ver nota no card). Recalcula os dois anos a partir de
+// contratosPorAno + rpIndex já carregados (nunca de totais agregados prontos
+// de rp_reconciliado.regionais, que não respeitam filtro), aplicando os MESMOS
+// critérios de filtro (regiao/tipo/status/busca) que já existem — tudo exceto
+// o ano, que aqui é sempre os dois. Mesma regra de todo o resto: RP e %RP só
+// somam contratos 'casado'. Reaproveita filtrarContratosPorCriterios(), a
+// mesma função usada no comparativo de ano do KPI (Fase 7 enxuta) — um único
+// lugar calculando "outro ano com os mesmos filtros", não duas versões que
+// podem divergir.
+function renderExecChartCompare(){
+  const canvas = document.getElementById('chartContSR');
+  if(!canvas) return;
+
+  const f = getContratoFilterValues();
+  const anos = Object.keys(contratosPorAno).sort();
+  const porAno = {};
+  anos.forEach(ano=>{
+    const filtrado = filtrarContratosPorCriterios(contratosPorAno[ano] || [], f);
+    const liqBySR = SR_ORDER.map(sr=>filtrado.filter(c=>c.sr===sr).reduce((a,c)=>a+c.liquidado,0));
+    const rpBySR  = SR_ORDER.map(sr=>filtrado.filter(c=>c.sr===sr && c.statusRp==='casado').reduce((a,c)=>a+(c.rp||0),0));
+    // Corrente = liqBySR inalterado; RP é somado por cima (ver mesma correção em
+    // renderExecChartAno acima) — o total do par de barras é correnteBySR+rpBySR,
+    // não liqBySR sozinho.
+    const correnteBySR = liqBySR;
+    const totalBySR = correnteBySR.map((liq,i)=>liq + rpBySR[i]);
+    porAno[ano] = { liqBySR, rpBySR, correnteBySR, totalBySR };
+  });
+
+  const datasets = [];
+  anos.forEach(ano=>{
+    datasets.push({
+      label:`Exercício Corrente ${ano}`, data:porAno[ano].correnteBySR, backgroundColor:'#2E75B6',
+      stack:ano, categoryPercentage:0.62, barPercentage:0.86,
+      borderRadius:{topLeft:0,topRight:0,bottomLeft:3,bottomRight:3}, borderSkipped:false,
+      borderWidth:{top:2,left:0,right:0,bottom:0}, borderColor:'#fff'
+    });
+    datasets.push({
+      label:`RP ${ano}`, data:porAno[ano].rpBySR, backgroundColor:'#e87ba4',
+      stack:ano, categoryPercentage:0.62, barPercentage:0.86,
+      borderRadius:{topLeft:3,topRight:3,bottomLeft:0,bottomRight:0}, borderSkipped:false
+    });
+  });
+
+  chContSR = makeChart(canvas,{
+    type:'bar',
+    data:{ labels: SR_LABELS_SHORT, datasets },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          title:items=>{
+            const year = items[0].dataset.label.split(' ').pop();
+            return `${items[0].label} — ${year}`;
+          },
+          label:item=>{
+            const kind = item.dataset.label.includes('RP') ? 'RP' : 'Exercício corrente';
+            return ` ${kind}: ${fmtCur(item.raw)}`;
+          },
+          // Mesmo padrão do mockup_rp.html original: footer com o total do
+          // ano/SR e o %RP — total = Corrente+RP (totalBySR), não liqBySR
+          // sozinho, e o %RP usa esse mesmo total como denominador
+          // (rp/(exercicio_corrente+rp), igual ao resto do painel — Fase 5).
+          footer:items=>{
+            const item = items[0];
+            const year = item.dataset.label.split(' ').pop();
+            const idx = item.dataIndex;
+            const total = porAno[year].totalBySR[idx];
+            const rp = porAno[year].rpBySR[idx];
+            const pct = total > 0 ? (rp/total*100) : 0;
+            return `Total ${year}: ${fmtCur(total)}  (RP: ${fmtNum(pct,1)}%)`;
+          }
+        }}
+      },
+      scales:{
+        x:{grid:{display:false}},
+        y:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v>=1e6?fmtNum(v/1e6,0)+' M':v}}
+      }
+    }
+  });
+}
+
+function renderContratos(data = contratos){
+  if(!contratos.length) return;
+  setupContratoTableFilters();
+  updatePeriodoBadges();
+
+  // RP / Exercício Anterior — composição do Liquidado. Soma só contratos com
+  // statusRp === 'casado': so_base/so_rp/null não têm RP calculável (ver _meta
+  // de rp_reconciliado.json) e ficam de fora tanto do numerador (rp) quanto do
+  // denominador (totalComRp), senão o % fica distorcido por liquidado de
+  // contrato sem RP mensurável. Reage a `data`, que já vem filtrada por
+  // ano/regional/tipo/status pela chamada em getContratosFiltrados().
+  const casadoRp = data.filter(c => c.statusRp === 'casado');
+  const totalRp  = casadoRp.reduce((a,c)=>a+(c.rp||0),0);
+  const totalComRpCasado = casadoRp.reduce((a,c)=>a+(c.totalComRp||0),0);
+
+  const totalEmp  = data.reduce((a,c)=>a+c.empenhado,0);
+  // Total Liquidado do KPI = liquidado da base (inalterado, todos os contratos)
+  // + RP somado por cima (totalRp, só 'casado') — mesma correção do chartContSR
+  // acima. Cálculo duplicado: este KPI soma direto sobre `data`, não reaproveita
+  // renderExecChartAno, então a correção de lá não se propaga sozinha aqui.
+  const totalLiqBase = data.reduce((a,c)=>a+c.liquidado,0);
+  const totalLiq  = totalLiqBase + totalRp;
+  const pctExec   = totalEmp>0?(totalLiq/totalEmp*100):0;
+  document.getElementById('kpi-cont-total').textContent = data.length;
+  document.getElementById('kpi-cont-emp').innerHTML     = fmtR(totalEmp);
+  document.getElementById('kpi-cont-liq').innerHTML     = fmtR(totalLiq);
+  document.getElementById('kpi-cont-exec').textContent  = fmtNum(pctExec,1)+'%';
+  const execCard = document.getElementById('kpi-cont-exec-card');
+  if(execCard) execCard.classList.toggle('alert', pctExec<70);
+  const pctRpCasado = totalComRpCasado>0 ? (totalRp/totalComRpCasado*100) : 0;
+
+  // Comparativo com o outro ano disponível — versão enxuta no lugar da Fase 7
+  // original (toggle + gráfico pareado): não cria seletor/infraestrutura
+  // paralela, só mais um texto na mesma linha que já existe, reagindo ao MESMO
+  // seletor global. Aplica os MESMOS critérios de filtro (regiao/tipo/status/
+  // busca) ao outro ano, senão a comparação mistura recortes diferentes.
+  let compTxt = '';
+  const anoAtual = appState.selectedFinancialYear;
+  const outroAno = Object.keys(contratosPorAno).find(a => a !== anoAtual);
+  if(casadoRp.length && outroAno){
+    const f = getContratoFilterValues();
+    const outroCasado = filtrarContratosPorCriterios(contratosPorAno[outroAno] || [], f)
+      .filter(c => c.statusRp === 'casado');
+    const outroTotalComRp = outroCasado.reduce((a,c)=>a+(c.totalComRp||0),0);
+    if(outroCasado.length && outroTotalComRp > 0){
+      const outroPct = outroCasado.reduce((a,c)=>a+(c.rp||0),0) / outroTotalComRp * 100;
+      const delta = pctRpCasado - outroPct;
+      const seta = delta >= 0 ? '▲' : '▼';
+      compTxt = ` — ${seta} ${fmtNum(Math.abs(delta),1)} p.p. vs. ${esc(outroAno)}`;
+    }
+  }
+
+  const liqRpSub = document.getElementById('kpi-cont-liq-rp');
+  if(liqRpSub){
+    // O % é sobre o subconjunto 'casado' (totalComRpCasado), não sobre o Liquidado
+    // total exibido acima (totalLiq, que também soma o liquidado de contratos
+    // so_base/so_rp sem RP calculável, além do RP dos 'casado') — os dois números
+    // partem de universos diferentes, então o asterisco + title deixam isso
+    // explícito em vez de sugerir "26,4 / totalLiq".
+    liqRpSub.innerHTML = casadoRp.length
+      ? `${fmtR(totalRp)} de RP (<span title="% sobre o liquidado dos ${casadoRp.length} contratos casados (${fmtR(totalComRpCasado)}) — não sobre os ${fmtR(totalLiq)} do card acima, que também inclui o liquidado de contratos sem RP calculável (so_base/so_rp)">${fmtNum(pctRpCasado,1)}%*</span>${compTxt})`
+      : '';
+  }
+
+  // Destrói instâncias anteriores antes de recriar
+  if(chContSR)  { chContSR.destroy();  chContSR  = null; }
+  if(chContTipo){ chContTipo.destroy(); chContTipo = null; }
+
+  renderExecChart(data);
 
   // Chart 2 — Liquidado por tipo (barras horizontais, ordenado desc)
   const tiposAtivos = Object.keys(TIPO_COLORS).filter(t=>data.some(c=>c.tipo===t));
@@ -1529,9 +1902,125 @@ function renderContratos(data = contratos){
     }
   });
 
+  renderRpRanking(data);
   renderTblContratos(data);
+  renderRpDivergencias();
   renderSRTipoMatrix();
   updateContratoFilterCount(data.length);
+}
+
+// Fase 6 — Divergências: ao contrário da Fase 4 (onde só 'so_base' podia
+// ocorrer, porque so_rp nunca entra em contratosPorAno), aqui as duas
+// categorias aparecem juntas pela primeira vez — e são operacionalmente
+// diferentes: so_base = achamos o contrato, falta o RP (mais brando, pode ser
+// só planilha incompleta); so_rp = contrato nem está na base do painel, só na
+// planilha do DER (mais grave — reclassificação, encerramento ou erro de
+// cadastro). Por isso dois tratamentos visuais distintos aqui (badge + texto),
+// não o ícone único da Fase 4 — usar um sinal genérico esconderia exatamente a
+// distinção que é o motivo desta seção existir. Escopo só por ano (seletor
+// global), sem os filtros de regional/tipo/status/busca da tabela de
+// contratos — a lista de divergências é por definição sobre TODOS os
+// contratos do ano, não um recorte.
+function displaySrRp(sr){
+  return String(sr || '').startsWith('SR ') ? sr : `SR ${sr}`;
+}
+
+function renderRpDivergencias(){
+  const ano = appState.selectedFinancialYear;
+  const countBadge = document.getElementById('rpDivergenciasCount');
+  const listEl = document.getElementById('rpDivergenciasList');
+  if(!listEl || !ano) return;
+
+  const soBase = (contratosPorAno[ano] || []).filter(c => c.statusRp !== 'casado');
+  const soRp = rpSemContratoBase.filter(r => String(r.ano) === String(ano));
+  const total = soBase.length + soRp.length;
+
+  if(countBadge) countBadge.textContent = `${total} em ${ano}`;
+
+  const itemSoBase = c => {
+    const msg = c.statusRp === 'so_base'
+      ? `Consta na base de exercício corrente (${esc(displaySrRp(c.sr))}, ${esc(c.ano)}) com ${fmtRF(c.liquidado)} liquidado, mas não aparece na planilha de Pagamentos com RP enviada pelo DER — confirmar se o contrato foi encerrado ou reclassificado.`
+      : `Consta na base de exercício corrente (${esc(displaySrRp(c.sr))}, ${esc(c.ano)}) com ${fmtRF(c.liquidado)} liquidado, mas sem correspondência em rp_reconciliado.json (nem 'casado' nem 'so_base' — falha de join a investigar, ver console).`;
+    return `<div class="note warn note-compact disc-item">
+      <span class="badge b-yellow">⚠ Só na base</span>
+      <span><strong>${esc(c.contrato)}</strong> — ${msg}</span>
+    </div>`;
+  };
+
+  const itemSoRp = r => {
+    const msg = `Consta na planilha de Pagamentos com RP (${esc(displaySrRp(r.sr))}, ${esc(r.ano)}) com ${fmtRF(r.total_com_rp)} liquidado, mas não existe na base de exercício corrente do painel (Contratos DOPSR1 por Regional.xlsx / Empenhos CGM) — todo o valor pode ser RP/exercício anterior, ou o contrato foi reclassificado/encerrado sem entrar nessa base. Confirmar com o DER.`;
+    return `<div class="note critical note-compact disc-item">
+      <span class="badge b-red">✕ Só na planilha c/ RP</span>
+      <span><strong>${esc(r.contrato)}</strong> — ${msg}</span>
+    </div>`;
+  };
+
+  listEl.innerHTML = total
+    ? soBase.map(itemSoBase).join('') + soRp.map(itemSoRp).join('')
+    : `<p class="chart-source">Nenhuma divergência para ${esc(ano)} — todos os contratos casaram entre as duas bases.</p>`;
+
+  // Resumo fixo por ano (não precisa de toggle/interatividade) — útil para
+  // mostrar se a qualidade da reconciliação melhorou de um ano pro outro.
+  const resumoEl = document.getElementById('rpDivergenciasResumoAnos');
+  if(resumoEl){
+    const partes = Object.keys(contratosPorAno).sort().map(a=>{
+      const sb = (contratosPorAno[a] || []).filter(c => c.statusRp !== 'casado').length;
+      const sr = rpSemContratoBase.filter(r => String(r.ano) === String(a)).length;
+      const t = sb + sr;
+      if(!t) return `Em ${esc(a)}: nenhuma divergência`;
+      const sub = [sb ? `${sb} só na base` : null, sr ? `${sr} só no RP` : null].filter(Boolean).join(' + ');
+      return `Em ${esc(a)}: ${t} divergência${t===1?'':'s'} (${sub})`;
+    });
+    resumoEl.textContent = partes.join(' · ');
+  }
+}
+
+// Fase 5 — ranking de concentração de RP: top 8-10 contratos 'casado' por %RP,
+// no recorte já filtrado (ano do seletor global + regional/tipo/status/busca
+// atuais), mesma `data` que já alimenta KPIs/gráfico de execução/tabela.
+function renderRpRanking(data){
+  const canvas = document.getElementById('chartRpRanking');
+  if(!canvas) return;
+
+  const legendRamp = document.getElementById('rpRankLegendRamp');
+  if(legendRamp) legendRamp.style.background = `linear-gradient(90deg, ${rpRankRamp(0)}, ${rpRankRamp(1)})`;
+
+  const top = data
+    .filter(c => c.statusRp === 'casado' && c.pctRp != null)
+    .sort((a,b) => b.pctRp - a.pctRp)
+    .slice(0, 10);
+
+  if(chRpRanking){ chRpRanking.destroy(); chRpRanking = null; }
+  if(!top.length) return;
+
+  const labels = top.map(c => `${c.contrato} — ${SR_DISPLAY[c.sr]||c.sr}`);
+  const values = top.map(c => c.pctRp*100);
+  // Cor por posição na escala FIXA (0–RP_RANK_DOMAIN_MAX), não pelo min/max do
+  // `top` exibido no momento — ver comentário em RP_RANK_DOMAIN_MAX.
+  const colors = top.map(c => rpRankRamp(c.pctRp / RP_RANK_DOMAIN_MAX));
+
+  chRpRanking = makeChart(canvas, {
+    type:'bar',
+    data:{ labels, datasets:[{ data: values, backgroundColor: colors, borderRadius:3, barPercentage:0.72 }] },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const c = top[ctx.dataIndex];
+            return [` % RP: ${fmtNum(c.pctRp*100,1)}%`, ` RP: ${fmtRF(c.rp)}`, ` Total Liquidado c/ RP: ${fmtRF(c.totalComRp)}`];
+          }
+        }}
+      },
+      scales:{
+        x:{grid:{color:'#F0F0F0'},ticks:{callback:v=>v+'%'},suggestedMax:RP_RANK_DOMAIN_MAX*100},
+        y:{grid:{display:false}}
+      }
+    }
+  });
 }
 
 function renderSRTipoMatrix(){
@@ -1568,6 +2057,24 @@ function renderSRTipoMatrix(){
     `<p class="chart-source"><strong>Fonte:</strong> Contratos DOPSR1 ${esc(appState.selectedFinancialYear || '—')}</p>`;
 }
 
+// Sinal discreto para linhas cujo RP não pôde ser calculado. so_rp NÃO aparece
+// nesta tabela — esses contratos não têm empenhado/liquidado/pago na base do
+// painel (não estão em contratos_dopsr1_por_ano) e por isso ficam só em
+// rpSemContratoBase, listados na Fase 6. Aqui só ocorrem 'so_base' (achamos o
+// contrato, mas não a linha de RP dele) e, defensivamente, null (nem chave
+// encontrada em rp_reconciliado — não deveria acontecer em uso normal, ver log
+// de attachRpAContratos). Decisão consciente: um ícone só, não dois — como
+// so_rp está fora desta tabela, a distinção operacional so_base vs. so_rp que
+// o mockup fazia com dois badges não se aplica aqui; o texto do title ainda
+// diferencia os dois casos que podem ocorrer, pra quem passar o mouse.
+function rpStatusFlag(c){
+  if(c.statusRp === 'casado') return '';
+  const msg = c.statusRp === 'so_base'
+    ? 'RP não calculável: contrato não encontrado na planilha de Pagamentos com RP (Total Liquidado é o valor normal, sem composição de RP conhecida). Ver Divergências.'
+    : 'RP não calculável: contrato sem correspondência em rp_reconciliado.json. Ver Divergências.';
+  return ` <span class="rp-flag" title="${esc(msg)}">⚠</span>`;
+}
+
 function renderTblContratos(data){
   const tipoBadge = t=>{
     const cls={'PROCONSERVA':'b-blue','COP':'b-green','INTEGRA':'b-blue','CREMEP':'b-yellow','EMERGENCIAL':'b-red'};
@@ -1575,9 +2082,11 @@ function renderTblContratos(data){
   };
   const tblBody = document.getElementById('tbodyContratos');
   if(!tblBody) return;
-  tblBody.innerHTML = data.map(c=>{
+  const sorted = ordenarContratos(data);
+  tblBody.innerHTML = sorted.map(c=>{
     const pct = c.empenhado>0?c.liquidado/c.empenhado*100:0;
     const emgRow = c.tipo==='EMERGENCIAL'?'tr-emergencial':'';
+    const pctRpPct = c.pctRp!=null ? c.pctRp*100 : null;
     return `<tr class="${emgRow}">
       <td><strong>${esc(c.contrato)}</strong></td>
       <td>${esc(SR_DISPLAY[c.sr]||c.sr)}</td>
@@ -1585,6 +2094,8 @@ function renderTblContratos(data){
       <td>${fmtRF(c.empenhado)}</td>
       <td>${fmtRF(c.liquidado)}</td>
       <td>${fmtRF(c.pago)}</td>
+      <td>${fmtRF(c.rp)}${rpStatusFlag(c)}</td>
+      <td>${fmtP(pctRpPct)}</td>
       <td>${execBadge(pct)}</td>
     </tr>`;
   }).join('');
@@ -3081,20 +3592,35 @@ function onAnoMalhaChange(anoStr){
   if(rendered['benchmark']) updateBenchYear(benchAnoIdx);
 }
 
+// Carrega rp_reconciliado.json e cruza com contratosPorAno. Falha aqui não
+// derruba o painel — RP fica indisponível na sessão, mas Empenhado/Liquidado/
+// Pago (que não dependem dele) continuam funcionando normalmente.
+function loadRpReconciliado(){
+  return loadJsonData('rp_reconciliado', `${DATA_PATH.DASHBOARD}rp_reconciliado.json`, 'rp_reconciliado.json')
+    .then(rpData => { indexarRpReconciliado(rpData); attachRpAContratos(); })
+    .catch(err => {
+      console.error('Erro ao carregar rp_reconciliado.json — dados de RP ficarão indisponíveis nesta sessão:', err);
+    });
+}
+
 if (window.STANDALONE_DATA && window.STANDALONE_DATA.der_precomputed) {
   const d      = window.STANDALONE_DATA.der_precomputed;
   tmdaPorSr = d.tmda_por_sr || {};
   prepareTemporalDatasets(d);
-  setupMalhaPorAno();
-  initDashboard(d);
+  loadRpReconciliado().then(()=>{
+    setupMalhaPorAno();
+    initDashboard(d);
+  });
 } else {
   Promise.all([
     loadJsonData('der_precomputed', `${DATA_PATH.ROOT}der_precomputed.json`, 'der_precomputed.json')
   ]).then(([d])=>{
     tmdaPorSr = d.tmda_por_sr || {};
     prepareTemporalDatasets(d);
-    setupMalhaPorAno();
-    initDashboard(d);
+    return loadRpReconciliado().then(()=>{
+      setupMalhaPorAno();
+      initDashboard(d);
+    });
   }).catch(err=>{
     const fonteProvavel =
       /der_precomputed/i.test(err.message) ? 'der_precomputed.json' :
